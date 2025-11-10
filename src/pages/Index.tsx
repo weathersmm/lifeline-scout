@@ -3,6 +3,7 @@ import { Opportunity, ServiceTag, Priority, ContractType } from '@/types/opportu
 import { OpportunityCard } from '@/components/dashboard/OpportunityCard';
 import { OpportunityFilters } from '@/components/dashboard/OpportunityFilters';
 import { OpportunityDetailDialog } from '@/components/dashboard/OpportunityDetailDialog';
+import { WebScraperDialog } from '@/components/dashboard/WebScraperDialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -178,6 +179,7 @@ const Index = () => {
               </p>
             </div>
             <div className="flex items-center gap-3">
+              <WebScraperDialog />
               <Button variant="outline" onClick={handleGenerateReport}>
                 <Calendar className="w-4 h-4 mr-2" />
                 Generate Report
