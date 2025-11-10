@@ -5,3 +5,6 @@ verify_jwt = true
 
 [functions.scrape-opportunities]
 verify_jwt = true
+
+[functions.fetch-highergov-opportunities]
+verify_jwt = true
