@@ -12,7 +12,7 @@ import { BatchScraperDialog } from '@/components/dashboard/BatchScraperDialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AlertCircle, TrendingUp, FileText, Calendar, LogOut, User, GitCompare, BarChart3 } from 'lucide-react';
+import { AlertCircle, TrendingUp, FileText, Calendar, LogOut, User, GitCompare, BarChart3, Shield } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const Index = () => {
-  const { user, userRole, signOut } = useAuth();
+  const { user, userRole, isAdmin, signOut } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
   const [selectedOpportunity, setSelectedOpportunity] = useState<Opportunity | null>(null);
@@ -228,6 +228,12 @@ const Index = () => {
               </p>
             </div>
             <div className="flex items-center gap-3">
+              {isAdmin && (
+                <Button variant="outline" onClick={() => navigate('/admin')}>
+                  <Shield className="w-4 h-4 mr-2" />
+                  Admin
+                </Button>
+              )}
               <Button variant="outline" onClick={() => navigate('/analytics')}>
                 <BarChart3 className="w-4 h-4 mr-2" />
                 Analytics
