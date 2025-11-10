@@ -7,7 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Database, Lock, Mail, User } from "lucide-react";
+import { Database, Lock, Mail, User, Eye } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Auth() {
   const navigate = useNavigate();
@@ -104,9 +105,24 @@ export default function Auth() {
             EMS Opportunity Intelligence Platform
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
+          <Link to="/demo" className="block">
+            <Button variant="outline" className="w-full" type="button">
+              <Eye className="w-4 h-4 mr-2" />
+              View Demo (No Signup Required)
+            </Button>
+          </Link>
+          
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+            </div>
+          </div>
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="signin">Sign In</TabsTrigger>
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
             </TabsList>
