@@ -1,23 +1,98 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Opportunity, ServiceTag, Priority, ContractType } from '@/types/opportunity';
 import { OpportunityCard } from '@/components/dashboard/OpportunityCard';
 import { OpportunityFilters } from '@/components/dashboard/OpportunityFilters';
 import { OpportunityDetailDialog } from '@/components/dashboard/OpportunityDetailDialog';
+import { HigherGovSyncDialog } from '@/components/dashboard/HigherGovSyncDialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AlertCircle, TrendingUp, FileText, Eye } from 'lucide-react';
+import { AlertCircle, TrendingUp, FileText, Eye, RefreshCw } from 'lucide-react';
 import { mockOpportunities } from '@/data/mockOpportunities';
 import { Link } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 const Demo = () => {
+  const { toast } = useToast();
   const [selectedOpportunity, setSelectedOpportunity] = useState<Opportunity | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedServiceTags, setSelectedServiceTags] = useState<ServiceTag[]>([]);
   const [selectedPriority, setSelectedPriority] = useState<Priority | 'all'>('all');
   const [selectedContractType, setSelectedContractType] = useState<ContractType | 'all'>('all');
-  
-  const opportunities = mockOpportunities;
+  const [opportunities, setOpportunities] = useState<Opportunity[]>(mockOpportunities);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchOpportunities();
+  }, []);
+
+  const fetchOpportunities = async () => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase
+        .from('opportunities')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        // Transform database format to app format
+        const transformedData: Opportunity[] = data.map((opp: any) => ({
+          id: opp.id,
+          title: opp.title,
+          agency: opp.agency,
+          geography: {
+            state: opp.geography_state,
+            county: opp.geography_county,
+            city: opp.geography_city,
+          },
+          serviceTags: opp.service_tags,
+          contractType: opp.contract_type,
+          estimatedValue: opp.estimated_value_min || opp.estimated_value_max ? {
+            min: opp.estimated_value_min,
+            max: opp.estimated_value_max,
+          } : undefined,
+          keyDates: {
+            issueDate: opp.issue_date,
+            questionsDue: opp.questions_due,
+            preBidMeeting: opp.pre_bid_meeting,
+            proposalDue: opp.proposal_due,
+          },
+          termLength: opp.term_length,
+          link: opp.link,
+          summary: opp.summary,
+          priority: opp.priority,
+          status: opp.status,
+          source: opp.source,
+          recommendedAction: opp.recommended_action,
+        }));
+        setOpportunities(transformedData);
+        toast({
+          title: "Real data loaded",
+          description: `Showing ${transformedData.length} opportunities from the database`,
+        });
+      } else {
+        // Use mock data if database is empty
+        setOpportunities(mockOpportunities);
+        toast({
+          title: "Demo mode",
+          description: "Showing sample data. Use 'Sync HigherGov' to fetch real opportunities.",
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching opportunities:', error);
+      setOpportunities(mockOpportunities);
+      toast({
+        variant: "destructive",
+        title: "Error loading data",
+        description: "Showing sample data instead.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Filter opportunities
   const filteredOpportunities = opportunities.filter((opp) => {
@@ -89,6 +164,18 @@ const Demo = () => {
               <p className="text-muted-foreground mt-1">
                 EMS Business Development Opportunity Intelligence
               </p>
+            </div>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={fetchOpportunities}
+                disabled={isLoading}
+              >
+                <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+                Refresh
+              </Button>
+              <HigherGovSyncDialog />
             </div>
           </div>
         </div>
