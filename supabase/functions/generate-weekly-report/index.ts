@@ -89,7 +89,7 @@ serve(async (req) => {
   } catch (error) {
     console.error("Error generating report:", error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+      JSON.stringify({ error: "Failed to generate weekly report" }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 500,

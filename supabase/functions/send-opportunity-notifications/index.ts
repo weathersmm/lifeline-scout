@@ -96,7 +96,32 @@ serve(async (req) => {
 
       console.log(`Found ${matchingOpps.length} matching opportunities for ${pref.email}`);
 
-      // Generate email content
+      // HTML escape function to prevent XSS
+      const escapeHtml = (text: string): string => {
+        const map: Record<string, string> = {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#039;'
+        };
+        return text.replace(/[&<>"']/g, (m) => map[m]);
+      };
+
+      // Sanitize URL to prevent javascript: or data: protocols
+      const sanitizeUrl = (url: string): string => {
+        try {
+          const parsed = new URL(url);
+          if (!['http:', 'https:'].includes(parsed.protocol)) {
+            return '#';
+          }
+          return url;
+        } catch {
+          return '#';
+        }
+      };
+
+      // Generate email content with sanitized data
       const opportunitiesHtml = matchingOpps.map((opp) => `
         <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
           <h3 style="margin: 0 0 8px 0; color: #111827;">
@@ -107,29 +132,29 @@ serve(async (req) => {
             }; margin-right: 8px;">
               ${opp.priority.toUpperCase()}
             </span>
-            ${opp.title}
+            ${escapeHtml(opp.title)}
           </h3>
           <p style="margin: 4px 0; color: #6b7280; font-size: 14px;">
-            <strong>Agency:</strong> ${opp.agency}
+            <strong>Agency:</strong> ${escapeHtml(opp.agency)}
           </p>
           <p style="margin: 4px 0; color: #6b7280; font-size: 14px;">
-            <strong>Location:</strong> ${opp.geography_city || opp.geography_county || opp.geography_state}
+            <strong>Location:</strong> ${escapeHtml(opp.geography_city || opp.geography_county || opp.geography_state)}
           </p>
           <p style="margin: 4px 0; color: #6b7280; font-size: 14px;">
-            <strong>Contract Type:</strong> ${opp.contract_type}
+            <strong>Contract Type:</strong> ${escapeHtml(opp.contract_type)}
           </p>
           <p style="margin: 4px 0; color: #6b7280; font-size: 14px;">
             <strong>Proposal Due:</strong> ${new Date(opp.proposal_due).toLocaleDateString()}
           </p>
           ${opp.service_tags && opp.service_tags.length > 0 ? `
             <p style="margin: 8px 0 4px 0; color: #6b7280; font-size: 14px;">
-              <strong>Tags:</strong> ${opp.service_tags.join(', ')}
+              <strong>Tags:</strong> ${opp.service_tags.map((tag: string) => escapeHtml(tag)).join(', ')}
             </p>
           ` : ''}
           <p style="margin: 8px 0 4px 0; color: #374151; font-size: 14px;">
-            ${opp.summary}
+            ${escapeHtml(opp.summary)}
           </p>
-          <a href="${opp.link}" style="display: inline-block; margin-top: 8px; padding: 8px 16px; background: #3b82f6; color: white; text-decoration: none; border-radius: 4px; font-size: 14px;">
+          <a href="${sanitizeUrl(opp.link)}" style="display: inline-block; margin-top: 8px; padding: 8px 16px; background: #3b82f6; color: white; text-decoration: none; border-radius: 4px; font-size: 14px;">
             View Opportunity
           </a>
         </div>
@@ -205,7 +230,7 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error in send-opportunity-notifications:', error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
+      JSON.stringify({ error: 'Failed to process notification request' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }

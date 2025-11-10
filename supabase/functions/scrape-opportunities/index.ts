@@ -242,14 +242,20 @@ Return ONLY a valid JSON array of opportunities. If no opportunities found, retu
     );
   } catch (error) {
     console.error("Error scraping opportunities:", error);
+    
+    // Return generic error message to client, detailed error logged above
+    const userMessage = error instanceof Error && error.message.includes('validation')
+      ? 'Invalid input parameters'
+      : 'Failed to scrape opportunities';
+    
     return new Response(
       JSON.stringify({ 
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: userMessage,
         success: false,
       }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 500,
+        status: error instanceof Error && error.message.includes('validation') ? 400 : 500,
       }
     );
   }
