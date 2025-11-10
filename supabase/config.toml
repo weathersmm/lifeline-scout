@@ -8,3 +8,6 @@ verify_jwt = true
 
 [functions.fetch-highergov-opportunities]
 verify_jwt = true
+
+[functions.send-opportunity-notifications]
+verify_jwt = false
