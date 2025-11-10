@@ -2,12 +2,16 @@ import { Opportunity } from '@/types/opportunity';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Calendar, MapPin, DollarSign, ExternalLink, Clock, Building2 } from 'lucide-react';
 import { format } from 'date-fns';
 
 interface OpportunityCardProps {
   opportunity: Opportunity;
   onViewDetails: (opportunity: Opportunity) => void;
+  isSelected?: boolean;
+  onSelectionChange?: (selected: boolean) => void;
+  showCompareCheckbox?: boolean;
 }
 
 const priorityColors = {
@@ -25,7 +29,13 @@ const contractTypeColors = {
   'Sole-Source Notice': 'bg-secondary text-secondary-foreground border-secondary'
 };
 
-export const OpportunityCard = ({ opportunity, onViewDetails }: OpportunityCardProps) => {
+export const OpportunityCard = ({ 
+  opportunity, 
+  onViewDetails,
+  isSelected = false,
+  onSelectionChange,
+  showCompareCheckbox = false
+}: OpportunityCardProps) => {
   const daysUntilDue = Math.ceil(
     (new Date(opportunity.keyDates.proposalDue).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
   );
@@ -33,10 +43,17 @@ export const OpportunityCard = ({ opportunity, onViewDetails }: OpportunityCardP
   const isUrgent = daysUntilDue <= 14;
 
   return (
-    <Card className="p-6 hover:shadow-lg transition-shadow">
+    <Card className={`p-6 hover:shadow-lg transition-shadow ${isSelected ? 'ring-2 ring-primary' : ''}`}>
       <div className="space-y-4">
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
+          {showCompareCheckbox && onSelectionChange && (
+            <Checkbox
+              checked={isSelected}
+              onCheckedChange={onSelectionChange}
+              className="mt-1"
+            />
+          )}
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
               <Badge className={priorityColors[opportunity.priority]}>

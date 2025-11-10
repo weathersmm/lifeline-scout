@@ -8,8 +8,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Search, X } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { Search, X, CalendarIcon } from 'lucide-react';
 import { ServiceTag, ContractType, Priority } from '@/types/opportunity';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 interface OpportunityFiltersProps {
   searchQuery: string;
@@ -20,6 +24,8 @@ interface OpportunityFiltersProps {
   onPriorityChange: (priority: Priority | 'all') => void;
   selectedContractType: ContractType | 'all';
   onContractTypeChange: (type: ContractType | 'all') => void;
+  dateRange?: { from: Date | undefined; to: Date | undefined };
+  onDateRangeChange: (range: { from: Date | undefined; to: Date | undefined }) => void;
   onClearFilters: () => void;
 }
 
@@ -43,13 +49,17 @@ export const OpportunityFilters = ({
   onPriorityChange,
   selectedContractType,
   onContractTypeChange,
+  dateRange,
+  onDateRangeChange,
   onClearFilters
 }: OpportunityFiltersProps) => {
   const hasActiveFilters = 
     searchQuery || 
     selectedServiceTags.length > 0 || 
     selectedPriority !== 'all' || 
-    selectedContractType !== 'all';
+    selectedContractType !== 'all' ||
+    dateRange?.from ||
+    dateRange?.to;
 
   return (
     <div className="space-y-4">
@@ -65,7 +75,7 @@ export const OpportunityFilters = ({
       </div>
 
       {/* Dropdowns */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Select value={selectedPriority} onValueChange={onPriorityChange}>
           <SelectTrigger>
             <SelectValue placeholder="Priority" />
@@ -91,6 +101,42 @@ export const OpportunityFilters = ({
             ))}
           </SelectContent>
         </Select>
+
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              className={cn(
+                "w-full justify-start text-left font-normal",
+                !dateRange?.from && !dateRange?.to && "text-muted-foreground"
+              )}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {dateRange?.from ? (
+                dateRange.to ? (
+                  <>
+                    {format(dateRange.from, "MMM d")} - {format(dateRange.to, "MMM d, yyyy")}
+                  </>
+                ) : (
+                  format(dateRange.from, "MMM d, yyyy")
+                )
+              ) : (
+                <span>Deadline range</span>
+              )}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              initialFocus
+              mode="range"
+              defaultMonth={dateRange?.from}
+              selected={{ from: dateRange?.from, to: dateRange?.to }}
+              onSelect={(range) => onDateRangeChange({ from: range?.from, to: range?.to })}
+              numberOfMonths={2}
+              className={cn("p-3 pointer-events-auto")}
+            />
+          </PopoverContent>
+        </Popover>
 
         {hasActiveFilters && (
           <Button

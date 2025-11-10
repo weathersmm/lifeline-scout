@@ -4,10 +4,11 @@ import { OpportunityCard } from '@/components/dashboard/OpportunityCard';
 import { OpportunityFilters } from '@/components/dashboard/OpportunityFilters';
 import { OpportunityDetailDialog } from '@/components/dashboard/OpportunityDetailDialog';
 import { HigherGovSyncDialog } from '@/components/dashboard/HigherGovSyncDialog';
+import { ComparisonView } from '@/components/dashboard/ComparisonView';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AlertCircle, TrendingUp, FileText, Eye, RefreshCw } from 'lucide-react';
+import { AlertCircle, TrendingUp, FileText, Eye, RefreshCw, GitCompare } from 'lucide-react';
 import { mockOpportunities } from '@/data/mockOpportunities';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -20,8 +21,12 @@ const Demo = () => {
   const [selectedServiceTags, setSelectedServiceTags] = useState<ServiceTag[]>([]);
   const [selectedPriority, setSelectedPriority] = useState<Priority | 'all'>('all');
   const [selectedContractType, setSelectedContractType] = useState<ContractType | 'all'>('all');
+  const [dateRange, setDateRange] = useState<{ from: Date | undefined; to: Date | undefined }>({ from: undefined, to: undefined });
   const [opportunities, setOpportunities] = useState<Opportunity[]>(mockOpportunities);
   const [isLoading, setIsLoading] = useState(true);
+  const [compareMode, setCompareMode] = useState(false);
+  const [selectedForComparison, setSelectedForComparison] = useState<string[]>([]);
+  const [showComparison, setShowComparison] = useState(false);
 
   useEffect(() => {
     fetchOpportunities();
@@ -108,7 +113,22 @@ const Demo = () => {
 
     const matchesContractType = selectedContractType === 'all' || opp.contractType === selectedContractType;
 
-    return matchesSearch && matchesServiceTags && matchesPriority && matchesContractType;
+    const matchesDateRange = !dateRange.from && !dateRange.to ? true : (() => {
+      const dueDate = new Date(opp.keyDates.proposalDue);
+      const from = dateRange.from ? new Date(dateRange.from) : null;
+      const to = dateRange.to ? new Date(dateRange.to) : null;
+      
+      if (from && to) {
+        return dueDate >= from && dueDate <= to;
+      } else if (from) {
+        return dueDate >= from;
+      } else if (to) {
+        return dueDate <= to;
+      }
+      return true;
+    })();
+
+    return matchesSearch && matchesServiceTags && matchesPriority && matchesContractType && matchesDateRange;
   });
 
   // Stats
@@ -126,6 +146,7 @@ const Demo = () => {
     setSelectedServiceTags([]);
     setSelectedPriority('all');
     setSelectedContractType('all');
+    setDateRange({ from: undefined, to: undefined });
   };
 
   const handleServiceTagToggle = (tag: ServiceTag) => {
@@ -133,6 +154,28 @@ const Demo = () => {
       prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
     );
   };
+
+  const handleComparisonToggle = (oppId: string, selected: boolean) => {
+    if (selected) {
+      if (selectedForComparison.length >= 5) {
+        toast({
+          variant: "destructive",
+          title: "Limit reached",
+          description: "You can compare up to 5 opportunities at once",
+        });
+        return;
+      }
+      setSelectedForComparison(prev => [...prev, oppId]);
+    } else {
+      setSelectedForComparison(prev => prev.filter(id => id !== oppId));
+    }
+  };
+
+  const handleRemoveFromComparison = (oppId: string) => {
+    setSelectedForComparison(prev => prev.filter(id => id !== oppId));
+  };
+
+  const comparedOpportunities = opportunities.filter(opp => selectedForComparison.includes(opp.id));
 
   return (
     <div className="min-h-screen bg-background">
@@ -176,6 +219,24 @@ const Demo = () => {
                 Refresh
               </Button>
               <HigherGovSyncDialog />
+              <Button 
+                variant={compareMode ? "default" : "outline"}
+                size="sm"
+                onClick={() => {
+                  setCompareMode(!compareMode);
+                  if (compareMode) {
+                    setSelectedForComparison([]);
+                  }
+                }}
+              >
+                <GitCompare className="w-4 h-4 mr-2" />
+                Compare ({selectedForComparison.length})
+              </Button>
+              {selectedForComparison.length > 0 && (
+                <Button size="sm" onClick={() => setShowComparison(true)}>
+                  View Comparison
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -245,6 +306,8 @@ const Demo = () => {
               onPriorityChange={setSelectedPriority}
               selectedContractType={selectedContractType}
               onContractTypeChange={setSelectedContractType}
+              dateRange={dateRange}
+              onDateRangeChange={setDateRange}
               onClearFilters={handleClearFilters}
             />
 
@@ -254,6 +317,9 @@ const Demo = () => {
                   key={opportunity.id}
                   opportunity={opportunity}
                   onViewDetails={setSelectedOpportunity}
+                  showCompareCheckbox={compareMode}
+                  isSelected={selectedForComparison.includes(opportunity.id)}
+                  onSelectionChange={(selected) => handleComparisonToggle(opportunity.id, selected)}
                 />
               ))}
             </div>
@@ -317,6 +383,14 @@ const Demo = () => {
         opportunity={selectedOpportunity}
         open={!!selectedOpportunity}
         onOpenChange={(open) => !open && setSelectedOpportunity(null)}
+      />
+
+      {/* Comparison View */}
+      <ComparisonView
+        opportunities={comparedOpportunities}
+        open={showComparison}
+        onOpenChange={setShowComparison}
+        onRemove={handleRemoveFromComparison}
       />
     </div>
   );

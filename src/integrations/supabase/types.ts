@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      notification_preferences: {
+        Row: {
+          created_at: string
+          email: string
+          enabled: boolean
+          id: string
+          min_priority: Database["public"]["Enums"]["priority_level"]
+          service_tags: Database["public"]["Enums"]["service_tag"][]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          enabled?: boolean
+          id?: string
+          min_priority?: Database["public"]["Enums"]["priority_level"]
+          service_tags?: Database["public"]["Enums"]["service_tag"][]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          enabled?: boolean
+          id?: string
+          min_priority?: Database["public"]["Enums"]["priority_level"]
+          service_tags?: Database["public"]["Enums"]["service_tag"][]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       opportunities: {
         Row: {
           agency: string
