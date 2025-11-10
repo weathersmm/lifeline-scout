@@ -7,6 +7,36 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Rate limiting helper
+async function checkRateLimit(supabase: any, userId: string, action: string, limit: number, windowHours: number): Promise<boolean> {
+  const windowStart = new Date(Date.now() - windowHours * 60 * 60 * 1000);
+  
+  const { count, error } = await supabase
+    .from('rate_limits')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', userId)
+    .eq('action', action)
+    .gte('created_at', windowStart.toISOString());
+
+  if (error) {
+    console.error('Rate limit check error:', error);
+    return false;
+  }
+
+  if (count !== null && count >= limit) {
+    return false;
+  }
+
+  // Record this attempt
+  await supabase.from('rate_limits').insert({
+    user_id: userId,
+    action: action,
+    created_at: new Date().toISOString()
+  });
+
+  return true;
+}
+
 // Input validation schema
 const scrapeSchema = z.object({
   source_url: z.string()
@@ -56,6 +86,43 @@ serve(async (req) => {
   }
 
   try {
+    // Initialize Supabase client first for auth check
+    const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+    );
+
+    // Get authenticated user
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: 'No authorization header' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(token);
+    
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Rate limit: 5 calls per day (24 hours)
+    const canProceed = await checkRateLimit(supabaseClient, user.id, 'scrape_opportunities', 5, 24);
+    if (!canProceed) {
+      console.log(`Rate limit exceeded for user ${user.id}`);
+      return new Response(JSON.stringify({ 
+        error: 'Rate limit exceeded. You can scrape up to 5 times per day.' 
+      }), {
+        status: 429,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     const body = await req.json();
 
     // Validate input with zod
@@ -77,11 +144,6 @@ serve(async (req) => {
     }
 
     const { source_url, source_name } = validation.data;
-
-    const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
-    );
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {

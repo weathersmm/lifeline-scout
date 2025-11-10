@@ -9,11 +9,21 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Database, Lock, Mail, User, Eye } from "lucide-react";
 import { Link } from "react-router-dom";
+import { z } from "zod";
+import { PasswordStrengthIndicator } from "@/components/PasswordStrengthIndicator";
+
+const passwordSchema = z.string()
+  .min(12, "Password must be at least 12 characters")
+  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+  .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+  .regex(/[0-9]/, "Password must contain at least one number")
+  .regex(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least one special character");
 
 export default function Auth() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [signupPassword, setSignupPassword] = useState("");
 
   useEffect(() => {
     // Check if user is already logged in
@@ -62,6 +72,18 @@ export default function Auth() {
     const email = formData.get("signup-email") as string;
     const password = formData.get("signup-password") as string;
     const fullName = formData.get("signup-name") as string;
+
+    // Validate password
+    const passwordValidation = passwordSchema.safeParse(password);
+    if (!passwordValidation.success) {
+      toast({
+        title: "Password requirements not met",
+        description: passwordValidation.error.errors[0].message,
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
 
     const { error } = await supabase.auth.signUp({
       email,
@@ -213,12 +235,14 @@ export default function Auth() {
                     id="signup-password"
                     name="signup-password"
                     type="password"
-                    placeholder="Minimum 6 characters"
+                    placeholder="Min 12 chars, uppercase, lowercase, number, special"
                     required
-                    minLength={6}
                     disabled={isLoading}
                     className="h-11"
+                    value={signupPassword}
+                    onChange={(e) => setSignupPassword(e.target.value)}
                   />
+                  <PasswordStrengthIndicator password={signupPassword} />
                 </div>
                 
                 <Button 
