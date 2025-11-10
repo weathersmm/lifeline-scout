@@ -1,1 +1,7 @@
 project_id = "pkhcwvafficfkqjegalj"
+
+[functions.generate-weekly-report]
+verify_jwt = true
+
+[functions.scrape-opportunities]
+verify_jwt = true

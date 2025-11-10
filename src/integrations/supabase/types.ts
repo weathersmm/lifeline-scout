@@ -14,16 +14,225 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      opportunities: {
+        Row: {
+          agency: string
+          contract_type: Database["public"]["Enums"]["contract_type"]
+          created_at: string
+          created_by: string | null
+          estimated_value_max: number | null
+          estimated_value_min: number | null
+          geography_city: string | null
+          geography_county: string | null
+          geography_state: string
+          id: string
+          issue_date: string | null
+          link: string
+          pre_bid_meeting: string | null
+          priority: Database["public"]["Enums"]["priority_level"]
+          proposal_due: string
+          questions_due: string | null
+          recommended_action: string | null
+          service_tags: Database["public"]["Enums"]["service_tag"][]
+          source: string
+          status: Database["public"]["Enums"]["opportunity_status"]
+          summary: string
+          term_length: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          agency: string
+          contract_type: Database["public"]["Enums"]["contract_type"]
+          created_at?: string
+          created_by?: string | null
+          estimated_value_max?: number | null
+          estimated_value_min?: number | null
+          geography_city?: string | null
+          geography_county?: string | null
+          geography_state: string
+          id?: string
+          issue_date?: string | null
+          link: string
+          pre_bid_meeting?: string | null
+          priority?: Database["public"]["Enums"]["priority_level"]
+          proposal_due: string
+          questions_due?: string | null
+          recommended_action?: string | null
+          service_tags?: Database["public"]["Enums"]["service_tag"][]
+          source: string
+          status?: Database["public"]["Enums"]["opportunity_status"]
+          summary: string
+          term_length?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          agency?: string
+          contract_type?: Database["public"]["Enums"]["contract_type"]
+          created_at?: string
+          created_by?: string | null
+          estimated_value_max?: number | null
+          estimated_value_min?: number | null
+          geography_city?: string | null
+          geography_county?: string | null
+          geography_state?: string
+          id?: string
+          issue_date?: string | null
+          link?: string
+          pre_bid_meeting?: string | null
+          priority?: Database["public"]["Enums"]["priority_level"]
+          proposal_due?: string
+          questions_due?: string | null
+          recommended_action?: string | null
+          service_tags?: Database["public"]["Enums"]["service_tag"][]
+          source?: string
+          status?: Database["public"]["Enums"]["opportunity_status"]
+          summary?: string
+          term_length?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      scraped_sources: {
+        Row: {
+          created_at: string
+          id: string
+          last_scraped_at: string | null
+          source_name: string
+          source_url: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_scraped_at?: string | null
+          source_name: string
+          source_url: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_scraped_at?: string | null
+          source_name?: string
+          source_url?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      weekly_reports: {
+        Row: {
+          created_at: string
+          generated_by: string | null
+          high_priority_count: number
+          id: string
+          report_data: Json
+          report_date: string
+          total_opportunities: number
+        }
+        Insert: {
+          created_at?: string
+          generated_by?: string | null
+          high_priority_count?: number
+          id?: string
+          report_data: Json
+          report_date: string
+          total_opportunities?: number
+        }
+        Update: {
+          created_at?: string
+          generated_by?: string | null
+          high_priority_count?: number
+          id?: string
+          report_data?: Json
+          report_date?: string
+          total_opportunities?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "member" | "viewer"
+      contract_type:
+        | "RFP"
+        | "RFQ"
+        | "RFI"
+        | "Sources Sought"
+        | "Pre-solicitation"
+        | "Sole-Source Notice"
+      opportunity_status: "new" | "monitoring" | "in-pipeline" | "archived"
+      priority_level: "high" | "medium" | "low"
+      service_tag:
+        | "EMS 911"
+        | "Non-Emergency"
+        | "IFT"
+        | "BLS"
+        | "ALS"
+        | "CCT"
+        | "MEDEVAC"
+        | "Billing"
+        | "CQI"
+        | "EMS Tech"
+        | "VR/Sim"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +359,31 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "member", "viewer"],
+      contract_type: [
+        "RFP",
+        "RFQ",
+        "RFI",
+        "Sources Sought",
+        "Pre-solicitation",
+        "Sole-Source Notice",
+      ],
+      opportunity_status: ["new", "monitoring", "in-pipeline", "archived"],
+      priority_level: ["high", "medium", "low"],
+      service_tag: [
+        "EMS 911",
+        "Non-Emergency",
+        "IFT",
+        "BLS",
+        "ALS",
+        "CCT",
+        "MEDEVAC",
+        "Billing",
+        "CQI",
+        "EMS Tech",
+        "VR/Sim",
+      ],
+    },
   },
 } as const
