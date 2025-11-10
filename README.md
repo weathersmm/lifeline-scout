@@ -1,4 +1,6 @@
-# Welcome to your Lovable project
+# LifeLine Pipeline Scout
+
+**EMS Opportunity Intelligence Platform** - Continuously scouts and summarizes EMS-related business development opportunities from public procurement sites, delivering weekly pipeline-ready reports.
 
 ## Project info
 
@@ -64,9 +66,68 @@ This project is built with:
 
 Simply open [Lovable](https://lovable.dev/projects/39ba6a08-40be-4eac-ac30-593bbf400887) and click on Share -> Publish.
 
-## Can I connect a custom domain to my Lovable project?
+## Domains & Entry Modes (ewproto.com)
 
-Yes, you can!
+This application uses a **multi-entry mode** deployment strategy with `ewproto.com` subdomains to support different user contexts.
+
+### Deployment Mapping
+
+Three entry modes are controlled via the `VITE_ENTRY_MODE` environment variable:
+
+| Mode | Domain | Behavior | Use Case |
+|------|--------|----------|----------|
+| `landing` | `scout.ewproto.com` | Shows landing page with Internal vs Demo choice | Public entry point |
+| `internal` | `scout-internal.ewproto.com` | Direct to internal dashboard, internal auth only | LifeLine staff |
+| `demo` | `scout-demo.ewproto.com` | Direct to demo with synthetic data | Prospects/evaluation |
+
+### Entry Mode Details
+
+**Landing Mode** (`VITE_ENTRY_MODE=landing`)
+- Root `/` shows landing page with two entry options
+- "Internal" button → `/auth` (internal staff login)
+- "External Demo" button → `/demo` (demo experience)
+- Used for `scout.ewproto.com`
+
+**Internal Mode** (`VITE_ENTRY_MODE=internal`)
+- Root `/` redirects to dashboard (requires auth)
+- `/auth` shows internal-only login (no signup)
+- No demo access or CTAs
+- Long session durations to minimize login friction
+- Used for `scout-internal.ewproto.com`
+
+**Demo Mode** (`VITE_ENTRY_MODE=demo`)
+- Root `/` shows demo with synthetic data
+- Public signup/login allowed
+- Strict data isolation from internal
+- No access to real LifeLine data
+- Used for `scout-demo.ewproto.com`
+
+### Running Locally
+
+Set the entry mode via environment variable:
+
+```bash
+# Landing version (default)
+VITE_ENTRY_MODE=landing npm run dev
+
+# Internal-only version
+VITE_ENTRY_MODE=internal npm run dev
+
+# Demo-only version
+VITE_ENTRY_MODE=demo npm run dev
+```
+
+### Deployment
+
+Each subdomain deployment should set the appropriate `VITE_ENTRY_MODE`:
+
+1. **scout.ewproto.com**: Set `VITE_ENTRY_MODE=landing`
+2. **scout-internal.ewproto.com**: Set `VITE_ENTRY_MODE=internal`
+3. **scout-demo.ewproto.com**: Set `VITE_ENTRY_MODE=demo`
+
+**Note**: This app is designed for `ewproto.com`. The `lifeline-ems.com` domain is **not** configured by default and is managed separately by LifeLine IT.
+
+### Custom Domain Setup
 
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
