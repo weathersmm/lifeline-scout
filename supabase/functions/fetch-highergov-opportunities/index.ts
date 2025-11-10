@@ -1,10 +1,24 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+// Input validation schema
+const higherGovSchema = z.object({
+  search_keywords: z.string()
+    .trim()
+    .max(500, { message: "Search keywords must be less than 500 characters" })
+    .optional(),
+  days_back: z.number()
+    .int({ message: "Days back must be an integer" })
+    .min(1, { message: "Days back must be at least 1" })
+    .max(90, { message: "Days back must be no more than 90" })
+    .default(7)
+});
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -12,7 +26,27 @@ serve(async (req) => {
   }
 
   try {
-    const { search_keywords, days_back = 7 } = await req.json();
+    const body = await req.json();
+
+    // Validate input with zod
+    const validation = higherGovSchema.safeParse(body);
+    
+    if (!validation.success) {
+      const errors = validation.error.errors.map(err => `${err.path.join('.')}: ${err.message}`).join(', ');
+      console.error("Input validation failed:", errors);
+      return new Response(
+        JSON.stringify({ 
+          error: "Invalid input parameters",
+          details: errors
+        }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 400,
+        }
+      );
+    }
+
+    const { search_keywords, days_back } = validation.data;
 
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",

@@ -1,10 +1,54 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+// Input validation schema
+const scrapeSchema = z.object({
+  source_url: z.string()
+    .url({ message: "Invalid URL format" })
+    .max(2048, { message: "URL must be less than 2048 characters" })
+    .refine(
+      (url) => {
+        try {
+          const urlObj = new URL(url);
+          // Only allow HTTPS protocol
+          if (urlObj.protocol !== 'https:') return false;
+          
+          // Allowlist of trusted procurement domains
+          const allowedDomains = [
+            'sam.gov',
+            'beta.sam.gov',
+            'fbo.gov',
+            'grants.gov',
+            'highergov.com',
+            'www.highergov.com',
+            'bidnet.com',
+            'publicpurchase.com',
+            'bidsync.com',
+            'govspend.com'
+          ];
+          
+          const hostname = urlObj.hostname.toLowerCase();
+          return allowedDomains.some(domain => 
+            hostname === domain || hostname.endsWith('.' + domain)
+          );
+        } catch {
+          return false;
+        }
+      },
+      { message: "URL must be from a trusted procurement domain (e.g., sam.gov, highergov.com)" }
+    ),
+  source_name: z.string()
+    .trim()
+    .min(1, { message: "Source name cannot be empty" })
+    .max(100, { message: "Source name must be less than 100 characters" })
+    .regex(/^[a-zA-Z0-9\s\-_.]+$/, { message: "Source name contains invalid characters" })
+});
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -12,17 +56,27 @@ serve(async (req) => {
   }
 
   try {
-    const { source_url, source_name } = await req.json();
+    const body = await req.json();
 
-    if (!source_url || !source_name) {
+    // Validate input with zod
+    const validation = scrapeSchema.safeParse(body);
+    
+    if (!validation.success) {
+      const errors = validation.error.errors.map(err => `${err.path.join('.')}: ${err.message}`).join(', ');
+      console.error("Input validation failed:", errors);
       return new Response(
-        JSON.stringify({ error: "source_url and source_name are required" }),
+        JSON.stringify({ 
+          error: "Invalid input parameters",
+          details: errors
+        }),
         {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
           status: 400,
         }
       );
     }
+
+    const { source_url, source_name } = validation.data;
 
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
