@@ -9,27 +9,46 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Database, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+
+const formSchema = z.object({
+  daysBack: z.coerce.number()
+    .min(1, { message: "Must be at least 1 day" })
+    .max(90, { message: "Cannot exceed 90 days" }),
+  keywords: z.string()
+    .trim()
+    .max(1000, { message: "Keywords must be less than 1000 characters" })
+    .optional(),
+});
 
 export const HigherGovSyncDialog = () => {
   const [open, setOpen] = useState(false);
-  const [daysBack, setDaysBack] = useState("7");
-  const [keywords, setKeywords] = useState("EMS ambulance emergency medical services");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const handleSync = async () => {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      daysBack: 7,
+      keywords: "EMS ambulance emergency medical services",
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke(
         "fetch-highergov-opportunities",
         {
           body: {
-            days_back: parseInt(daysBack) || 7,
-            search_keywords: keywords,
+            days_back: values.daysBack,
+            search_keywords: values.keywords || "EMS ambulance emergency medical services",
           },
         }
       );
@@ -73,51 +92,65 @@ export const HigherGovSyncDialog = () => {
             AI will filter for relevant EMS opportunities only.
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-4 py-4">
-          <div className="space-y-2">
-            <Label htmlFor="days">Days Back</Label>
-            <Input
-              id="days"
-              type="number"
-              placeholder="7"
-              value={daysBack}
-              onChange={(e) => setDaysBack(e.target.value)}
-              disabled={isLoading}
-              min="1"
-              max="90"
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
+            <FormField
+              control={form.control}
+              name="daysBack"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Days Back</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="7"
+                      disabled={isLoading}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Fetch opportunities posted in the last N days (1-90)
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <p className="text-xs text-muted-foreground">
-              Fetch opportunities posted in the last N days (1-90)
-            </p>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="keywords">Search Keywords (optional)</Label>
-            <Input
-              id="keywords"
-              placeholder="EMS ambulance emergency medical services"
-              value={keywords}
-              onChange={(e) => setKeywords(e.target.value)}
-              disabled={isLoading}
+            <FormField
+              control={form.control}
+              name="keywords"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Search Keywords (optional)</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="EMS ambulance emergency medical services"
+                      disabled={isLoading}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Leave blank to use default EMS-related keywords
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <p className="text-xs text-muted-foreground">
-              Leave blank to use default EMS-related keywords
-            </p>
-          </div>
-          <Button
-            onClick={handleSync}
-            disabled={isLoading}
-            className="w-full"
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Syncing...
-              </>
-            ) : (
-              "Start Sync"
-            )}
-          </Button>
-        </div>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Syncing...
+                </>
+              ) : (
+                "Start Sync"
+              )}
+            </Button>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

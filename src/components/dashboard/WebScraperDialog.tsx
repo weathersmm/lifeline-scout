@@ -9,36 +9,47 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Globe, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+
+const formSchema = z.object({
+  sourceUrl: z.string()
+    .trim()
+    .url({ message: "Invalid URL format" })
+    .max(2048, { message: "URL must be less than 2048 characters" }),
+  sourceName: z.string()
+    .trim()
+    .min(1, { message: "Source name is required" })
+    .max(100, { message: "Source name must be less than 100 characters" }),
+});
 
 export const WebScraperDialog = () => {
   const [open, setOpen] = useState(false);
-  const [sourceUrl, setSourceUrl] = useState("");
-  const [sourceName, setSourceName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const handleScrape = async () => {
-    if (!sourceUrl || !sourceName) {
-      toast({
-        title: "Missing information",
-        description: "Please provide both URL and source name",
-        variant: "destructive",
-      });
-      return;
-    }
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      sourceUrl: "",
+      sourceName: "",
+    },
+  });
 
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke(
         "scrape-opportunities",
         {
           body: {
-            source_url: sourceUrl,
-            source_name: sourceName,
+            source_url: values.sourceUrl,
+            source_name: values.sourceName,
           },
         }
       );
@@ -50,8 +61,7 @@ export const WebScraperDialog = () => {
         description: `Found ${data.stats.extracted} opportunities, inserted ${data.stats.inserted}`,
       });
 
-      setSourceUrl("");
-      setSourceName("");
+      form.reset();
       setOpen(false);
       
       // Reload the page to show new opportunities
@@ -84,42 +94,58 @@ export const WebScraperDialog = () => {
             to automatically extract and classify EMS opportunities.
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-4 py-4">
-          <div className="space-y-2">
-            <Label htmlFor="url">Website URL</Label>
-            <Input
-              id="url"
-              placeholder="https://sam.gov/opportunities/..."
-              value={sourceUrl}
-              onChange={(e) => setSourceUrl(e.target.value)}
-              disabled={isLoading}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
+            <FormField
+              control={form.control}
+              name="sourceUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Website URL</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="https://sam.gov/opportunities/..."
+                      disabled={isLoading}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="name">Source Name</Label>
-            <Input
-              id="name"
-              placeholder="SAM.gov"
-              value={sourceName}
-              onChange={(e) => setSourceName(e.target.value)}
-              disabled={isLoading}
+            <FormField
+              control={form.control}
+              name="sourceName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Source Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="SAM.gov"
+                      disabled={isLoading}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <Button
-            onClick={handleScrape}
-            disabled={isLoading}
-            className="w-full"
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Scraping...
-              </>
-            ) : (
-              "Start Scraping"
-            )}
-          </Button>
-        </div>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Scraping...
+                </>
+              ) : (
+                "Start Scraping"
+              )}
+            </Button>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

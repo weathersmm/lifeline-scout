@@ -16,6 +16,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 const serviceTags: ServiceTag[] = [
   'EMS 911', 'Non-Emergency', 'IFT', 'BLS', 'ALS', 'CCT',
@@ -24,14 +28,30 @@ const serviceTags: ServiceTag[] = [
 
 const priorities: Priority[] = ['high', 'medium', 'low'];
 
+const formSchema = z.object({
+  email: z.string()
+    .trim()
+    .email({ message: "Invalid email address" })
+    .max(255, { message: "Email must be less than 255 characters" }),
+  enabled: z.boolean(),
+  minPriority: z.enum(['high', 'medium', 'low'] as const),
+  serviceTags: z.array(z.string()),
+});
+
 export const NotificationPreferences = () => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
-  const [enabled, setEnabled] = useState(false);
-  const [email, setEmail] = useState('');
-  const [selectedServiceTags, setSelectedServiceTags] = useState<ServiceTag[]>([]);
-  const [minPriority, setMinPriority] = useState<Priority>('high');
   const [loading, setLoading] = useState(false);
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+      enabled: false,
+      minPriority: 'high',
+      serviceTags: [],
+    },
+  });
 
   useEffect(() => {
     if (open) {
@@ -55,17 +75,19 @@ export const NotificationPreferences = () => {
       }
 
       if (data) {
-        setEnabled(data.enabled);
-        setEmail(data.email);
-        setSelectedServiceTags(data.service_tags as ServiceTag[]);
-        setMinPriority(data.min_priority as Priority);
+        form.reset({
+          email: data.email,
+          enabled: data.enabled,
+          minPriority: data.min_priority as Priority,
+          serviceTags: data.service_tags as ServiceTag[],
+        });
       }
     } catch (error) {
       console.error('Error loading preferences:', error);
     }
   };
 
-  const handleSave = async () => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);
       const { data: { user } } = await supabase.auth.getUser();
@@ -78,23 +100,14 @@ export const NotificationPreferences = () => {
         return;
       }
 
-      if (!email) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Email is required",
-        });
-        return;
-      }
-
       const { error } = await supabase
         .from('notification_preferences')
         .upsert({
           user_id: user.id,
-          enabled,
-          email,
-          service_tags: selectedServiceTags,
-          min_priority: minPriority,
+          enabled: values.enabled,
+          email: values.email,
+          service_tags: values.serviceTags as any,
+          min_priority: values.minPriority,
         });
 
       if (error) throw error;
@@ -117,9 +130,11 @@ export const NotificationPreferences = () => {
   };
 
   const toggleServiceTag = (tag: ServiceTag) => {
-    setSelectedServiceTags(prev =>
-      prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
-    );
+    const currentTags = form.getValues('serviceTags');
+    const newTags = currentTags.includes(tag)
+      ? currentTags.filter(t => t !== tag)
+      : [...currentTags, tag];
+    form.setValue('serviceTags', newTags);
   };
 
   return (
@@ -138,88 +153,122 @@ export const NotificationPreferences = () => {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6">
-          {/* Enable/Disable */}
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label>Enable Notifications</Label>
-              <p className="text-sm text-muted-foreground">
-                Receive email alerts for matching opportunities
-              </p>
-            </div>
-            <Switch checked={enabled} onCheckedChange={setEnabled} />
-          </div>
-
-          {/* Email */}
-          <div className="space-y-2">
-            <Label htmlFor="email">Email Address</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="your@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={!enabled}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {/* Enable/Disable */}
+            <FormField
+              control={form.control}
+              name="enabled"
+              render={({ field }) => (
+                <FormItem className="flex items-center justify-between space-y-0">
+                  <div className="space-y-0.5">
+                    <FormLabel>Enable Notifications</FormLabel>
+                    <p className="text-sm text-muted-foreground">
+                      Receive email alerts for matching opportunities
+                    </p>
+                  </div>
+                  <FormControl>
+                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                </FormItem>
+              )}
             />
-          </div>
 
-          {/* Minimum Priority */}
-          <div className="space-y-2">
-            <Label>Minimum Priority</Label>
-            <Select
-              value={minPriority}
-              onValueChange={(value) => setMinPriority(value as Priority)}
-              disabled={!enabled}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {priorities.map((priority) => (
-                  <SelectItem key={priority} value={priority}>
-                    {priority.charAt(0).toUpperCase() + priority.slice(1)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <p className="text-sm text-muted-foreground">
-              Only notify for opportunities at or above this priority level
-            </p>
-          </div>
+            {/* Email */}
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email Address</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="your@email.com"
+                      disabled={!form.watch('enabled')}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          {/* Service Tags */}
-          <div className="space-y-2">
-            <Label>Service Tags (Optional)</Label>
-            <p className="text-sm text-muted-foreground mb-2">
-              Leave empty to receive all opportunities, or select specific tags
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {serviceTags.map((tag) => {
-                const isSelected = selectedServiceTags.includes(tag);
-                return (
-                  <Badge
-                    key={tag}
-                    variant={isSelected ? 'default' : 'outline'}
-                    className={`cursor-pointer transition-colors ${!enabled && 'opacity-50 cursor-not-allowed'}`}
-                    onClick={() => enabled && toggleServiceTag(tag)}
+            {/* Minimum Priority */}
+            <FormField
+              control={form.control}
+              name="minPriority"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Minimum Priority</FormLabel>
+                  <Select
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    disabled={!form.watch('enabled')}
                   >
-                    {tag}
-                  </Badge>
-                );
-              })}
-            </div>
-          </div>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {priorities.map((priority) => (
+                        <SelectItem key={priority} value={priority}>
+                          {priority.charAt(0).toUpperCase() + priority.slice(1)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-sm text-muted-foreground">
+                    Only notify for opportunities at or above this priority level
+                  </p>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          {/* Save Button */}
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleSave} disabled={loading}>
-              {loading ? 'Saving...' : 'Save Preferences'}
-            </Button>
-          </div>
-        </div>
+            {/* Service Tags */}
+            <FormField
+              control={form.control}
+              name="serviceTags"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Service Tags (Optional)</FormLabel>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Leave empty to receive all opportunities, or select specific tags
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {serviceTags.map((tag) => {
+                      const isSelected = field.value.includes(tag);
+                      const enabled = form.watch('enabled');
+                      return (
+                        <Badge
+                          key={tag}
+                          variant={isSelected ? 'default' : 'outline'}
+                          className={`cursor-pointer transition-colors ${!enabled && 'opacity-50 cursor-not-allowed'}`}
+                          onClick={() => enabled && toggleServiceTag(tag)}
+                        >
+                          {tag}
+                        </Badge>
+                      );
+                    })}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Save Button */}
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={loading}>
+                {loading ? 'Saving...' : 'Save Preferences'}
+              </Button>
+            </div>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );
