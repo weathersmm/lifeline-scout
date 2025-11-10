@@ -7,13 +7,16 @@ import { WebScraperDialog } from '@/components/dashboard/WebScraperDialog';
 import { HigherGovSyncDialog } from '@/components/dashboard/HigherGovSyncDialog';
 import { NotificationPreferences } from '@/components/dashboard/NotificationPreferences';
 import { ComparisonView } from '@/components/dashboard/ComparisonView';
+import { ExportButtons } from '@/components/dashboard/ExportButtons';
+import { BatchScraperDialog } from '@/components/dashboard/BatchScraperDialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AlertCircle, TrendingUp, FileText, Calendar, LogOut, User, GitCompare } from 'lucide-react';
+import { AlertCircle, TrendingUp, FileText, Calendar, LogOut, User, GitCompare, BarChart3 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +29,7 @@ import {
 const Index = () => {
   const { user, userRole, signOut } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [selectedOpportunity, setSelectedOpportunity] = useState<Opportunity | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedServiceTags, setSelectedServiceTags] = useState<ServiceTag[]>([]);
@@ -224,8 +228,14 @@ const Index = () => {
               </p>
             </div>
             <div className="flex items-center gap-3">
+              <Button variant="outline" onClick={() => navigate('/analytics')}>
+                <BarChart3 className="w-4 h-4 mr-2" />
+                Analytics
+              </Button>
+              <ExportButtons opportunities={filteredOpportunities} />
               <NotificationPreferences />
               <HigherGovSyncDialog />
+              <BatchScraperDialog />
               <WebScraperDialog />
               <Button variant="outline" onClick={handleGenerateReport}>
                 <Calendar className="w-4 h-4 mr-2" />
