@@ -199,25 +199,6 @@ export default function InternalAuth() {
     setIsLoading(false);
   };
 
-  const handleMicrosoftSignIn = async () => {
-    setIsLoading(true);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'azure',
-      options: {
-        redirectTo: `${window.location.origin}/`,
-        scopes: 'email openid profile',
-      },
-    });
-
-    if (error) {
-      toast({
-        title: "Error signing in with Microsoft",
-        description: error.message,
-        variant: "destructive",
-      });
-      setIsLoading(false);
-    }
-  };
 
   // Render MFA Enrollment Screen
   if (mfaStep === 'enroll') {
@@ -398,26 +379,11 @@ export default function InternalAuth() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* SSO Button */}
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full h-11"
-            onClick={handleMicrosoftSignIn}
-            disabled={isLoading}
-          >
-            <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zm12.6 0H12.6V0H24v11.4z" />
-            </svg>
-            Sign in with Microsoft
-          </Button>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <Separator />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">Or continue with email</span>
+          {/* Email/Password + MFA Only */}
+          <div className="text-center text-sm text-muted-foreground py-2 border border-border/50 rounded-md bg-muted/30">
+            <div className="flex items-center justify-center gap-2">
+              <Shield className="h-4 w-4" />
+              <span>Use email/password with mandatory MFA for secure access</span>
             </div>
           </div>
 
