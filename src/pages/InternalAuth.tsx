@@ -6,8 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Database, Lock, Mail } from "lucide-react";
+import { Database, Lock, Mail, Shield, Smartphone } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 
 /**
  * Internal-only authentication page
@@ -18,6 +19,11 @@ export default function InternalAuth() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [mfaStep, setMfaStep] = useState<'login' | 'enroll' | 'verify'>('login');
+  const [qrCode, setQrCode] = useState<string>('');
+  const [secret, setSecret] = useState<string>('');
+  const [totpCode, setTotpCode] = useState<string>('');
+  const [factorId, setFactorId] = useState<string>('');
 
   useEffect(() => {
     // Check if user is already logged in
@@ -36,7 +42,7 @@ export default function InternalAuth() {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -47,14 +53,137 @@ export default function InternalAuth() {
         description: error.message,
         variant: "destructive",
       });
-    } else {
-      toast({
-        title: "Welcome back!",
-        description: "Successfully signed in.",
-      });
-      navigate("/");
+      setIsLoading(false);
+      return;
     }
 
+    // Check if user has MFA enrolled
+    const { data: factors } = await supabase.auth.mfa.listFactors();
+    
+    if (factors && factors.totp && factors.totp.length > 0) {
+      // User has MFA enrolled, show verification
+      setFactorId(factors.totp[0].id);
+      setMfaStep('verify');
+    } else {
+      // First time login, enroll in MFA
+      await enrollMFA();
+    }
+
+    setIsLoading(false);
+  };
+
+  const enrollMFA = async () => {
+    setIsLoading(true);
+    
+    const { data, error } = await supabase.auth.mfa.enroll({
+      factorType: 'totp',
+      friendlyName: 'LifeLine Internal Auth',
+    });
+
+    if (error) {
+      toast({
+        title: "Error setting up authenticator",
+        description: error.message,
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    if (data) {
+      setQrCode(data.totp.qr_code);
+      setSecret(data.totp.secret);
+      setFactorId(data.id);
+      setMfaStep('enroll');
+    }
+
+    setIsLoading(false);
+  };
+
+  const handleVerifyEnrollment = async () => {
+    if (totpCode.length !== 6) {
+      toast({
+        title: "Invalid code",
+        description: "Please enter a 6-digit code from your authenticator app.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+
+    const { error } = await supabase.auth.mfa.challengeAndVerify({
+      factorId,
+      code: totpCode,
+    });
+
+    if (error) {
+      toast({
+        title: "Error verifying code",
+        description: error.message,
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    toast({
+      title: "Authenticator enabled!",
+      description: "Your account is now secured with two-factor authentication.",
+    });
+    
+    navigate("/");
+    setIsLoading(false);
+  };
+
+  const handleVerifyMFA = async () => {
+    if (totpCode.length !== 6) {
+      toast({
+        title: "Invalid code",
+        description: "Please enter a 6-digit code from your authenticator app.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+
+    const { data: challengeData, error: challengeError } = await supabase.auth.mfa.challenge({
+      factorId,
+    });
+
+    if (challengeError) {
+      toast({
+        title: "Error",
+        description: challengeError.message,
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    const { error: verifyError } = await supabase.auth.mfa.verify({
+      factorId,
+      challengeId: challengeData.id,
+      code: totpCode,
+    });
+
+    if (verifyError) {
+      toast({
+        title: "Invalid code",
+        description: "The code you entered is incorrect. Please try again.",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    toast({
+      title: "Welcome back!",
+      description: "Successfully signed in.",
+    });
+    
+    navigate("/");
     setIsLoading(false);
   };
 
@@ -97,6 +226,145 @@ export default function InternalAuth() {
     }
   };
 
+  // Render MFA Enrollment Screen
+  if (mfaStep === 'enroll') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
+        <Card className="w-full max-w-md border-border/50 shadow-elevated">
+          <CardHeader className="space-y-4 pb-6">
+            <div className="flex items-center justify-center mb-2">
+              <div className="p-3 rounded-full bg-primary/10">
+                <Shield className="h-8 w-8 text-primary" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl font-bold text-center">Set Up Authenticator</CardTitle>
+            <CardDescription className="text-center">
+              Scan this QR code with your authenticator app
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* QR Code */}
+            <div className="flex flex-col items-center space-y-4">
+              <div className="bg-white p-4 rounded-lg">
+                <img src={qrCode} alt="QR Code" className="w-48 h-48" />
+              </div>
+              <div className="text-center space-y-2">
+                <p className="text-sm text-muted-foreground">Or enter this code manually:</p>
+                <code className="block px-4 py-2 bg-muted rounded text-sm font-mono break-all">
+                  {secret}
+                </code>
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* Verification Code Input */}
+            <div className="space-y-4">
+              <Label className="flex items-center gap-2">
+                <Smartphone className="h-4 w-4" />
+                Enter 6-digit code from your app
+              </Label>
+              <div className="flex justify-center">
+                <InputOTP
+                  maxLength={6}
+                  value={totpCode}
+                  onChange={setTotpCode}
+                >
+                  <InputOTPGroup>
+                    <InputOTPSlot index={0} />
+                    <InputOTPSlot index={1} />
+                    <InputOTPSlot index={2} />
+                    <InputOTPSlot index={3} />
+                    <InputOTPSlot index={4} />
+                    <InputOTPSlot index={5} />
+                  </InputOTPGroup>
+                </InputOTP>
+              </div>
+            </div>
+
+            <Button 
+              onClick={handleVerifyEnrollment}
+              className="w-full h-11" 
+              disabled={isLoading || totpCode.length !== 6}
+            >
+              {isLoading ? "Verifying..." : "Verify & Enable"}
+            </Button>
+
+            <p className="text-center text-sm text-muted-foreground">
+              Use Google Authenticator, Microsoft Authenticator, or Authy
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Render MFA Verification Screen
+  if (mfaStep === 'verify') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
+        <Card className="w-full max-w-md border-border/50 shadow-elevated">
+          <CardHeader className="space-y-4 pb-6">
+            <div className="flex items-center justify-center mb-2">
+              <div className="p-3 rounded-full bg-primary/10">
+                <Shield className="h-8 w-8 text-primary" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl font-bold text-center">Two-Factor Authentication</CardTitle>
+            <CardDescription className="text-center">
+              Enter the code from your authenticator app
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-4">
+              <Label className="flex items-center gap-2">
+                <Smartphone className="h-4 w-4" />
+                6-digit authentication code
+              </Label>
+              <div className="flex justify-center">
+                <InputOTP
+                  maxLength={6}
+                  value={totpCode}
+                  onChange={setTotpCode}
+                >
+                  <InputOTPGroup>
+                    <InputOTPSlot index={0} />
+                    <InputOTPSlot index={1} />
+                    <InputOTPSlot index={2} />
+                    <InputOTPSlot index={3} />
+                    <InputOTPSlot index={4} />
+                    <InputOTPSlot index={5} />
+                  </InputOTPGroup>
+                </InputOTP>
+              </div>
+            </div>
+
+            <Button 
+              onClick={handleVerifyMFA}
+              className="w-full h-11" 
+              disabled={isLoading || totpCode.length !== 6}
+            >
+              {isLoading ? "Verifying..." : "Verify Code"}
+            </Button>
+
+            <Button 
+              onClick={() => {
+                setMfaStep('login');
+                setTotpCode('');
+              }}
+              variant="ghost"
+              className="w-full" 
+              disabled={isLoading}
+            >
+              Back to Sign In
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Render Login Screen
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
       <Card className="w-full max-w-md border-border/50 shadow-elevated">
@@ -206,6 +474,11 @@ export default function InternalAuth() {
               {isLoading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
+
+          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+            <Shield className="h-4 w-4" />
+            <span>Protected with two-factor authentication</span>
+          </div>
 
           <p className="text-center text-sm text-muted-foreground mt-6">
             Internal accounts only. Contact IT for access.
