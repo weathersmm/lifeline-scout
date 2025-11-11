@@ -9,10 +9,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ArrowLeft, Activity, Users, TrendingUp, Clock, Shield, CheckCircle, XCircle, UserCog, Database } from 'lucide-react';
+import { ArrowLeft, Activity, Users, TrendingUp, Clock, Shield, CheckCircle, XCircle, UserCog, Database, BarChart3 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { ScrapingHistoryDashboard } from '@/components/dashboard/ScrapingHistoryDashboard';
+import { ScrapingQualityDashboard } from '@/components/dashboard/ScrapingQualityDashboard';
 
 interface RateLimitRecord {
   id: string;
@@ -346,6 +347,10 @@ const AdminDashboard = () => {
               <Database className="w-4 h-4 mr-2" />
               Scraping History
             </TabsTrigger>
+            <TabsTrigger value="scraping-quality">
+              <BarChart3 className="w-4 h-4 mr-2" />
+              Quality Metrics
+            </TabsTrigger>
             <TabsTrigger value="user-management">
               <UserCog className="w-4 h-4 mr-2" />
               User Management
@@ -420,6 +425,10 @@ const AdminDashboard = () => {
 
           <TabsContent value="scraping-history">
             <ScrapingHistoryDashboard />
+          </TabsContent>
+
+          <TabsContent value="scraping-quality">
+            <ScrapingQualityDashboard />
           </TabsContent>
 
           <TabsContent value="user-management" className="space-y-6">

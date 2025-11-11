@@ -47,7 +47,12 @@ const higherGovSchema = z.object({
     .int({ message: "Days back must be an integer" })
     .min(1, { message: "Days back must be at least 1" })
     .max(90, { message: "Days back must be no more than 90" })
-    .default(7)
+    .default(7),
+  search_id: z.string()
+    .trim()
+    .optional(), // HigherGov saved search ID
+  source_type: z.enum(['sam', 'all'])
+    .default('all'), // 'sam' for federal opportunities only
 });
 
 serve(async (req) => {
@@ -113,7 +118,7 @@ serve(async (req) => {
       );
     }
 
-    const { search_keywords, days_back } = validation.data;
+    const { search_keywords, days_back, search_id, source_type } = validation.data;
 
     const HIGHERGOV_API_KEY = Deno.env.get("HIGHERGOV_API_KEY");
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
@@ -127,20 +132,28 @@ serve(async (req) => {
 
     console.log(`Fetching HigherGov opportunities from the last ${days_back} days`);
 
-    // Calculate date range
-    const capturedDate = new Date();
-    capturedDate.setDate(capturedDate.getDate() - days_back);
-    const formattedDate = capturedDate.toISOString().split('T')[0];
-
-    // Build HigherGov API URL with EMS-related search
-    const keywords = search_keywords || "EMS ambulance emergency medical services paramedic EMT 911 dispatch";
+    // Build HigherGov API URL
     const baseUrl = "https://www.highergov.com/api-external/opportunity/";
     const params = new URLSearchParams({
       api_key: HIGHERGOV_API_KEY,
-      captured_date: formattedDate,
-      ordering: "-captured_date",
       page_size: "100",
+      ordering: "-posted_date",
     });
+
+    // Add optional filters
+    if (search_id) {
+      params.set("search_id", search_id);
+    } else {
+      // Use date range if no search_id provided
+      const capturedDate = new Date();
+      capturedDate.setDate(capturedDate.getDate() - days_back);
+      const formattedDate = capturedDate.toISOString().split('T')[0];
+      params.set("captured_date", formattedDate);
+    }
+
+    if (source_type === 'sam') {
+      params.set("source_type", "sam");
+    }
 
     const apiUrl = `${baseUrl}?${params.toString()}`;
     console.log(`Fetching from HigherGov API: ${apiUrl.replace(HIGHERGOV_API_KEY, '[REDACTED]')}`);

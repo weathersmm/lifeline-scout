@@ -8,52 +8,37 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Database, Loader2 } from "lucide-react";
+import { Loader2, Database } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-
-const formSchema = z.object({
-  daysBack: z.coerce.number()
-    .min(1, { message: "Must be at least 1 day" })
-    .max(90, { message: "Cannot exceed 90 days" }),
-  keywords: z.string()
-    .trim()
-    .max(1000, { message: "Keywords must be less than 1000 characters" })
-    .optional(),
-});
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const HigherGovSyncDialog = () => {
   const [open, setOpen] = useState(false);
+  const [daysBack, setDaysBack] = useState("7");
+  const [keywords, setKeywords] = useState("ambulance");
+  const [searchId, setSearchId] = useState("Bvm7D2uxbydCmN2bJJ_rs");
+  const [sourceType, setSourceType] = useState<'sam' | 'all'>('sam');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      daysBack: 7,
-      keywords: "EMS ambulance emergency medical services",
-    },
-  });
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const handleSync = async () => {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke(
-        "fetch-highergov-opportunities",
-        {
-          body: {
-            days_back: values.daysBack,
-            search_keywords: values.keywords || "EMS ambulance emergency medical services",
-          },
-        }
-      );
+      const { data, error } = await supabase.functions.invoke('fetch-highergov-opportunities', {
+        body: {
+          days_back: parseInt(daysBack),
+          search_keywords: keywords || undefined,
+          search_id: searchId || undefined,
+          source_type: sourceType,
+        },
+      });
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
       toast({
         title: "HigherGov sync completed",
@@ -84,73 +69,89 @@ export const HigherGovSyncDialog = () => {
           Sync HigherGov
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Sync HigherGov Opportunities</DialogTitle>
           <DialogDescription>
             Automatically fetch and classify EMS opportunities from HigherGov API.
-            AI will filter for relevant EMS opportunities only.
+            Configure federal search or use date-based filtering.
           </DialogDescription>
         </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
-            <FormField
-              control={form.control}
-              name="daysBack"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Days Back</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="7"
-                      disabled={isLoading}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Fetch opportunities posted in the last N days (1-90)
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="keywords"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Search Keywords (optional)</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="EMS ambulance emergency medical services"
-                      disabled={isLoading}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Leave blank to use default EMS-related keywords
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button
-              type="submit"
+        <div className="space-y-4 py-4">
+          <div className="space-y-2">
+            <Label htmlFor="source-type">Source Type</Label>
+            <Select value={sourceType} onValueChange={(value: 'sam' | 'all') => setSourceType(value)}>
+              <SelectTrigger id="source-type">
+                <SelectValue placeholder="Select source type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="sam">Federal (SAM.gov only)</SelectItem>
+                <SelectItem value="all">All Sources</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-muted-foreground">
+              Federal includes SAM.gov, GSA contracts, and federal procurement
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="search-id">Search ID (Optional)</Label>
+            <Input
+              id="search-id"
+              type="text"
+              placeholder="Bvm7D2uxbydCmN2bJJ_rs"
+              value={searchId}
+              onChange={(e) => setSearchId(e.target.value)}
               disabled={isLoading}
-              className="w-full"
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Syncing...
-                </>
-              ) : (
-                "Start Sync"
-              )}
-            </Button>
-          </form>
-        </Form>
+            />
+            <p className="text-xs text-muted-foreground">
+              Use a saved HigherGov search ID for specific queries
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="days-back">Days Back</Label>
+            <Input
+              id="days-back"
+              type="number"
+              placeholder="7"
+              min="1"
+              max="90"
+              value={daysBack}
+              onChange={(e) => setDaysBack(e.target.value)}
+              disabled={isLoading}
+            />
+            <p className="text-xs text-muted-foreground">
+              Fetch opportunities from the last N days (1-90)
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="keywords">Keywords (Optional)</Label>
+            <Input
+              id="keywords"
+              type="text"
+              placeholder="ambulance EMS paramedic"
+              value={keywords}
+              onChange={(e) => setKeywords(e.target.value)}
+              disabled={isLoading}
+            />
+            <p className="text-xs text-muted-foreground">
+              Additional keywords to filter opportunities
+            </p>
+          </div>
+
+          <Button onClick={handleSync} disabled={isLoading} className="w-full">
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Syncing...
+              </>
+            ) : (
+              "Start Sync"
+            )}
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );
