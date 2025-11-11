@@ -10,6 +10,7 @@ import { ComparisonView } from '@/components/dashboard/ComparisonView';
 import { ExportButtons } from '@/components/dashboard/ExportButtons';
 import { BatchScraperDialog } from '@/components/dashboard/BatchScraperDialog';
 import { RoleSwitcher } from '@/components/dashboard/RoleSwitcher';
+import { ExecutiveView } from '@/components/dashboard/ExecutiveView';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -365,13 +366,21 @@ const Index = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-6 py-8">
-        <Tabs defaultValue="all" className="space-y-6">
+        <Tabs defaultValue="executive" className="space-y-6">
           <TabsList>
+            <TabsTrigger value="executive">Executive View</TabsTrigger>
             <TabsTrigger value="all">All Opportunities</TabsTrigger>
             <TabsTrigger value="high-priority">High Priority</TabsTrigger>
             <TabsTrigger value="new">New This Week</TabsTrigger>
             <TabsTrigger value="urgent">Urgent</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="executive" className="space-y-6">
+            <ExecutiveView 
+              opportunities={categoryFilteredOpportunities}
+              onViewDetails={setSelectedOpportunity}
+            />
+          </TabsContent>
 
           <TabsContent value="all" className="space-y-6">
             <OpportunityFilters
