@@ -8,6 +8,7 @@ export function useAuth() {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [previewRole, setPreviewRole] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -62,14 +63,25 @@ export function useAuth() {
     navigate("/auth");
   };
 
+  const setRolePreview = (role: string | null) => {
+    setPreviewRole(role);
+  };
+
+  // Use preview role if set, otherwise use actual role
+  const effectiveRole = previewRole || userRole;
+
   return {
     user,
     session,
     loading,
     userRole,
+    effectiveRole,
+    previewRole,
+    setRolePreview,
     signOut,
-    isAdmin: userRole === "admin",
-    isMember: userRole === "member" || userRole === "admin",
-    isViewer: userRole === "viewer",
+    isAdmin: effectiveRole === "admin",
+    isMember: effectiveRole === "member" || effectiveRole === "admin",
+    isViewer: effectiveRole === "viewer",
+    actualIsAdmin: userRole === "admin", // Always use actual role for admin checks
   };
 }

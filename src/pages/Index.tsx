@@ -9,6 +9,7 @@ import { NotificationPreferences } from '@/components/dashboard/NotificationPref
 import { ComparisonView } from '@/components/dashboard/ComparisonView';
 import { ExportButtons } from '@/components/dashboard/ExportButtons';
 import { BatchScraperDialog } from '@/components/dashboard/BatchScraperDialog';
+import { RoleSwitcher } from '@/components/dashboard/RoleSwitcher';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -27,7 +28,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const Index = () => {
-  const { user, userRole, isAdmin, signOut } = useAuth();
+  const { user, userRole, effectiveRole, previewRole, setRolePreview, actualIsAdmin, isAdmin, signOut } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
   const [selectedOpportunity, setSelectedOpportunity] = useState<Opportunity | null>(null);
@@ -228,6 +229,13 @@ const Index = () => {
               </p>
             </div>
             <div className="flex items-center gap-3">
+              {actualIsAdmin && (
+                <RoleSwitcher
+                  currentRole={userRole}
+                  previewRole={previewRole}
+                  onRoleChange={setRolePreview}
+                />
+              )}
               {isAdmin && (
                 <Button variant="outline" onClick={() => navigate('/admin')}>
                   <Shield className="w-4 h-4 mr-2" />
@@ -275,9 +283,16 @@ const Index = () => {
                   <DropdownMenuLabel>
                     <div className="flex flex-col gap-1">
                       <span className="text-sm font-medium">{user?.email}</span>
-                      <Badge variant="secondary" className="w-fit text-xs">
-                        {userRole}
-                      </Badge>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="secondary" className="w-fit text-xs">
+                          {effectiveRole}
+                        </Badge>
+                        {previewRole && (
+                          <Badge variant="outline" className="w-fit text-xs">
+                            Preview Mode
+                          </Badge>
+                        )}
+                      </div>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
