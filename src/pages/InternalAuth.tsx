@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Database, Lock, Mail, Shield, Smartphone } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { isLandingEntry } from "@/config/entryMode";
 
 /**
  * Internal-only authentication page
@@ -37,7 +38,8 @@ export default function InternalAuth() {
     // Avoid redirect flicker: only navigate after a real sign-in event
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_IN') {
-        navigate("/");
+        const redirectPath = isLandingEntry ? "/dashboard" : "/";
+        navigate(redirectPath);
       }
     });
 
@@ -158,7 +160,8 @@ export default function InternalAuth() {
       description: "Your account is now secured with two-factor authentication.",
     });
     
-    // Don't navigate manually - let onAuthStateChange handle it
+    const redirectPath = isLandingEntry ? "/dashboard" : "/";
+    navigate(redirectPath);
     setIsLoading(false);
   };
 
@@ -209,7 +212,8 @@ export default function InternalAuth() {
       description: "Successfully signed in.",
     });
     
-    // Don't navigate manually - let onAuthStateChange handle it
+    const redirectPath = isLandingEntry ? "/dashboard" : "/";
+    navigate(redirectPath);
     setIsLoading(false);
   };
 
@@ -369,7 +373,7 @@ export default function InternalAuth() {
                   </div>
                 </div>
                 <Button 
-                  onClick={() => navigate("/")}
+                  onClick={() => navigate(isLandingEntry ? "/dashboard" : "/")}
                   size="sm"
                   className="shrink-0"
                 >
