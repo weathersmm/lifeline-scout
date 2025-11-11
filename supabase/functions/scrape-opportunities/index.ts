@@ -94,7 +94,7 @@ const scrapeSchema = z.object({
     .trim()
     .min(1, { message: "Source name cannot be empty" })
     .max(100, { message: "Source name must be less than 100 characters" })
-    .regex(/^[a-zA-Z0-9\s\-_.]+$/, { message: "Source name contains invalid characters" })
+    .regex(/^[a-zA-Z0-9\s\-_.()\/&]+$/, { message: "Source name contains invalid characters" })
 });
 
 serve(async (req) => {
