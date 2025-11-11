@@ -19,8 +19,19 @@ serve(async (req) => {
 
     console.log("Starting daily batch scrape...");
 
-    // Get all active scraped sources
-    const { data: sources, error: sourcesError } = await supabaseClient
+    // Define comprehensive global sources for batch scraping
+    const GLOBAL_SOURCES = [
+      { url: 'https://sam.gov/opp/search', name: 'SAM.gov' },
+      { url: 'https://www.highergov.com/opportunities/', name: 'HigherGov' },
+      { url: 'https://caleprocure.ca.gov/pages/index.aspx', name: 'CAleprocure' },
+      { url: 'https://procurement.opengov.com/portal/ocgov', name: 'Orange County (OpenGov)' },
+      { url: 'https://www.planetbids.com/portal/portal.cfm?CompanyID=39493', name: 'PlanetBids - LA County' },
+      { url: 'https://www.bonfirehub.com/opportunities', name: 'BonfireHub' },
+      { url: 'https://camisvr.co.la.ca.us/webapp/PRDPCM/AltSelfService', name: 'LA County Procurement' },
+    ];
+
+    // Get all active scraped sources from database
+    const { data: dbSources, error: sourcesError } = await supabaseClient
       .from("scraped_sources")
       .select("*")
       .eq("status", "active")
@@ -30,7 +41,23 @@ serve(async (req) => {
       throw sourcesError;
     }
 
-    console.log(`Found ${sources?.length || 0} active sources to scrape`);
+    // Combine database sources with global sources (deduplicate by URL)
+    const sourceMap = new Map();
+    
+    // Add database sources
+    (dbSources || []).forEach(s => {
+      sourceMap.set(s.source_url, { url: s.source_url, name: s.source_name });
+    });
+    
+    // Add global sources (will not overwrite existing)
+    GLOBAL_SOURCES.forEach(s => {
+      if (!sourceMap.has(s.url)) {
+        sourceMap.set(s.url, s);
+      }
+    });
+
+    const sources = Array.from(sourceMap.values());
+    console.log(`Found ${sources.length} total sources to scrape (${dbSources?.length || 0} from DB + ${GLOBAL_SOURCES.length} global)`);
 
     const results = {
       total: sources?.length || 0,
@@ -42,9 +69,9 @@ serve(async (req) => {
     };
 
     // Scrape each source
-    for (const source of sources || []) {
+    for (const source of sources) {
       try {
-        console.log(`Scraping ${source.source_name}...`);
+        console.log(`Scraping ${source.name}...`);
 
         const scrapeResponse = await fetch(
           `${Deno.env.get("SUPABASE_URL")}/functions/v1/scrape-opportunities`,
@@ -55,8 +82,8 @@ serve(async (req) => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              source_url: source.source_url,
-              source_name: source.source_name,
+              source_url: source.url,
+              source_name: source.name,
               source_type: "global",
             }),
           }
@@ -67,15 +94,15 @@ serve(async (req) => {
           results.successful++;
           results.totalOpportunities += data.stats?.inserted || 0;
           results.sourcesScraped.push({
-            name: source.source_name,
-            url: source.source_url,
+            name: source.name,
+            url: source.url,
             opportunities: data.stats?.inserted || 0,
           });
         } else {
           const errorText = await scrapeResponse.text();
           results.failed++;
           results.errors.push({
-            name: source.source_name,
+            name: source.name,
             error: errorText,
           });
         }
@@ -83,10 +110,10 @@ serve(async (req) => {
         // Add delay between scrapes to avoid overwhelming servers
         await new Promise((resolve) => setTimeout(resolve, 2000));
       } catch (error) {
-        console.error(`Error scraping ${source.source_name}:`, error);
+        console.error(`Error scraping ${source.name}:`, error);
         results.failed++;
         results.errors.push({
-          name: source.source_name,
+          name: source.name,
           error: error instanceof Error ? error.message : "Unknown error",
         });
       }

@@ -24,6 +24,40 @@ export const HigherGovSyncDialog = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
+  const triggerBatchScraping = async () => {
+    try {
+      // Get key global sources to scrape after HigherGov sync
+      const globalSources = [
+        { url: 'https://sam.gov/opp/search', name: 'SAM.gov' },
+        { url: 'https://caleprocure.ca.gov/pages/index.aspx', name: 'CAleprocure' },
+        { url: 'https://procurement.opengov.com/portal/ocgov', name: 'Orange County Procurement' },
+      ];
+
+      let successCount = 0;
+      for (const source of globalSources) {
+        try {
+          await supabase.functions.invoke("scrape-opportunities", {
+            body: {
+              source_url: source.url,
+              source_name: source.name,
+              source_type: 'global',
+            },
+          });
+          successCount++;
+        } catch (error) {
+          console.error(`Failed to scrape ${source.name}:`, error);
+        }
+      }
+
+      toast({
+        title: "Batch scraping completed",
+        description: `Successfully scraped ${successCount}/${globalSources.length} additional sources`,
+      });
+    } catch (error) {
+      console.error("Batch scraping error:", error);
+    }
+  };
+
   const handleSync = async () => {
     setIsLoading(true);
     try {
@@ -42,8 +76,11 @@ export const HigherGovSyncDialog = () => {
 
       toast({
         title: "HigherGov sync completed",
-        description: `Fetched ${data.stats.fetched} opportunities, classified ${data.stats.classified} as EMS-related, inserted ${data.stats.inserted}`,
+        description: `Fetched ${data.stats.fetched} opportunities, classified ${data.stats.classified} as EMS-related, inserted ${data.stats.inserted}. Starting batch scraping...`,
       });
+
+      // Chain batch scraping after HigherGov sync
+      await triggerBatchScraping();
 
       setOpen(false);
       
