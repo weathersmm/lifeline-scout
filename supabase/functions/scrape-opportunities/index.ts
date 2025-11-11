@@ -194,27 +194,62 @@ serve(async (req) => {
         messages: [
           {
             role: "system",
-            content: `You are an expert at extracting EMS (Emergency Medical Services) procurement opportunities from government and public procurement websites. Extract ALL relevant opportunities and classify them according to EMS service types.
+            content: `You are an expert at extracting Emergency Medical Services (EMS) and adjacent healthcare procurement opportunities from government and public procurement websites.
 
-Service tags to use: EMS 911, Non-Emergency, IFT, BLS, ALS, CCT, MEDEVAC, Billing, CQI, EMS Tech, VR/Sim
-Contract types: RFP, RFQ, RFI, Sources Sought, Pre-solicitation, Sole-Source Notice
-Priority levels: high (closing soon or high value), medium (moderate timeline), low (early stage or low value)
+**EXTRACT OPPORTUNITIES IF THEY INVOLVE ANY OF:**
 
-For each opportunity found, extract:
-- title: Full title of the opportunity
-- agency: Government agency or organization
+Core EMS Services:
+- Ambulance services (911, non-emergency, interfacility transport)
+- Emergency medical services, paramedic/EMT services
+- Medical transport (ground, air, helicopter, MEDEVAC)
+- BLS (Basic Life Support), ALS (Advanced Life Support), CCT (Critical Care Transport)
+
+Adjacent Healthcare Services:
+- Medical equipment and supplies (stretchers, monitors, defibrillators, oxygen systems, patient warming/cooling)
+- Healthcare facility services (emergency departments, urgent care, trauma centers)
+- Surgical equipment and OR technology
+- Medical imaging (mobile MRI, CT, X-ray services)
+- Patient care equipment (hospital beds, wheelchairs, medical devices)
+
+Emergency Response & First Responder Technology:
+- 911 dispatch systems, CAD (Computer-Aided Dispatch), emergency communications
+- Law enforcement technology and equipment
+- Fire/rescue equipment and services
+- Field medicine and tactical medicine equipment
+- Emergency response coordination systems
+- Public safety technology and infrastructure
+
+Administrative & Support Services:
+- Call center services (911, dispatch, patient scheduling, medical hotlines)
+- Billing and claims processing (EMS billing, medical billing, revenue cycle management)
+- EMS management software (ePCR, electronic patient care records)
+- Quality improvement programs (CQI, QA/QI systems)
+- EMS training and simulation (VR/Sim training, CPR training, medical education)
+
+**SERVICE TAGS:** EMS 911, Non-Emergency, IFT, BLS, ALS, CCT, MEDEVAC, Billing, CQI, EMS Tech, VR/Sim, Call Center
+**CONTRACT TYPES:** RFP, RFQ, RFI, Sources Sought, Pre-solicitation, Sole-Source Notice
+**PRIORITY LEVELS:**
+- high: closing soon (<14 days) OR high value (>$1M) OR critical emergency services
+- medium: 14-30 days OR $100K-$1M OR important support services
+- low: >30 days OR <$100K OR general equipment/supplies
+
+**EXTRACT FOR EACH OPPORTUNITY:**
+- title: Full title
+- agency: Government agency/organization
 - geography: { state, county (optional), city (optional) }
-- serviceTags: Array of relevant service tags from the list above
-- contractType: One of the contract types listed
+- serviceTags: Array from list above
+- contractType: From list above
 - estimatedValue: { min (optional), max (optional) } in USD
 - keyDates: { issueDate (optional), questionsDue (optional), preBidMeeting (optional), proposalDue (required) }
 - termLength: Contract duration if specified
-- link: Direct URL to the opportunity
+- link: Direct URL to opportunity
 - summary: Brief 2-3 sentence description
-- priority: high/medium/low based on timeline and value
+- priority: high/medium/low
 - source: Website name
 
-Return ONLY a valid JSON array of opportunities. If no opportunities found, return an empty array [].`
+**BE INCLUSIVE:** Extract anything with reasonable connection to emergency response, healthcare, or public safety.
+
+Return ONLY a valid JSON array of opportunities. If none found, return [].`
           },
           {
             role: "user",

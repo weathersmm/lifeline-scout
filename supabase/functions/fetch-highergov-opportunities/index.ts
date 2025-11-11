@@ -204,17 +204,52 @@ serve(async (req) => {
         messages: [
           {
             role: "system",
-            content: `You are an expert at classifying Emergency Medical Services (EMS) procurement opportunities. 
-Analyze each opportunity and determine:
-1. If it's EMS-related (ambulance services, emergency medical services, paramedic services, EMT services, 911 dispatch, medical transport, emergency response, etc.)
-2. Which EMS service tags apply: EMS 911, Non-Emergency, IFT, BLS, ALS, CCT, MEDEVAC, Billing, CQI, EMS Tech, VR/Sim
-3. Priority level (high: closing soon <14 days or >$1M value, medium: 14-30 days or $100K-$1M, low: >30 days or <$100K)
+            content: `You are an expert at classifying Emergency Medical Services (EMS) and adjacent healthcare procurement opportunities. 
 
+**CLASSIFY AS EMS-RELATED IF THE OPPORTUNITY INVOLVES ANY OF:**
+
+Core EMS Services:
+- Ambulance services (911, non-emergency, interfacility transport)
+- Emergency medical services, paramedic/EMT services
+- Medical transport (ground, air, helicopter, MEDEVAC)
+- BLS (Basic Life Support), ALS (Advanced Life Support), CCT (Critical Care Transport)
+
+Adjacent Healthcare Services:
+- Medical equipment and supplies (stretchers, monitors, defibrillators, oxygen systems, patient warming/cooling)
+- Healthcare facility services (emergency departments, urgent care, trauma centers)
+- Surgical equipment and OR technology
+- Medical imaging (mobile MRI, CT, X-ray services)
+- Patient care equipment (hospital beds, wheelchairs, medical devices)
+
+Emergency Response & First Responder Technology:
+- 911 dispatch systems, CAD (Computer-Aided Dispatch), emergency communications
+- Law enforcement technology and equipment
+- Fire/rescue equipment and services
+- Field medicine and tactical medicine equipment
+- Emergency response coordination systems
+- Public safety technology and infrastructure
+
+Administrative & Support Services:
+- Call center services (911, dispatch, patient scheduling, medical hotlines)
+- Billing and claims processing (EMS billing, medical billing, revenue cycle management)
+- EMS management software (ePCR, electronic patient care records)
+- Quality improvement programs (CQI, QA/QI systems)
+- EMS training and simulation (VR/Sim training, CPR training, medical education)
+
+**SERVICE TAGS TO USE:** 
+EMS 911, Non-Emergency, IFT, BLS, ALS, CCT, MEDEVAC, Billing, CQI, EMS Tech, VR/Sim, Call Center
+
+**PRIORITY LEVELS:**
+- high: closing soon (<14 days) OR high value (>$1M) OR critical emergency services
+- medium: 14-30 days OR $100K-$1M OR important support services
+- low: >30 days OR <$100K OR general equipment/supplies
+
+**OUTPUT FORMAT:**
 Return ONLY a JSON array where each element corresponds to the input opportunity by index.
-For EMS-related opportunities: { "isEMS": true, "serviceTags": ["tag1", "tag2"], "priority": "high/medium/low", "reasoning": "brief explanation" }
-For non-EMS opportunities: { "isEMS": false }
+- For EMS-related: { "isEMS": true, "serviceTags": ["tag1", "tag2"], "priority": "high/medium/low", "reasoning": "brief explanation" }
+- For non-EMS: { "isEMS": false }
 
-Example: [{"isEMS": true, "serviceTags": ["EMS 911", "ALS"], "priority": "high", "reasoning": "Emergency 911 ALS ambulance service"}, {"isEMS": false}]`
+**BE INCLUSIVE:** If there's any reasonable connection to emergency response, healthcare, or public safety, classify it as EMS-related.`
           },
           {
             role: "user",
