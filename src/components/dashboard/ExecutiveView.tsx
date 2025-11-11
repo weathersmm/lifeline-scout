@@ -2,8 +2,9 @@ import { Opportunity } from '@/types/opportunity';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { MapPin, TrendingUp, Calendar, DollarSign } from 'lucide-react';
+import { MapPin, TrendingUp, Calendar, DollarSign, Clock } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
+import { format, differenceInDays } from 'date-fns';
 
 interface ExecutiveViewProps {
   opportunities: Opportunity[];
@@ -40,6 +41,30 @@ export const ExecutiveView = ({ opportunities, onViewDetails }: ExecutiveViewPro
     { name: 'Medium', value: opportunities.filter(o => o.priority === 'medium').length, color: 'hsl(var(--warning))' },
     { name: 'Low', value: opportunities.filter(o => o.priority === 'low').length, color: 'hsl(var(--muted))' }
   ];
+
+  // County breakdown for California opportunities
+  const countyBreakdown = caOpportunities.reduce((acc, opp) => {
+    const county = opp.geography.county || 'Unknown';
+    acc[county] = (acc[county] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const countyData = Object.entries(countyBreakdown)
+    .map(([name, value]) => ({ name, value }))
+    .sort((a, b) => b.value - a.value)
+    .slice(0, 10); // Top 10 counties
+
+  // High-priority CA opportunities timeline
+  const highPriorityCAOpps = caOpportunities
+    .filter(opp => opp.priority === 'high')
+    .sort((a, b) => new Date(a.keyDates.proposalDue).getTime() - new Date(b.keyDates.proposalDue).getTime());
+
+  const getUrgencyColor = (dueDate: string) => {
+    const daysUntil = differenceInDays(new Date(dueDate), new Date());
+    if (daysUntil <= 7) return 'hsl(var(--destructive))';
+    if (daysUntil <= 14) return 'hsl(var(--warning))';
+    return 'hsl(var(--primary))';
+  };
 
   // Calculate total estimated value for CA opportunities
   const caEstimatedValue = caOpportunities.reduce((sum, opp) => {
@@ -170,6 +195,125 @@ export const ExecutiveView = ({ opportunities, onViewDetails }: ExecutiveViewPro
           )}
         </CardContent>
       </Card>
+
+      {/* County Breakdown Chart */}
+      {countyData.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-primary" />
+              California County Distribution
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={350}>
+              <BarChart data={countyData} layout="vertical">
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis type="number" stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                <YAxis 
+                  dataKey="name" 
+                  type="category"
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={11}
+                  width={120}
+                />
+                <Tooltip 
+                  contentStyle={{
+                    backgroundColor: 'hsl(var(--card))',
+                    border: '1px solid hsl(var(--border))',
+                    borderRadius: '6px'
+                  }}
+                />
+                <Bar dataKey="value" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+            <p className="text-xs text-muted-foreground text-center mt-4">
+              Showing top 10 counties by opportunity count
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* High-Priority CA Timeline */}
+      {highPriorityCAOpps.length > 0 && (
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Clock className="w-5 h-5 text-destructive" />
+                High-Priority CA Timeline
+              </CardTitle>
+              <Badge variant="destructive" className="text-sm">
+                {highPriorityCAOpps.length} Urgent
+              </Badge>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {highPriorityCAOpps.map((opp) => {
+                const dueDate = new Date(opp.keyDates.proposalDue);
+                const daysUntil = differenceInDays(dueDate, new Date());
+                const urgencyColor = getUrgencyColor(opp.keyDates.proposalDue);
+                
+                return (
+                  <div 
+                    key={opp.id}
+                    className="flex items-center gap-4 p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
+                    onClick={() => onViewDetails(opp)}
+                  >
+                    <div className="flex flex-col items-center justify-center min-w-[80px] p-3 rounded-lg" style={{ backgroundColor: `${urgencyColor}15` }}>
+                      <div className="text-2xl font-bold" style={{ color: urgencyColor }}>
+                        {format(dueDate, 'MMM')}
+                      </div>
+                      <div className="text-3xl font-bold" style={{ color: urgencyColor }}>
+                        {format(dueDate, 'd')}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {daysUntil <= 0 ? 'DUE' : `${daysUntil}d`}
+                      </div>
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-semibold text-foreground mb-1 line-clamp-1">
+                        {opp.title}
+                      </h4>
+                      <p className="text-sm text-muted-foreground mb-2">
+                        {opp.agency} • {opp.geography.county}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {opp.serviceTags.slice(0, 4).map(tag => (
+                          <Badge key={tag} variant="outline" className="text-xs">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+
+                    {opp.estimatedValue && (
+                      <div className="text-right">
+                        <div className="text-sm font-semibold text-foreground">
+                          {new Intl.NumberFormat('en-US', {
+                            style: 'currency',
+                            currency: 'USD',
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          }).format(opp.estimatedValue.max || opp.estimatedValue.min || 0)}
+                        </div>
+                        <div className="text-xs text-muted-foreground">Est. Value</div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            {highPriorityCAOpps.length === 0 && (
+              <div className="text-center py-8 text-muted-foreground">
+                No high-priority California opportunities with upcoming due dates
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Analytics Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
