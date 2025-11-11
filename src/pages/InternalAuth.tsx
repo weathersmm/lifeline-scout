@@ -144,7 +144,7 @@ export default function InternalAuth() {
       description: "Your account is now secured with two-factor authentication.",
     });
     
-    navigate("/");
+    // Don't navigate manually - let onAuthStateChange handle it
     setIsLoading(false);
   };
 
@@ -195,7 +195,7 @@ export default function InternalAuth() {
       description: "Successfully signed in.",
     });
     
-    navigate("/");
+    // Don't navigate manually - let onAuthStateChange handle it
     setIsLoading(false);
   };
 
