@@ -57,7 +57,7 @@ export default function Landing() {
                 </li>
               </ul>
               <Button 
-                onClick={() => navigate("/auth")} 
+                onClick={() => navigate("/internal-auth")} 
                 className="w-full h-12 text-base"
                 size="lg"
               >

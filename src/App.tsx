@@ -43,6 +43,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/internal-auth" element={<InternalAuth />} />
           <Route path="/demo" element={<Demo />} />
           <Route
             path="/dashboard"
