@@ -50,9 +50,15 @@ export type Database = {
       opportunities: {
         Row: {
           agency: string
+          contract_expiration: string | null
           contract_type: Database["public"]["Enums"]["contract_type"]
+          county_notes: string | null
           created_at: string
           created_by: string | null
+          current_911_provider: string | null
+          current_nemt_provider: string | null
+          current_procurement_type: string | null
+          ems_plan_url: string | null
           estimated_value_max: number | null
           estimated_value_min: number | null
           geography_city: string | null
@@ -60,6 +66,7 @@ export type Database = {
           geography_state: string
           id: string
           issue_date: string | null
+          lemsa_site: string | null
           link: string
           pre_bid_meeting: string | null
           priority: Database["public"]["Enums"]["priority_level"]
@@ -76,9 +83,15 @@ export type Database = {
         }
         Insert: {
           agency: string
+          contract_expiration?: string | null
           contract_type: Database["public"]["Enums"]["contract_type"]
+          county_notes?: string | null
           created_at?: string
           created_by?: string | null
+          current_911_provider?: string | null
+          current_nemt_provider?: string | null
+          current_procurement_type?: string | null
+          ems_plan_url?: string | null
           estimated_value_max?: number | null
           estimated_value_min?: number | null
           geography_city?: string | null
@@ -86,6 +99,7 @@ export type Database = {
           geography_state: string
           id?: string
           issue_date?: string | null
+          lemsa_site?: string | null
           link: string
           pre_bid_meeting?: string | null
           priority?: Database["public"]["Enums"]["priority_level"]
@@ -102,9 +116,15 @@ export type Database = {
         }
         Update: {
           agency?: string
+          contract_expiration?: string | null
           contract_type?: Database["public"]["Enums"]["contract_type"]
+          county_notes?: string | null
           created_at?: string
           created_by?: string | null
+          current_911_provider?: string | null
+          current_nemt_provider?: string | null
+          current_procurement_type?: string | null
+          ems_plan_url?: string | null
           estimated_value_max?: number | null
           estimated_value_min?: number | null
           geography_city?: string | null
@@ -112,6 +132,7 @@ export type Database = {
           geography_state?: string
           id?: string
           issue_date?: string | null
+          lemsa_site?: string | null
           link?: string
           pre_bid_meeting?: string | null
           priority?: Database["public"]["Enums"]["priority_level"]
@@ -197,6 +218,54 @@ export type Database = {
           source_name?: string
           source_url?: string
           status?: string
+        }
+        Relationships: []
+      }
+      scraping_history: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          error_message: string | null
+          id: string
+          metadata: Json | null
+          opportunities_found: number | null
+          opportunities_inserted: number | null
+          source_name: string
+          source_type: string
+          source_url: string
+          started_at: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          opportunities_found?: number | null
+          opportunities_inserted?: number | null
+          source_name: string
+          source_type: string
+          source_url: string
+          started_at?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          opportunities_found?: number | null
+          opportunities_inserted?: number | null
+          source_name?: string
+          source_type?: string
+          source_url?: string
+          started_at?: string
+          status?: string
+          user_id?: string
         }
         Relationships: []
       }

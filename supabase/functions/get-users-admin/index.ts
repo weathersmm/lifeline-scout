@@ -72,7 +72,8 @@ serve(async (req) => {
         userId: user.id,
       });
 
-      const hasMFA = factors?.totp && factors.totp.length > 0;
+      // Check if user has any MFA factors enrolled
+      const hasMFA = factors?.factors && factors.factors.length > 0;
 
       return {
         id: user.id,
@@ -95,8 +96,9 @@ serve(async (req) => {
     );
   } catch (error) {
     console.error('Error fetching users:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: errorMessage }),
       {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

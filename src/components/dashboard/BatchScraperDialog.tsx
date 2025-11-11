@@ -136,6 +136,7 @@ export const BatchScraperDialog = () => {
             body: {
               source_url: url,
               source_name: name,
+              source_type: uniqueUrls.find(u => u.url === url)?.type || 'custom',
             },
           });
 

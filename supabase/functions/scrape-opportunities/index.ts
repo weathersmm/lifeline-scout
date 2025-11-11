@@ -144,6 +144,7 @@ serve(async (req) => {
     }
 
     const { source_url, source_name } = validation.data;
+    const source_type = body.source_type || 'custom'; // local, global, or custom
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
@@ -151,6 +152,26 @@ serve(async (req) => {
     }
 
     console.log(`Starting scrape for ${source_url}`);
+
+    // Create scraping history record
+    const { data: historyRecord, error: historyError } = await supabaseClient
+      .from('scraping_history')
+      .insert({
+        source_url,
+        source_name,
+        source_type,
+        started_at: new Date().toISOString(),
+        status: 'running',
+        user_id: user.id,
+      })
+      .select()
+      .single();
+
+    if (historyError) {
+      console.error('Failed to create history record:', historyError);
+    }
+
+    const historyId = historyRecord?.id;
 
     // Fetch webpage content
     const pageResponse = await fetch(source_url);
@@ -233,6 +254,23 @@ Return ONLY a valid JSON array of opportunities. If no opportunities found, retu
 
     console.log(`Extracted ${opportunities.length} opportunities`);
 
+    // Enrich opportunities with EMS provider context
+    for (const opp of opportunities) {
+      const county = opp.geography?.county;
+      if (county) {
+        // Query for EMS provider data for this county
+        // Note: This would require the PipeLineScout data to be loaded into a database table
+        // For now, we'll add placeholder fields that can be enriched later
+        opp.current_911_provider = null;
+        opp.current_nemt_provider = null;
+        opp.contract_expiration = null;
+        opp.current_procurement_type = null;
+        opp.county_notes = null;
+        opp.lemsa_site = null;
+        opp.ems_plan_url = null;
+      }
+    }
+
     // Insert opportunities into database
     let insertedCount = 0;
     let errorCount = 0;
@@ -244,11 +282,17 @@ Return ONLY a valid JSON array of opportunities. If no opportunities found, retu
           .insert({
             title: opp.title,
             agency: opp.agency,
-            geography: opp.geography,
+            geography_state: opp.geography?.state || null,
+            geography_county: opp.geography?.county || null,
+            geography_city: opp.geography?.city || null,
             service_tags: opp.serviceTags,
             contract_type: opp.contractType,
-            estimated_value: opp.estimatedValue,
-            key_dates: opp.keyDates,
+            estimated_value_min: opp.estimatedValue?.min || null,
+            estimated_value_max: opp.estimatedValue?.max || null,
+            issue_date: opp.keyDates?.issueDate || null,
+            questions_due: opp.keyDates?.questionsDue || null,
+            pre_bid_meeting: opp.keyDates?.preBidMeeting || null,
+            proposal_due: opp.keyDates?.proposalDue,
             term_length: opp.termLength,
             link: opp.link,
             summary: opp.summary,
@@ -256,6 +300,13 @@ Return ONLY a valid JSON array of opportunities. If no opportunities found, retu
             status: 'new',
             source: opp.source || source_name,
             recommended_action: null,
+            current_911_provider: opp.current_911_provider,
+            current_nemt_provider: opp.current_nemt_provider,
+            contract_expiration: opp.contract_expiration,
+            current_procurement_type: opp.current_procurement_type,
+            county_notes: opp.county_notes,
+            lemsa_site: opp.lemsa_site,
+            ems_plan_url: opp.ems_plan_url,
           });
 
         if (insertError) {
@@ -284,6 +335,19 @@ Return ONLY a valid JSON array of opportunities. If no opportunities found, retu
 
     if (sourceError) {
       console.error("Source update error:", sourceError);
+    }
+
+    // Update scraping history record as completed
+    if (historyId) {
+      await supabaseClient
+        .from('scraping_history')
+        .update({
+          completed_at: new Date().toISOString(),
+          status: 'completed',
+          opportunities_found: opportunities.length,
+          opportunities_inserted: insertedCount,
+        })
+        .eq('id', historyId);
     }
 
     return new Response(
