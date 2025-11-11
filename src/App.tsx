@@ -28,7 +28,9 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   if (!user) {
-    return <Navigate to="/auth" replace />;
+    // In landing mode, redirect to internal-auth for internal flows
+    const redirectPath = isLandingEntry ? "/internal-auth" : "/auth";
+    return <Navigate to={redirectPath} replace />;
   }
 
   return <>{children}</>;

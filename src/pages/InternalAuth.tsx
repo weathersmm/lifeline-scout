@@ -24,8 +24,16 @@ export default function InternalAuth() {
   const [secret, setSecret] = useState<string>('');
   const [totpCode, setTotpCode] = useState<string>('');
   const [factorId, setFactorId] = useState<string>('');
+  const [hasStoredSession, setHasStoredSession] = useState(false);
 
   useEffect(() => {
+    // Check for stored session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        setHasStoredSession(true);
+      }
+    });
+
     // Avoid redirect flicker: only navigate after a real sign-in event
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_IN') {
@@ -371,7 +379,32 @@ export default function InternalAuth() {
   // Render Login Screen
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
-      <Card className="w-full max-w-md border-border/50 shadow-elevated">
+      <div className="w-full max-w-md space-y-4">
+        {/* Session Detected Banner */}
+        {hasStoredSession && (
+          <Card className="border-primary/50 bg-primary/5">
+            <CardContent className="pt-6 pb-6">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <Shield className="h-5 w-5 text-primary" />
+                  <div>
+                    <p className="text-sm font-medium">Session detected</p>
+                    <p className="text-xs text-muted-foreground">You're already signed in</p>
+                  </div>
+                </div>
+                <Button 
+                  onClick={() => navigate("/")}
+                  size="sm"
+                  className="shrink-0"
+                >
+                  Continue to Dashboard
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        <Card className="w-full border-border/50 shadow-elevated">
         <CardHeader className="space-y-4 pb-6">
           <div className="flex items-center justify-center mb-2">
             <div className="p-3 rounded-full bg-primary/10">
@@ -489,6 +522,7 @@ export default function InternalAuth() {
           </p>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }
