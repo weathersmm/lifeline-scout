@@ -238,8 +238,8 @@ Administrative & Support Services:
 - Quality improvement programs (CQI, QA/QI systems)
 - EMS training and simulation (VR/Sim training, CPR training, medical education)
 
-**SERVICE TAGS TO USE:** 
-EMS 911, Non-Emergency, IFT, BLS, ALS, CCT, MEDEVAC, Billing, CQI, EMS Tech, VR/Sim, Call Center
+**SERVICE TAGS TO USE (EXACT STRINGS ONLY):** 
+"EMS 911" (not "911"), "Non-Emergency", "IFT", "BLS", "ALS", "CCT", "MEDEVAC", "Billing", "CQI", "EMS Tech", "VR/Sim", "Call Center"
 
 **PRIORITY LEVELS:**
 - high: closing soon (<14 days) OR high value (>$1M) OR critical emergency services
@@ -307,7 +307,7 @@ Return ONLY a JSON array where each element corresponds to the input opportunity
           .insert({
             title: opp.title || "Untitled Opportunity",
             agency: opp.agency?.agency_name || "Unknown Agency",
-            geography_state: opp.pop_state || null,
+            geography_state: opp.pop_state || opp.agency?.agency_state || "N/A",
             geography_county: null,
             geography_city: opp.pop_city || null,
             service_tags: classification.serviceTags || [],

@@ -18,10 +18,7 @@ import { ScrapingProgressMonitor } from "./ScrapingProgressMonitor";
 
 export const HigherGovSyncDialog = () => {
   const [open, setOpen] = useState(false);
-  const [daysBack, setDaysBack] = useState("7");
-  const [keywords, setKeywords] = useState("ambulance");
-  const [searchId, setSearchId] = useState("Bvm7D2uxbydCmN2bJJ_rs");
-  const [sourceType, setSourceType] = useState<'sam' | 'sled' | 'all'>('sam');
+  const [sourceType, setSourceType] = useState<'sam' | 'sled'>('sled');
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const { toast } = useToast();
@@ -111,11 +108,15 @@ export const HigherGovSyncDialog = () => {
     setSessionId(newSessionId);
 
     try {
+      // Use predefined search IDs for ambulance opportunities
+      const searchId = sourceType === 'sam' 
+        ? 'Bvm7D2uxbydCmN2bJJ_rs'  // Federal ambulance search
+        : 'jQDXT1Mj3rMe5qU0zdFOk-sl'; // State & Local ambulance search
+      
       const { data, error } = await supabase.functions.invoke('fetch-highergov-opportunities', {
         body: {
-          days_back: parseInt(daysBack),
-          search_keywords: keywords || undefined,
-          search_id: searchId || undefined,
+          days_back: 30,
+          search_id: searchId,
           source_type: sourceType,
         },
       });
@@ -158,74 +159,25 @@ export const HigherGovSyncDialog = () => {
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Sync HigherGov Opportunities</DialogTitle>
+          <DialogTitle>Sync EMS Opportunities</DialogTitle>
           <DialogDescription>
-            Automatically fetch and classify EMS opportunities from HigherGov API.
-            Configure federal search or use date-based filtering.
+            Discover new ambulance and EMS opportunities from government contracts.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <Label htmlFor="source-type">Source Type</Label>
-            <Select value={sourceType} onValueChange={(value: 'sam' | 'sled' | 'all') => setSourceType(value)}>
-              <SelectTrigger id="source-type">
-                <SelectValue placeholder="Select source type" />
+            <Label>Choose Contract Type</Label>
+            <Select value={sourceType} onValueChange={(value: 'sam' | 'sled') => setSourceType(value)}>
+              <SelectTrigger className="bg-background">
+                <SelectValue />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="sam">Federal (SAM.gov)</SelectItem>
+              <SelectContent className="bg-background border-border z-50">
                 <SelectItem value="sled">State & Local</SelectItem>
-                <SelectItem value="all">All Sources</SelectItem>
+                <SelectItem value="sam">Federal</SelectItem>
               </SelectContent>
             </Select>
             <p className="text-xs text-muted-foreground">
-              Federal: SAM.gov, GSA contracts | State & Local: SLED opportunities
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="search-id">Search ID (Optional)</Label>
-            <Input
-              id="search-id"
-              type="text"
-              placeholder="Bvm7D2uxbydCmN2bJJ_rs"
-              value={searchId}
-              onChange={(e) => setSearchId(e.target.value)}
-              disabled={isLoading}
-            />
-            <p className="text-xs text-muted-foreground">
-              Use a saved HigherGov search ID for specific queries
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="days-back">Days Back</Label>
-            <Input
-              id="days-back"
-              type="number"
-              placeholder="7"
-              min="1"
-              max="90"
-              value={daysBack}
-              onChange={(e) => setDaysBack(e.target.value)}
-              disabled={isLoading}
-            />
-            <p className="text-xs text-muted-foreground">
-              Fetch opportunities from the last N days (1-90)
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="keywords">Keywords (Optional)</Label>
-            <Input
-              id="keywords"
-              type="text"
-              placeholder="ambulance EMS paramedic"
-              value={keywords}
-              onChange={(e) => setKeywords(e.target.value)}
-              disabled={isLoading}
-            />
-            <p className="text-xs text-muted-foreground">
-              Additional keywords to filter opportunities
+              Searches the last 30 days for ambulance contracts
             </p>
           </div>
 
