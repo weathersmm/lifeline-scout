@@ -10,16 +10,19 @@ import {
 } from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { Search, X, CalendarIcon } from 'lucide-react';
-import { ServiceTag, ContractType, Priority } from '@/types/opportunity';
+import { Search, X, CalendarIcon, Filter } from 'lucide-react';
+import { ServiceTag, ContractType, Priority, OpportunityCategory } from '@/types/opportunity';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { allCategories } from '@/utils/categoryMapping';
 
 interface OpportunityFiltersProps {
   searchQuery: string;
   onSearchChange: (value: string) => void;
   selectedServiceTags: ServiceTag[];
   onServiceTagToggle: (tag: ServiceTag) => void;
+  selectedCategories: OpportunityCategory[];
+  onCategoryToggle: (category: OpportunityCategory) => void;
   selectedPriority: Priority | 'all';
   onPriorityChange: (priority: Priority | 'all') => void;
   selectedContractType: ContractType | 'all';
@@ -31,7 +34,7 @@ interface OpportunityFiltersProps {
 
 const serviceTags: ServiceTag[] = [
   'EMS 911', 'Non-Emergency', 'IFT', 'BLS', 'ALS', 'CCT',
-  'MEDEVAC', 'Billing', 'CQI', 'EMS Tech', 'VR/Sim'
+  'MEDEVAC', 'Billing', 'CQI', 'EMS Tech', 'VR/Sim', 'Call Center'
 ];
 
 const priorities: (Priority | 'all')[] = ['all', 'high', 'medium', 'low'];
@@ -45,6 +48,8 @@ export const OpportunityFilters = ({
   onSearchChange,
   selectedServiceTags,
   onServiceTagToggle,
+  selectedCategories,
+  onCategoryToggle,
   selectedPriority,
   onPriorityChange,
   selectedContractType,
@@ -56,6 +61,7 @@ export const OpportunityFilters = ({
   const hasActiveFilters = 
     searchQuery || 
     selectedServiceTags.length > 0 || 
+    selectedCategories.length > 0 ||
     selectedPriority !== 'all' || 
     selectedContractType !== 'all' ||
     dateRange?.from ||
@@ -74,13 +80,36 @@ export const OpportunityFilters = ({
         />
       </div>
 
+      {/* Category Filters */}
+      <div>
+        <label className="text-sm font-medium text-foreground mb-2 flex items-center gap-2">
+          <Filter className="w-4 h-4" />
+          Opportunity Categories
+        </label>
+        <div className="flex flex-wrap gap-2">
+          {allCategories.map((category) => {
+            const isSelected = selectedCategories.includes(category);
+            return (
+              <Badge
+                key={category}
+                variant={isSelected ? 'default' : 'outline'}
+                className="cursor-pointer hover:bg-primary/90 transition-colors text-xs px-3 py-1"
+                onClick={() => onCategoryToggle(category)}
+              >
+                {category}
+              </Badge>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Dropdowns */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Select value={selectedPriority} onValueChange={onPriorityChange}>
           <SelectTrigger>
             <SelectValue placeholder="Priority" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-background z-50">
             {priorities.map((priority) => (
               <SelectItem key={priority} value={priority}>
                 {priority === 'all' ? 'All Priorities' : priority.charAt(0).toUpperCase() + priority.slice(1)}
@@ -93,7 +122,7 @@ export const OpportunityFilters = ({
           <SelectTrigger>
             <SelectValue placeholder="Contract Type" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-background z-50">
             {contractTypes.map((type) => (
               <SelectItem key={type} value={type}>
                 {type === 'all' ? 'All Types' : type}
@@ -125,7 +154,7 @@ export const OpportunityFilters = ({
               )}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
+          <PopoverContent className="w-auto p-0 bg-background z-50" align="start">
             <Calendar
               initialFocus
               mode="range"

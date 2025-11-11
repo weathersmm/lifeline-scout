@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Opportunity, ServiceTag, Priority, ContractType } from '@/types/opportunity';
+import { Opportunity, ServiceTag, Priority, ContractType, OpportunityCategory } from '@/types/opportunity';
 import { OpportunityCard } from '@/components/dashboard/OpportunityCard';
 import { OpportunityFilters } from '@/components/dashboard/OpportunityFilters';
 import { OpportunityDetailDialog } from '@/components/dashboard/OpportunityDetailDialog';
@@ -11,11 +11,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AlertCircle, TrendingUp, FileText, Eye, RefreshCw, GitCompare } from 'lucide-react';
 import { mockOpportunities } from '@/data/mockOpportunities';
 import { Link } from 'react-router-dom';
+import { filterByCategories } from '@/utils/categoryMapping';
 
 const Demo = () => {
   const [selectedOpportunity, setSelectedOpportunity] = useState<Opportunity | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedServiceTags, setSelectedServiceTags] = useState<ServiceTag[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<OpportunityCategory[]>([]);
   const [selectedPriority, setSelectedPriority] = useState<Priority | 'all'>('all');
   const [selectedContractType, setSelectedContractType] = useState<ContractType | 'all'>('all');
   const [dateRange, setDateRange] = useState<{ from: Date | undefined; to: Date | undefined }>({ from: undefined, to: undefined });
@@ -56,10 +58,13 @@ const Demo = () => {
     return matchesSearch && matchesServiceTags && matchesPriority && matchesContractType && matchesDateRange;
   });
 
+  // Apply category filtering
+  const categoryFilteredOpportunities = filterByCategories(filteredOpportunities, selectedCategories);
+
   // Stats
-  const highPriorityCount = filteredOpportunities.filter(o => o.priority === 'high').length;
-  const newOpportunitiesCount = filteredOpportunities.filter(o => o.status === 'new').length;
-  const urgentCount = filteredOpportunities.filter(o => {
+  const highPriorityCount = categoryFilteredOpportunities.filter(o => o.priority === 'high').length;
+  const newOpportunitiesCount = categoryFilteredOpportunities.filter(o => o.status === 'new').length;
+  const urgentCount = categoryFilteredOpportunities.filter(o => {
     const daysUntilDue = Math.ceil(
       (new Date(o.keyDates.proposalDue).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
     );
@@ -69,6 +74,7 @@ const Demo = () => {
   const handleClearFilters = () => {
     setSearchQuery('');
     setSelectedServiceTags([]);
+    setSelectedCategories([]);
     setSelectedPriority('all');
     setSelectedContractType('all');
     setDateRange({ from: undefined, to: undefined });
@@ -77,6 +83,12 @@ const Demo = () => {
   const handleServiceTagToggle = (tag: ServiceTag) => {
     setSelectedServiceTags(prev =>
       prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
+    );
+  };
+
+  const handleCategoryToggle = (category: OpportunityCategory) => {
+    setSelectedCategories(prev =>
+      prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]
     );
   };
 
@@ -162,7 +174,7 @@ const Demo = () => {
                 <FileText className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-foreground">{filteredOpportunities.length}</p>
+                <p className="text-2xl font-bold text-foreground">{categoryFilteredOpportunities.length}</p>
                 <p className="text-sm text-muted-foreground">Total Opportunities</p>
               </div>
             </div>
@@ -213,6 +225,8 @@ const Demo = () => {
               onSearchChange={setSearchQuery}
               selectedServiceTags={selectedServiceTags}
               onServiceTagToggle={handleServiceTagToggle}
+              selectedCategories={selectedCategories}
+              onCategoryToggle={handleCategoryToggle}
               selectedPriority={selectedPriority}
               onPriorityChange={setSelectedPriority}
               selectedContractType={selectedContractType}
@@ -223,7 +237,7 @@ const Demo = () => {
             />
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {filteredOpportunities.map((opportunity) => (
+              {categoryFilteredOpportunities.map((opportunity) => (
                 <OpportunityCard
                   key={opportunity.id}
                   opportunity={opportunity}
@@ -235,7 +249,7 @@ const Demo = () => {
               ))}
             </div>
 
-            {filteredOpportunities.length === 0 && (
+            {categoryFilteredOpportunities.length === 0 && (
               <div className="text-center py-12">
                 <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                 <h3 className="text-lg font-semibold mb-2">No opportunities found</h3>
@@ -248,7 +262,7 @@ const Demo = () => {
 
           <TabsContent value="high-priority" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {filteredOpportunities.filter(o => o.priority === 'high').map((opportunity) => (
+              {categoryFilteredOpportunities.filter(o => o.priority === 'high').map((opportunity) => (
                 <OpportunityCard
                   key={opportunity.id}
                   opportunity={opportunity}
@@ -260,7 +274,7 @@ const Demo = () => {
 
           <TabsContent value="new" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {filteredOpportunities.filter(o => o.status === 'new').map((opportunity) => (
+              {categoryFilteredOpportunities.filter(o => o.status === 'new').map((opportunity) => (
                 <OpportunityCard
                   key={opportunity.id}
                   opportunity={opportunity}
@@ -272,7 +286,7 @@ const Demo = () => {
 
           <TabsContent value="urgent" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {filteredOpportunities.filter(o => {
+              {categoryFilteredOpportunities.filter(o => {
                 const daysUntilDue = Math.ceil(
                   (new Date(o.keyDates.proposalDue).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
                 );

@@ -39,7 +39,16 @@ export type ServiceTag =
   | 'Billing'
   | 'CQI'
   | 'EMS Tech'
-  | 'VR/Sim';
+  | 'VR/Sim'
+  | 'Call Center';
+
+export type OpportunityCategory =
+  | 'Core EMS Services'
+  | 'Medical Equipment'
+  | 'Call Center & Dispatch'
+  | 'Billing & Claims'
+  | 'First Responder Tech'
+  | 'Training & Simulation';
 
 export type ContractType = 
   | 'RFP'
