@@ -60,10 +60,27 @@ const scrapeSchema = z.object({
             'bidnet.com',
             'publicpurchase.com',
             'bidsync.com',
-            'govspend.com'
+            'govspend.com',
+            'opengov.com',
+            'planetbids.com',
+            'bonfirehub.com',
+            'periscope.com',
+            'procurenow.com'
           ];
           
           const hostname = urlObj.hostname.toLowerCase();
+          
+          // Allow California government domains (.ca.gov, .ca.us)
+          if (hostname.endsWith('.ca.gov') || hostname.endsWith('.ca.us')) {
+            return true;
+          }
+          
+          // Allow other U.S. government domains
+          if (hostname.endsWith('.gov') || hostname.endsWith('.us')) {
+            return true;
+          }
+          
+          // Check against allowlist
           return allowedDomains.some(domain => 
             hostname === domain || hostname.endsWith('.' + domain)
           );
