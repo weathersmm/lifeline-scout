@@ -313,6 +313,51 @@ export type Database = {
         }
         Relationships: []
       }
+      scraping_progress: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          error_message: string | null
+          id: string
+          opportunities_found: number | null
+          retry_count: number | null
+          session_id: string
+          source_name: string
+          source_url: string
+          started_at: string | null
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          opportunities_found?: number | null
+          retry_count?: number | null
+          session_id: string
+          source_name: string
+          source_url: string
+          started_at?: string | null
+          status: string
+          updated_at?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          opportunities_found?: number | null
+          retry_count?: number | null
+          session_id?: string
+          source_name?: string
+          source_url?: string
+          started_at?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

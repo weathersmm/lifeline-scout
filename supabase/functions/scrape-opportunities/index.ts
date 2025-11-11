@@ -170,6 +170,45 @@ serve(async (req) => {
 
     console.log(`Starting scrape for ${source_url}`);
 
+    // Helper function to implement exponential backoff retry
+    async function fetchWithRetry(url: string, maxRetries = 3, initialDelay = 1000): Promise<Response> {
+      let lastError: Error | null = null;
+      
+      for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+          const response = await fetch(url, {
+            headers: {
+              'User-Agent': 'Mozilla/5.0 (compatible; EMSScout/1.0; +https://scout.ewproto.com)',
+            },
+          });
+          
+          if (response.ok) {
+            return response;
+          }
+          
+          // If server error (5xx), retry with exponential backoff
+          if (response.status >= 500 && attempt < maxRetries) {
+            const delay = initialDelay * Math.pow(2, attempt);
+            console.log(`Server error ${response.status}, retrying in ${delay}ms... (attempt ${attempt + 1}/${maxRetries})`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            continue;
+          }
+          
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        } catch (error) {
+          lastError = error as Error;
+          
+          if (attempt < maxRetries) {
+            const delay = initialDelay * Math.pow(2, attempt);
+            console.log(`Fetch failed: ${lastError.message}, retrying in ${delay}ms... (attempt ${attempt + 1}/${maxRetries})`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+          }
+        }
+      }
+      
+      throw lastError || new Error('Failed to fetch after retries');
+    }
+
     // Create scraping history record
     const { data: historyRecord, error: historyError } = await supabaseClient
       .from('scraping_history')
@@ -190,8 +229,8 @@ serve(async (req) => {
 
     const historyId = historyRecord?.id;
 
-    // Fetch webpage content
-    const pageResponse = await fetch(source_url);
+    // Fetch webpage content with retry logic
+    const pageResponse = await fetchWithRetry(source_url);
     if (!pageResponse.ok) {
       throw new Error(`Failed to fetch page: ${pageResponse.statusText}`);
     }

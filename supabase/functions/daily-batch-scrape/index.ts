@@ -19,6 +19,9 @@ serve(async (req) => {
 
     console.log("Starting daily batch scrape...");
 
+    // Generate unique session ID for this batch
+    const sessionId = `batch-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+
     // Define comprehensive global sources for batch scraping
     const GLOBAL_SOURCES = [
       { url: 'https://sam.gov/opp/search', name: 'SAM.gov' },
@@ -68,10 +71,32 @@ serve(async (req) => {
       errors: [] as any[],
     };
 
+    // Initialize progress tracking for all sources
+    for (const source of sources) {
+      await supabaseClient
+        .from('scraping_progress')
+        .insert({
+          session_id: sessionId,
+          source_name: source.name,
+          source_url: source.url,
+          status: 'pending',
+        });
+    }
+
     // Scrape each source
     for (const source of sources) {
       try {
         console.log(`Scraping ${source.name}...`);
+
+        // Update status to in_progress
+        await supabaseClient
+          .from('scraping_progress')
+          .update({
+            status: 'in_progress',
+            started_at: new Date().toISOString(),
+          })
+          .eq('session_id', sessionId)
+          .eq('source_url', source.url);
 
         const scrapeResponse = await fetch(
           `${Deno.env.get("SUPABASE_URL")}/functions/v1/scrape-opportunities`,
@@ -98,6 +123,17 @@ serve(async (req) => {
             url: source.url,
             opportunities: data.stats?.inserted || 0,
           });
+
+          // Update progress as completed
+          await supabaseClient
+            .from('scraping_progress')
+            .update({
+              status: 'completed',
+              opportunities_found: data.stats?.inserted || 0,
+              completed_at: new Date().toISOString(),
+            })
+            .eq('session_id', sessionId)
+            .eq('source_url', source.url);
         } else {
           const errorText = await scrapeResponse.text();
           results.failed++;
@@ -105,6 +141,17 @@ serve(async (req) => {
             name: source.name,
             error: errorText,
           });
+
+          // Update progress as failed
+          await supabaseClient
+            .from('scraping_progress')
+            .update({
+              status: 'failed',
+              error_message: errorText,
+              completed_at: new Date().toISOString(),
+            })
+            .eq('session_id', sessionId)
+            .eq('source_url', source.url);
         }
 
         // Add delay between scrapes to avoid overwhelming servers
@@ -116,6 +163,17 @@ serve(async (req) => {
           name: source.name,
           error: error instanceof Error ? error.message : "Unknown error",
         });
+
+        // Update progress as failed
+        await supabaseClient
+          .from('scraping_progress')
+          .update({
+            status: 'failed',
+            error_message: error instanceof Error ? error.message : "Unknown error",
+            completed_at: new Date().toISOString(),
+          })
+          .eq('session_id', sessionId)
+          .eq('source_url', source.url);
       }
     }
 

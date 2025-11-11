@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { pipelineScoutDataService, type MunicipalityData } from "@/services/pipelineScoutDataService";
+import { ScrapingProgressMonitor } from "./ScrapingProgressMonitor";
 
 export const BatchScraperDialog = () => {
   const [open, setOpen] = useState(false);
@@ -27,6 +28,7 @@ export const BatchScraperDialog = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [dataLoading, setDataLoading] = useState(true);
   const [counties, setCounties] = useState<string[]>([]);
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -125,6 +127,23 @@ export const BatchScraperDialog = () => {
     }
 
     setIsLoading(true);
+    
+    // Generate unique session ID for progress tracking
+    const newSessionId = `batch-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+    setSessionId(newSessionId);
+
+    // Initialize progress tracking
+    for (const { url, name } of uniqueUrls) {
+      await supabase
+        .from('scraping_progress')
+        .insert({
+          session_id: newSessionId,
+          source_name: name,
+          source_url: url,
+          status: 'pending',
+        });
+    }
+
     let successCount = 0;
     let failCount = 0;
     let totalInserted = 0;
@@ -132,6 +151,16 @@ export const BatchScraperDialog = () => {
     try {
       for (const { url, name } of uniqueUrls) {
         try {
+          // Update status to in_progress
+          await supabase
+            .from('scraping_progress')
+            .update({
+              status: 'in_progress',
+              started_at: new Date().toISOString(),
+            })
+            .eq('session_id', newSessionId)
+            .eq('source_url', url);
+
           const { data, error } = await supabase.functions.invoke("scrape-opportunities", {
             body: {
               source_url: url,
@@ -144,9 +173,31 @@ export const BatchScraperDialog = () => {
 
           successCount++;
           totalInserted += data.stats.inserted || 0;
+
+          // Update progress as completed
+          await supabase
+            .from('scraping_progress')
+            .update({
+              status: 'completed',
+              opportunities_found: data.stats.inserted || 0,
+              completed_at: new Date().toISOString(),
+            })
+            .eq('session_id', newSessionId)
+            .eq('source_url', url);
         } catch (error) {
           console.error(`Failed to scrape ${url}:`, error);
           failCount++;
+
+          // Update progress as failed
+          await supabase
+            .from('scraping_progress')
+            .update({
+              status: 'failed',
+              error_message: error instanceof Error ? error.message : 'Unknown error',
+              completed_at: new Date().toISOString(),
+            })
+            .eq('session_id', newSessionId)
+            .eq('source_url', url);
         }
       }
 
@@ -358,6 +409,18 @@ export const BatchScraperDialog = () => {
               </p>
             </TabsContent>
           </Tabs>
+        )}
+
+        {isLoading && sessionId && (
+          <ScrapingProgressMonitor 
+            sessionId={sessionId} 
+            onComplete={() => {
+              toast({
+                title: "Scraping completed",
+                description: "All sources have been processed",
+              });
+            }}
+          />
         )}
 
         <div className="flex items-center justify-between pt-4 border-t">

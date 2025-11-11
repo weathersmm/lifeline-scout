@@ -14,6 +14,7 @@ import { Loader2, Database } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ScrapingProgressMonitor } from "./ScrapingProgressMonitor";
 
 export const HigherGovSyncDialog = () => {
   const [open, setOpen] = useState(false);
@@ -22,9 +23,10 @@ export const HigherGovSyncDialog = () => {
   const [searchId, setSearchId] = useState("Bvm7D2uxbydCmN2bJJ_rs");
   const [sourceType, setSourceType] = useState<'sam' | 'all'>('sam');
   const [isLoading, setIsLoading] = useState(false);
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const { toast } = useToast();
 
-  const triggerBatchScraping = async () => {
+  const triggerBatchScraping = async (batchSessionId: string) => {
     try {
       // Get key global sources to scrape after HigherGov sync
       const globalSources = [
@@ -33,9 +35,31 @@ export const HigherGovSyncDialog = () => {
         { url: 'https://procurement.opengov.com/portal/ocgov', name: 'Orange County Procurement' },
       ];
 
+      // Initialize progress tracking
+      for (const source of globalSources) {
+        await supabase
+          .from('scraping_progress')
+          .insert({
+            session_id: batchSessionId,
+            source_name: source.name,
+            source_url: source.url,
+            status: 'pending',
+          });
+      }
+
       let successCount = 0;
       for (const source of globalSources) {
         try {
+          // Update status to in_progress
+          await supabase
+            .from('scraping_progress')
+            .update({
+              status: 'in_progress',
+              started_at: new Date().toISOString(),
+            })
+            .eq('session_id', batchSessionId)
+            .eq('source_url', source.url);
+
           await supabase.functions.invoke("scrape-opportunities", {
             body: {
               source_url: source.url,
@@ -44,8 +68,29 @@ export const HigherGovSyncDialog = () => {
             },
           });
           successCount++;
+
+          // Update progress as completed
+          await supabase
+            .from('scraping_progress')
+            .update({
+              status: 'completed',
+              completed_at: new Date().toISOString(),
+            })
+            .eq('session_id', batchSessionId)
+            .eq('source_url', source.url);
         } catch (error) {
           console.error(`Failed to scrape ${source.name}:`, error);
+
+          // Update progress as failed
+          await supabase
+            .from('scraping_progress')
+            .update({
+              status: 'failed',
+              error_message: error instanceof Error ? error.message : 'Unknown error',
+              completed_at: new Date().toISOString(),
+            })
+            .eq('session_id', batchSessionId)
+            .eq('source_url', source.url);
         }
       }
 
@@ -60,6 +105,11 @@ export const HigherGovSyncDialog = () => {
 
   const handleSync = async () => {
     setIsLoading(true);
+    
+    // Generate session ID for progress tracking
+    const newSessionId = `highergov-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+    setSessionId(newSessionId);
+
     try {
       const { data, error } = await supabase.functions.invoke('fetch-highergov-opportunities', {
         body: {
@@ -80,7 +130,7 @@ export const HigherGovSyncDialog = () => {
       });
 
       // Chain batch scraping after HigherGov sync
-      await triggerBatchScraping();
+      await triggerBatchScraping(newSessionId);
 
       setOpen(false);
       
@@ -177,6 +227,18 @@ export const HigherGovSyncDialog = () => {
               Additional keywords to filter opportunities
             </p>
           </div>
+
+          {isLoading && sessionId && (
+            <ScrapingProgressMonitor 
+              sessionId={sessionId} 
+              onComplete={() => {
+                toast({
+                  title: "All operations completed",
+                  description: "HigherGov sync and batch scraping finished",
+                });
+              }}
+            />
+          )}
 
           <Button onClick={handleSync} disabled={isLoading} className="w-full">
             {isLoading ? (
