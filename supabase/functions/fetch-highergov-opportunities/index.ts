@@ -51,8 +51,8 @@ const higherGovSchema = z.object({
   search_id: z.string()
     .trim()
     .optional(), // HigherGov saved search ID
-  source_type: z.enum(['sam', 'all'])
-    .default('all'), // 'sam' for federal opportunities only
+  source_type: z.enum(['sam', 'sled', 'all'])
+    .default('all'), // 'sam' for federal, 'sled' for state/local, 'all' for everything
 });
 
 serve(async (req) => {
@@ -153,6 +153,8 @@ serve(async (req) => {
 
     if (source_type === 'sam') {
       params.set("source_type", "sam");
+    } else if (source_type === 'sled') {
+      params.set("source_type", "sled");
     }
 
     const apiUrl = `${baseUrl}?${params.toString()}`;

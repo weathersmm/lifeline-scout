@@ -21,7 +21,7 @@ export const HigherGovSyncDialog = () => {
   const [daysBack, setDaysBack] = useState("7");
   const [keywords, setKeywords] = useState("ambulance");
   const [searchId, setSearchId] = useState("Bvm7D2uxbydCmN2bJJ_rs");
-  const [sourceType, setSourceType] = useState<'sam' | 'all'>('sam');
+  const [sourceType, setSourceType] = useState<'sam' | 'sled' | 'all'>('sam');
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const { toast } = useToast();
@@ -167,17 +167,18 @@ export const HigherGovSyncDialog = () => {
         <div className="space-y-4 py-4">
           <div className="space-y-2">
             <Label htmlFor="source-type">Source Type</Label>
-            <Select value={sourceType} onValueChange={(value: 'sam' | 'all') => setSourceType(value)}>
+            <Select value={sourceType} onValueChange={(value: 'sam' | 'sled' | 'all') => setSourceType(value)}>
               <SelectTrigger id="source-type">
                 <SelectValue placeholder="Select source type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="sam">Federal (SAM.gov only)</SelectItem>
+                <SelectItem value="sam">Federal (SAM.gov)</SelectItem>
+                <SelectItem value="sled">State & Local</SelectItem>
                 <SelectItem value="all">All Sources</SelectItem>
               </SelectContent>
             </Select>
             <p className="text-xs text-muted-foreground">
-              Federal includes SAM.gov, GSA contracts, and federal procurement
+              Federal: SAM.gov, GSA contracts | State & Local: SLED opportunities
             </p>
           </div>
 
