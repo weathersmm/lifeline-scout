@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,45 +10,62 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Globe, Loader2, Plus, X } from "lucide-react";
+import { Globe, Loader2, Plus, X, ChevronRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
-
-// Predefined California county/city procurement URLs
-const ALAMEDA_SOURCES = [
-  { name: "Alameda County", url: "https://www.acgov.org/gsa/purchasing/" },
-  { name: "Alameda City", url: "https://www.alamedaca.gov/business/bids-contracts" },
-  { name: "Albany", url: "https://www.albanyca.org/government/bids-rfps" },
-  { name: "Berkeley", url: "https://www.berkeleyca.gov/doing-business/city-contracts-bidding-opportunities" },
-  { name: "Dublin", url: "https://www.dublin.ca.gov/105/Bids-RFPs" },
-  { name: "Emeryville", url: "https://www.emeryville.org/156/Bids-and-RFPs" },
-  { name: "Fremont", url: "https://www.fremont.gov/105/Bids-RFPs" },
-  { name: "Hayward", url: "https://www.hayward-ca.gov/business/bids-and-contracts" },
-  { name: "Livermore", url: "https://www.livermoreca.gov/business/bids-and-rfps" },
-  { name: "Newark", url: "https://www.newark.org/business/bids-and-proposals" },
-  { name: "Oakland", url: "https://www.oaklandca.gov/services/businesses/contracts-and-purchasing" },
-  { name: "Piedmont", url: "https://www.piedmont.ca.gov/government/bids_rfps" },
-  { name: "Pleasanton", url: "https://www.cityofpleasantonca.gov/business/bids.asp" },
-  { name: "San Leandro", url: "https://www.sanleandro.org/depts/finance/purchasing/bids.asp" },
-  { name: "Union City", url: "https://www.unioncity.org/105/Bids-RFPs" },
-];
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { pipelineScoutDataService, type MunicipalityData } from "@/services/pipelineScoutDataService";
 
 export const BatchScraperDialog = () => {
   const [open, setOpen] = useState(false);
   const [customUrls, setCustomUrls] = useState("");
-  const [selectedSources, setSelectedSources] = useState<Set<string>>(new Set());
+  const [selectedMunicipalities, setSelectedMunicipalities] = useState<Set<string>>(new Set());
+  const [selectedGlobalSources, setSelectedGlobalSources] = useState<Set<string>>(new Set());
+  const [selectedCounty, setSelectedCounty] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [dataLoading, setDataLoading] = useState(true);
+  const [counties, setCounties] = useState<string[]>([]);
   const { toast } = useToast();
 
-  const toggleSource = (url: string) => {
-    const newSelected = new Set(selectedSources);
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        await pipelineScoutDataService.loadWorkbook();
+        setCounties(pipelineScoutDataService.getCounties());
+      } catch (error) {
+        console.error('Failed to load pipeline scout data:', error);
+        toast({
+          title: "Data loading failed",
+          description: "Could not load California county/city data",
+          variant: "destructive",
+        });
+      } finally {
+        setDataLoading(false);
+      }
+    };
+    loadData();
+  }, [toast]);
+
+  const toggleMunicipality = (key: string) => {
+    const newSelected = new Set(selectedMunicipalities);
+    if (newSelected.has(key)) {
+      newSelected.delete(key);
+    } else {
+      newSelected.add(key);
+    }
+    setSelectedMunicipalities(newSelected);
+  };
+
+  const toggleGlobalSource = (url: string) => {
+    const newSelected = new Set(selectedGlobalSources);
     if (newSelected.has(url)) {
       newSelected.delete(url);
     } else {
       newSelected.add(url);
     }
-    setSelectedSources(newSelected);
+    setSelectedGlobalSources(newSelected);
   };
 
   const handleBatchScrape = async () => {
@@ -57,12 +74,51 @@ export const BatchScraperDialog = () => {
       .map((line) => line.trim())
       .filter((line) => line.length > 0 && line.startsWith("http"));
 
-    const allUrls = [...Array.from(selectedSources), ...customUrlList];
+    // Collect municipality URLs
+    const municipalityUrls: Array<{ url: string; name: string; county: string }> = [];
+    selectedMunicipalities.forEach(key => {
+      const [county, type, name] = key.split('::');
+      const countyGroup = pipelineScoutDataService.getCountyGroup(county);
+      if (!countyGroup) return;
 
-    if (allUrls.length === 0) {
+      const muni = type === 'County' 
+        ? countyGroup.countyData 
+        : countyGroup.cities.find(c => c.county === name);
+
+      if (muni) {
+        const urls = pipelineScoutDataService.getMunicipalityUrls(muni);
+        urls.forEach(url => {
+          municipalityUrls.push({
+            url,
+            name: type === 'County' ? `${county} County` : name,
+            county,
+          });
+        });
+      }
+    });
+
+    // Collect global source URLs
+    const globalUrls = Array.from(selectedGlobalSources);
+
+    // Combine all URLs
+    const allUrls = [
+      ...municipalityUrls.map(m => ({ url: m.url, name: m.name, type: 'local' as const })),
+      ...globalUrls.map(url => {
+        const source = pipelineScoutDataService.getGlobalSources().find(s => s.url === url);
+        return { url, name: source?.name || new URL(url).hostname, type: 'global' as const };
+      }),
+      ...customUrlList.map(url => ({ url, name: new URL(url).hostname, type: 'custom' as const })),
+    ];
+
+    // Deduplicate URLs
+    const uniqueUrls = Array.from(
+      new Map(allUrls.map(item => [item.url, item])).values()
+    );
+
+    if (uniqueUrls.length === 0) {
       toast({
         title: "No sources selected",
-        description: "Please select at least one source or enter custom URLs",
+        description: "Please select at least one county/city, global source, or enter custom URLs",
         variant: "destructive",
       });
       return;
@@ -74,14 +130,12 @@ export const BatchScraperDialog = () => {
     let totalInserted = 0;
 
     try {
-      for (const url of allUrls) {
+      for (const { url, name } of uniqueUrls) {
         try {
-          const sourceName = ALAMEDA_SOURCES.find((s) => s.url === url)?.name || new URL(url).hostname;
-          
           const { data, error } = await supabase.functions.invoke("scrape-opportunities", {
             body: {
               source_url: url,
-              source_name: sourceName,
+              source_name: name,
             },
           });
 
@@ -101,7 +155,9 @@ export const BatchScraperDialog = () => {
       });
 
       setCustomUrls("");
-      setSelectedSources(new Set());
+      setSelectedMunicipalities(new Set());
+      setSelectedGlobalSources(new Set());
+      setSelectedCounty(null);
       setOpen(false);
       window.location.reload();
     } catch (error) {
@@ -116,12 +172,38 @@ export const BatchScraperDialog = () => {
     }
   };
 
-  const selectAll = () => {
-    setSelectedSources(new Set(ALAMEDA_SOURCES.map((s) => s.url)));
+  const selectAllInCounty = () => {
+    if (!selectedCounty) return;
+    const countyGroup = pipelineScoutDataService.getCountyGroup(selectedCounty);
+    if (!countyGroup) return;
+
+    const newSelected = new Set(selectedMunicipalities);
+    newSelected.add(`${selectedCounty}::County::${selectedCounty}`);
+    countyGroup.cities.forEach(city => {
+      newSelected.add(`${selectedCounty}::City::${city.county}`);
+    });
+    setSelectedMunicipalities(newSelected);
   };
 
-  const clearAll = () => {
-    setSelectedSources(new Set());
+  const clearAllInCounty = () => {
+    if (!selectedCounty) return;
+    const countyGroup = pipelineScoutDataService.getCountyGroup(selectedCounty);
+    if (!countyGroup) return;
+
+    const newSelected = new Set(selectedMunicipalities);
+    newSelected.delete(`${selectedCounty}::County::${selectedCounty}`);
+    countyGroup.cities.forEach(city => {
+      newSelected.delete(`${selectedCounty}::City::${city.county}`);
+    });
+    setSelectedMunicipalities(newSelected);
+  };
+
+  const selectAllGlobal = () => {
+    setSelectedGlobalSources(new Set(pipelineScoutDataService.getGlobalSources().map(s => s.url)));
+  };
+
+  const clearAllGlobal = () => {
+    setSelectedGlobalSources(new Set());
   };
 
   return (
@@ -132,65 +214,160 @@ export const BatchScraperDialog = () => {
           Batch Scrape
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-w-5xl max-h-[85vh] overflow-hidden flex flex-col">
         <DialogHeader>
-          <DialogTitle>Batch Scrape Procurement Sites</DialogTitle>
+          <DialogTitle>EMS Opportunity Scout - Batch Scrape</DialogTitle>
           <DialogDescription>
-            Select multiple sources to scrape at once. This will extract EMS opportunities from all selected sites.
+            Select California counties/cities and global sources to scrape for EMS-relevant opportunities.
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-6 py-4">
-          {/* Predefined sources */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <Label>Alameda County Sources</Label>
-              <div className="space-x-2">
-                <Button variant="outline" size="sm" onClick={selectAll}>
-                  <Plus className="h-3 w-3 mr-1" />
-                  Select All
-                </Button>
-                <Button variant="outline" size="sm" onClick={clearAll}>
-                  <X className="h-3 w-3 mr-1" />
-                  Clear All
-                </Button>
+
+        {dataLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          </div>
+        ) : (
+          <Tabs defaultValue="counties" className="flex-1 flex flex-col overflow-hidden">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="counties">CA Counties & Cities</TabsTrigger>
+              <TabsTrigger value="global">Global Sources</TabsTrigger>
+              <TabsTrigger value="custom">Custom URLs</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="counties" className="flex-1 flex flex-col space-y-4 overflow-hidden">
+              <div className="space-y-2">
+                <Label>Select County</Label>
+                <ScrollArea className="h-32 border rounded-md p-3">
+                  <div className="flex flex-wrap gap-2">
+                    {counties.map((county) => (
+                      <Badge
+                        key={county}
+                        variant={selectedCounty === county ? "default" : "outline"}
+                        className="cursor-pointer"
+                        onClick={() => setSelectedCounty(county)}
+                      >
+                        {county} County
+                        {selectedCounty === county && <ChevronRight className="h-3 w-3 ml-1" />}
+                      </Badge>
+                    ))}
+                  </div>
+                </ScrollArea>
               </div>
-            </div>
-            <div className="flex flex-wrap gap-2 max-h-60 overflow-y-auto p-2 border rounded-md">
-              {ALAMEDA_SOURCES.map((source) => (
-                <Badge
-                  key={source.url}
-                  variant={selectedSources.has(source.url) ? "default" : "outline"}
-                  className="cursor-pointer"
-                  onClick={() => toggleSource(source.url)}
-                >
-                  {source.name}
-                  {selectedSources.has(source.url) && <X className="h-3 w-3 ml-1" />}
-                </Badge>
-              ))}
-            </div>
-          </div>
 
-          {/* Custom URLs */}
-          <div className="space-y-2">
-            <Label htmlFor="custom-urls">Custom URLs (one per line)</Label>
-            <Textarea
-              id="custom-urls"
-              placeholder="https://procurement.opengov.com/portal/ocgov&#10;https://example.com/bids"
-              value={customUrls}
-              onChange={(e) => setCustomUrls(e.target.value)}
-              disabled={isLoading}
-              rows={6}
-            />
-            <p className="text-xs text-muted-foreground">
-              Enter additional procurement URLs to scrape (e.g., OpenGov portals, SAM.gov, etc.)
-            </p>
-          </div>
+              {selectedCounty && (
+                <div className="space-y-3 flex-1 flex flex-col overflow-hidden">
+                  <div className="flex items-center justify-between">
+                    <Label>{selectedCounty} County & Cities</Label>
+                    <div className="space-x-2">
+                      <Button variant="outline" size="sm" onClick={selectAllInCounty}>
+                        <Plus className="h-3 w-3 mr-1" />
+                        Select All
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={clearAllInCounty}>
+                        <X className="h-3 w-3 mr-1" />
+                        Clear All
+                      </Button>
+                    </div>
+                  </div>
+                  <ScrollArea className="flex-1 border rounded-md p-3">
+                    <div className="flex flex-wrap gap-2">
+                      {(() => {
+                        const countyGroup = pipelineScoutDataService.getCountyGroup(selectedCounty);
+                        if (!countyGroup) return null;
 
-          <Button onClick={handleBatchScrape} disabled={isLoading} className="w-full">
+                        const countyKey = `${selectedCounty}::County::${selectedCounty}`;
+                        const items = [
+                          <Badge
+                            key={countyKey}
+                            variant={selectedMunicipalities.has(countyKey) ? "default" : "outline"}
+                            className="cursor-pointer font-semibold"
+                            onClick={() => toggleMunicipality(countyKey)}
+                          >
+                            {selectedCounty} County
+                            {selectedMunicipalities.has(countyKey) && <X className="h-3 w-3 ml-1" />}
+                          </Badge>
+                        ];
+
+                        countyGroup.cities.forEach(city => {
+                          const cityKey = `${selectedCounty}::City::${city.county}`;
+                          items.push(
+                            <Badge
+                              key={cityKey}
+                              variant={selectedMunicipalities.has(cityKey) ? "default" : "outline"}
+                              className="cursor-pointer"
+                              onClick={() => toggleMunicipality(cityKey)}
+                            >
+                              {city.county}
+                              {selectedMunicipalities.has(cityKey) && <X className="h-3 w-3 ml-1" />}
+                            </Badge>
+                          );
+                        });
+
+                        return items;
+                      })()}
+                    </div>
+                  </ScrollArea>
+                </div>
+              )}
+            </TabsContent>
+
+            <TabsContent value="global" className="flex-1 flex flex-col space-y-3 overflow-hidden">
+              <div className="flex items-center justify-between">
+                <Label>National & State Procurement Portals</Label>
+                <div className="space-x-2">
+                  <Button variant="outline" size="sm" onClick={selectAllGlobal}>
+                    <Plus className="h-3 w-3 mr-1" />
+                    Select All
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={clearAllGlobal}>
+                    <X className="h-3 w-3 mr-1" />
+                    Clear All
+                  </Button>
+                </div>
+              </div>
+              <ScrollArea className="flex-1 border rounded-md p-3">
+                <div className="flex flex-wrap gap-2">
+                  {pipelineScoutDataService.getGlobalSources().map((source) => (
+                    <Badge
+                      key={source.url}
+                      variant={selectedGlobalSources.has(source.url) ? "default" : "outline"}
+                      className="cursor-pointer"
+                      onClick={() => toggleGlobalSource(source.url)}
+                    >
+                      {source.name}
+                      {selectedGlobalSources.has(source.url) && <X className="h-3 w-3 ml-1" />}
+                    </Badge>
+                  ))}
+                </div>
+              </ScrollArea>
+            </TabsContent>
+
+            <TabsContent value="custom" className="flex-1 flex flex-col space-y-2">
+              <Label htmlFor="custom-urls">Custom URLs (one per line)</Label>
+              <Textarea
+                id="custom-urls"
+                placeholder="https://procurement.opengov.com/portal/ocgov&#10;https://example.com/bids"
+                value={customUrls}
+                onChange={(e) => setCustomUrls(e.target.value)}
+                disabled={isLoading}
+                className="flex-1 font-mono text-sm"
+              />
+              <p className="text-xs text-muted-foreground">
+                Enter additional procurement URLs to scrape (e.g., OpenGov portals, SAM.gov, county/city sites)
+              </p>
+            </TabsContent>
+          </Tabs>
+        )}
+
+        <div className="flex items-center justify-between pt-4 border-t">
+          <p className="text-sm text-muted-foreground">
+            {selectedMunicipalities.size} local + {selectedGlobalSources.size} global + {customUrls.split("\n").filter(l => l.trim().startsWith("http")).length} custom
+          </p>
+          <Button onClick={handleBatchScrape} disabled={isLoading || dataLoading}>
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Scraping {Array.from(selectedSources).length + customUrls.split("\n").filter((l) => l.trim().startsWith("http")).length} sources...
+                Scraping...
               </>
             ) : (
               "Start Batch Scraping"
