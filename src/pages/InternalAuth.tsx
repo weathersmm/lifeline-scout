@@ -70,18 +70,17 @@ export default function InternalAuth() {
     }
 
     // Check if user has MFA enrolled
-    const { data: factors } = await supabase.auth.mfa.listFactors();
+    const { data: factors, error: factorsError } = await supabase.auth.mfa.listFactors();
     
-    if (factors && factors.totp && factors.totp.length > 0) {
+    if (!factorsError && factors && factors.totp && factors.totp.length > 0) {
       // User has MFA enrolled, show verification
       setFactorId(factors.totp[0].id);
       setMfaStep('verify');
+      setIsLoading(false);
     } else {
       // First time login, enroll in MFA
       await enrollMFA();
     }
-
-    setIsLoading(false);
   };
 
   const enrollMFA = async () => {
@@ -93,6 +92,21 @@ export default function InternalAuth() {
     });
 
     if (error) {
+      // If factor already exists, list factors and go to verification
+      if (error.message?.includes('already exists')) {
+        const { data: factors } = await supabase.auth.mfa.listFactors();
+        if (factors && factors.totp && factors.totp.length > 0) {
+          setFactorId(factors.totp[0].id);
+          setMfaStep('verify');
+          toast({
+            title: "Authenticator already set up",
+            description: "Please enter your authentication code to continue.",
+          });
+          setIsLoading(false);
+          return;
+        }
+      }
+      
       toast({
         title: "Error setting up authenticator",
         description: error.message,
