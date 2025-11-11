@@ -8,7 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ArrowLeft, Activity, Users, TrendingUp, Clock } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ArrowLeft, Activity, Users, TrendingUp, Clock, Shield, CheckCircle, XCircle, UserCog } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 
@@ -33,6 +34,17 @@ interface ActionStats {
   users: number;
 }
 
+interface UserAccount {
+  id: string;
+  email: string;
+  full_name: string;
+  role: 'admin' | 'member' | 'viewer';
+  has_mfa: boolean;
+  created_at: string;
+  last_sign_in_at: string | null;
+  email_confirmed_at: string | null;
+}
+
 const COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))', 'hsl(var(--chart-5))'];
 
 const AdminDashboard = () => {
@@ -44,6 +56,8 @@ const AdminDashboard = () => {
   const [actionStats, setActionStats] = useState<ActionStats[]>([]);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState<'24h' | '7d' | '30d'>('7d');
+  const [userAccounts, setUserAccounts] = useState<UserAccount[]>([]);
+  const [loadingUsers, setLoadingUsers] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !isAdmin) {
@@ -59,6 +73,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     if (isAdmin) {
       fetchRateLimitData();
+      fetchUserAccounts();
     }
   }, [isAdmin, timeRange]);
 
@@ -150,6 +165,71 @@ const AdminDashboard = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchUserAccounts = async () => {
+    try {
+      setLoadingUsers(true);
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        throw new Error('No session');
+      }
+
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/get-users-admin`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to fetch users');
+      }
+
+      const { users } = await response.json();
+      setUserAccounts(users || []);
+    } catch (error) {
+      console.error('Error fetching user accounts:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to fetch user accounts.',
+      });
+    } finally {
+      setLoadingUsers(false);
+    }
+  };
+
+  const updateUserRole = async (userId: string, newRole: 'admin' | 'member' | 'viewer') => {
+    try {
+      const { error } = await supabase
+        .from('user_roles')
+        .update({ role: newRole })
+        .eq('user_id', userId);
+
+      if (error) throw error;
+
+      toast({
+        title: 'Role updated',
+        description: 'User role has been successfully updated.',
+      });
+
+      // Refresh user accounts
+      await fetchUserAccounts();
+    } catch (error) {
+      console.error('Error updating role:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to update user role.',
+      });
     }
   };
 
@@ -261,6 +341,10 @@ const AdminDashboard = () => {
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="user-management">
+              <UserCog className="w-4 h-4 mr-2" />
+              User Management
+            </TabsTrigger>
             <TabsTrigger value="users">Users</TabsTrigger>
             <TabsTrigger value="actions">Actions</TabsTrigger>
             <TabsTrigger value="recent">Recent Activity</TabsTrigger>
@@ -327,6 +411,95 @@ const AdminDashboard = () => {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+
+          <TabsContent value="user-management" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Internal Staff Accounts</CardTitle>
+                <CardDescription>Manage user roles and view MFA enrollment status</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {loadingUsers ? (
+                  <div className="flex items-center justify-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                  </div>
+                ) : (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Role</TableHead>
+                        <TableHead>MFA Status</TableHead>
+                        <TableHead>Last Sign In</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {userAccounts.map((account) => (
+                        <TableRow key={account.id}>
+                          <TableCell className="font-medium">{account.email}</TableCell>
+                          <TableCell>{account.full_name || '-'}</TableCell>
+                          <TableCell>
+                            <Select
+                              value={account.role}
+                              onValueChange={(value: 'admin' | 'member' | 'viewer') => 
+                                updateUserRole(account.id, value)
+                              }
+                            >
+                              <SelectTrigger className="w-32">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="admin">
+                                  <Badge variant="destructive" className="text-xs">Admin</Badge>
+                                </SelectItem>
+                                <SelectItem value="member">
+                                  <Badge variant="default" className="text-xs">Member</Badge>
+                                </SelectItem>
+                                <SelectItem value="viewer">
+                                  <Badge variant="secondary" className="text-xs">Viewer</Badge>
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              {account.has_mfa ? (
+                                <>
+                                  <CheckCircle className="w-4 h-4 text-green-500" />
+                                  <span className="text-sm text-green-600">Enabled</span>
+                                </>
+                              ) : (
+                                <>
+                                  <XCircle className="w-4 h-4 text-amber-500" />
+                                  <span className="text-sm text-amber-600">Not Enabled</span>
+                                </>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {account.last_sign_in_at 
+                              ? new Date(account.last_sign_in_at).toLocaleString()
+                              : 'Never'}
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => fetchUserAccounts()}
+                            >
+                              Refresh
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="users" className="space-y-6">
