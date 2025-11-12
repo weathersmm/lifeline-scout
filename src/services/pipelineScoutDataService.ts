@@ -85,10 +85,14 @@ class PipelineScoutDataService {
     if (this.workbook) return; // Already loaded
 
     try {
-      const response = await fetch('/src/data/PipeLineScout.xlsx');
+      const response = await fetch('/data/PipeLineScout.xlsx');
+      if (!response.ok) {
+        throw new Error(`Failed to fetch workbook: ${response.status} ${response.statusText}`);
+      }
       const arrayBuffer = await response.arrayBuffer();
       this.workbook = XLSX.read(arrayBuffer, { type: 'array' });
       this.parseMainDataBase();
+      console.log(`Loaded ${this.countyGroups.size} counties from PipeLineScout workbook`);
     } catch (error) {
       console.error('Failed to load PipeLineScout workbook:', error);
       throw error;
