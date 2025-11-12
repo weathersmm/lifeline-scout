@@ -14,6 +14,10 @@ const serviceTagToCategory: Record<ServiceTag, OpportunityCategory> = {
   'EMS Tech': 'First Responder Tech',
   'VR/Sim': 'Training & Simulation',
   'CQI': 'Training & Simulation',
+  'LA28 Olympics': 'Major Sporting Events',
+  'Paralympics': 'Major Sporting Events',
+  'FIFA World Cup': 'Major Sporting Events',
+  'Soccer/Football': 'Major Sporting Events',
 };
 
 // Keywords that indicate medical equipment opportunities
@@ -78,4 +82,5 @@ export const allCategories: OpportunityCategory[] = [
   'Billing & Claims',
   'First Responder Tech',
   'Training & Simulation',
+  'Major Sporting Events',
 ];

@@ -40,7 +40,11 @@ export type ServiceTag =
   | 'CQI'
   | 'EMS Tech'
   | 'VR/Sim'
-  | 'Call Center';
+  | 'Call Center'
+  | 'LA28 Olympics'
+  | 'Paralympics'
+  | 'FIFA World Cup'
+  | 'Soccer/Football';
 
 export type OpportunityCategory =
   | 'Core EMS Services'
@@ -48,7 +52,8 @@ export type OpportunityCategory =
   | 'Call Center & Dispatch'
   | 'Billing & Claims'
   | 'First Responder Tech'
-  | 'Training & Simulation';
+  | 'Training & Simulation'
+  | 'Major Sporting Events';
 
 export type ContractType = 
   | 'RFP'

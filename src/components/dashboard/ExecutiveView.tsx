@@ -2,7 +2,7 @@ import { Opportunity } from '@/types/opportunity';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { MapPin, TrendingUp, Calendar, DollarSign, Clock } from 'lucide-react';
+import { MapPin, TrendingUp, Calendar, DollarSign, Clock, Trophy } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import { format, differenceInDays } from 'date-fns';
 
@@ -21,6 +21,13 @@ export const ExecutiveView = ({ opportunities, onViewDetails }: ExecutiveViewPro
   const otherOpportunities = opportunities.filter(opp => 
     !opp.geography.state.toLowerCase().includes('california') && 
     opp.geography.state.toLowerCase() !== 'ca'
+  );
+
+  // Major sporting events opportunities
+  const majorEventsOpportunities = opportunities.filter(opp => 
+    opp.serviceTags.some(tag => 
+      ['LA28 Olympics', 'Paralympics', 'FIFA World Cup', 'Soccer/Football'].includes(tag)
+    )
   );
 
   // Service tag breakdown
@@ -116,6 +123,31 @@ export const ExecutiveView = ({ opportunities, onViewDetails }: ExecutiveViewPro
 
   return (
     <div className="space-y-6">
+      {/* LA28 Olympics & Major Events Section */}
+      {majorEventsOpportunities.length > 0 && (
+        <Card className="p-6 border-2 border-amber-500/50 bg-gradient-to-r from-amber-50/50 to-orange-50/50 dark:from-amber-950/20 dark:to-orange-950/20">
+          <div className="flex items-center gap-3 mb-4">
+            <Trophy className="h-6 w-6 text-amber-600 dark:text-amber-400" />
+            <h2 className="text-xl font-bold text-foreground">LA28 Olympics & Major Sporting Events</h2>
+          </div>
+          <p className="text-sm text-muted-foreground mb-4">
+            Opportunities related to LA28 Olympic & Paralympic Games, FIFA World Cup, and major sporting events including Games Transportation Program Integrator (GTPI) and event medical services
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {majorEventsOpportunities.slice(0, 6).map((opp) => (
+              <OpportunityMiniCard key={opp.id} opp={opp} />
+            ))}
+          </div>
+          {majorEventsOpportunities.length > 6 && (
+            <div className="mt-4 text-center">
+              <Button variant="outline" size="sm">
+                View All {majorEventsOpportunities.length} Major Event Opportunities
+              </Button>
+            </div>
+          )}
+        </Card>
+      )}
+
       {/* Executive Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>

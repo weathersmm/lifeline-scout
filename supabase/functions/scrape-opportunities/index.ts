@@ -282,7 +282,14 @@ Administrative & Support Services:
 - Quality improvement programs (CQI, QA/QI systems)
 - EMS training and simulation (VR/Sim training, CPR training, medical education)
 
-**SERVICE TAGS:** EMS 911, Non-Emergency, IFT, BLS, ALS, CCT, MEDEVAC, Billing, CQI, EMS Tech, VR/Sim, Call Center
+Major Sporting Events & Mass Gathering Medical Services:
+- LA28 Olympics and Paralympic Games medical services (Games Transportation Program Integrator, GTPI, event medical support)
+- FIFA World Cup medical and emergency services
+- Soccer/football event medical coverage and transport
+- Major event medical planning, logistics, and emergency response
+- Mass gathering healthcare and EMS coordination
+
+**SERVICE TAGS:** EMS 911, Non-Emergency, IFT, BLS, ALS, CCT, MEDEVAC, Billing, CQI, EMS Tech, VR/Sim, Call Center, LA28 Olympics, Paralympics, FIFA World Cup, Soccer/Football
 **CONTRACT TYPES:** RFP, RFQ, RFI, Sources Sought, Pre-solicitation, Sole-Source Notice
 **PRIORITY LEVELS:**
 - high: closing soon (<14 days) OR high value (>$1M) OR critical emergency services
