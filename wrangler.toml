@@ -1,0 +1,6 @@
+name = "lifeline-scout"
+compatibility_date = "2025-11-12"
+
+[pages]
+build = "npm run build"
+directory = "dist"
