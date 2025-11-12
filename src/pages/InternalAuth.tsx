@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Database, Lock, Mail, Shield, Smartphone } from "lucide-react";
+import { Database, Lock, Mail, Shield, Smartphone, Building2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { isLandingEntry } from "@/config/entryMode";
@@ -83,6 +83,34 @@ export default function InternalAuth() {
       // First time login, enroll in MFA
       await enrollMFA();
     }
+  };
+
+  const handleAzureSignIn = async () => {
+    setIsLoading(true);
+
+    const tenantId = import.meta.env.VITE_MS_AZURE_AD_TENANT_ID;
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'azure',
+      options: {
+        scopes: 'email',
+        queryParams: {
+          tenant: tenantId,
+        },
+      },
+    });
+
+    if (error) {
+      toast({
+        title: "Error signing in with Microsoft",
+        description: error.message,
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    // OAuth will redirect, no need to handle success here
   };
 
   const enrollMFA = async () => {
@@ -446,6 +474,26 @@ export default function InternalAuth() {
               {isLoading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground">Or</span>
+            </div>
+          </div>
+
+          {/* Microsoft Sign-in Button */}
+          <Button 
+            onClick={handleAzureSignIn}
+            variant="outline"
+            className="w-full h-11" 
+            disabled={isLoading}
+          >
+            <Building2 className="h-4 w-4 mr-2" />
+            Sign in with Microsoft
+          </Button>
 
           <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
             <Shield className="h-4 w-4" />
