@@ -275,8 +275,12 @@ export const BatchScraperDialog = () => {
         </DialogHeader>
 
         {dataLoading ? (
-          <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          <div className="flex flex-col items-center justify-center py-12 space-y-4">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <div className="text-center space-y-1">
+              <p className="text-sm font-medium">Loading California County Data</p>
+              <p className="text-xs text-muted-foreground">Parsing PipeLineScout.xlsx workbook...</p>
+            </div>
           </div>
         ) : (
           <Tabs defaultValue="counties" className="flex-1 flex flex-col overflow-hidden">
