@@ -515,6 +515,35 @@ const Index = () => {
               ))}
             </div>
           </TabsContent>
+
+          <TabsContent value="archived" className="space-y-6">
+            <div className="mb-4 p-4 bg-muted/50 border border-border rounded-lg">
+              <p className="text-sm text-muted-foreground">
+                <strong>Archived Opportunities:</strong> These opportunities have passed their proposal due dates. 
+                They are kept for historical reference and tracking purposes.
+              </p>
+            </div>
+            
+            {categoryFilteredArchivedOpportunities.length === 0 ? (
+              <div className="text-center py-12">
+                <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-foreground mb-2">No Archived Opportunities</h3>
+                <p className="text-muted-foreground">
+                  Past due opportunities will appear here once their deadlines have passed.
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {categoryFilteredArchivedOpportunities.map((opportunity) => (
+                  <OpportunityCard
+                    key={opportunity.id}
+                    opportunity={opportunity}
+                    onViewDetails={setSelectedOpportunity}
+                  />
+                ))}
+              </div>
+            )}
+          </TabsContent>
         </Tabs>
       </main>
 
