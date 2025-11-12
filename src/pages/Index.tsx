@@ -161,7 +161,14 @@ const Index = () => {
       return true;
     })();
 
-    return matchesSearch && matchesServiceTags && matchesPriority && matchesContractType && matchesDateRange;
+    // Exclude opportunities with past deadlines
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const dueDate = new Date(opp.keyDates.proposalDue);
+    dueDate.setHours(0, 0, 0, 0);
+    const isNotPastDue = dueDate >= today;
+
+    return matchesSearch && matchesServiceTags && matchesPriority && matchesContractType && matchesDateRange && isNotPastDue;
   });
 
   // Apply category filtering
