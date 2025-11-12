@@ -40,7 +40,35 @@ export const OpportunityCard = ({
     (new Date(opportunity.keyDates.proposalDue).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
   );
   
-  const isUrgent = daysUntilDue <= 14;
+  const isUrgent = daysUntilDue <= 14 && daysUntilDue >= 0;
+  const isPastDue = daysUntilDue < 0;
+
+  // Determine badge styling based on days remaining
+  const getDaysRemainingBadge = () => {
+    if (isPastDue) {
+      return {
+        className: "bg-muted/50 text-muted-foreground border-muted",
+        text: `${Math.abs(daysUntilDue)}d overdue`
+      };
+    } else if (isUrgent) {
+      return {
+        className: "bg-destructive/10 text-destructive border-destructive/20",
+        text: `${daysUntilDue}d left`
+      };
+    } else if (daysUntilDue <= 30) {
+      return {
+        className: "bg-warning/10 text-warning border-warning/20",
+        text: `${daysUntilDue}d left`
+      };
+    } else {
+      return {
+        className: "bg-success/10 text-success border-success/20",
+        text: `${daysUntilDue}d left`
+      };
+    }
+  };
+
+  const daysRemainingBadge = getDaysRemainingBadge();
 
   return (
     <Card className={`p-6 hover:shadow-lg transition-shadow ${isSelected ? 'ring-2 ring-primary' : ''}`}>
@@ -62,12 +90,10 @@ export const OpportunityCard = ({
               <Badge variant="outline" className={contractTypeColors[opportunity.contractType]}>
                 {opportunity.contractType}
               </Badge>
-              {isUrgent && (
-                <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">
-                  <Clock className="w-3 h-3 mr-1" />
-                  {daysUntilDue}d left
-                </Badge>
-              )}
+              <Badge variant="outline" className={daysRemainingBadge.className}>
+                <Clock className="w-3 h-3 mr-1" />
+                {daysRemainingBadge.text}
+              </Badge>
             </div>
             <h3 className="text-lg font-semibold text-foreground mb-1">
               {opportunity.title}

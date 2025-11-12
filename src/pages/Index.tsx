@@ -132,7 +132,7 @@ const Index = () => {
     }
   };
 
-  // Filter opportunities
+  // Filter opportunities (active - not past due)
   const filteredOpportunities = opportunities.filter((opp) => {
     const matchesSearch = !searchQuery || 
       opp.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -171,8 +171,48 @@ const Index = () => {
     return matchesSearch && matchesServiceTags && matchesPriority && matchesContractType && matchesDateRange && isNotPastDue;
   });
 
+  // Filter archived opportunities (past due)
+  const archivedOpportunities = opportunities.filter((opp) => {
+    const matchesSearch = !searchQuery || 
+      opp.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      opp.agency.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      opp.summary.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesServiceTags = selectedServiceTags.length === 0 ||
+      selectedServiceTags.some(tag => opp.serviceTags.includes(tag));
+
+    const matchesPriority = selectedPriority === 'all' || opp.priority === selectedPriority;
+
+    const matchesContractType = selectedContractType === 'all' || opp.contractType === selectedContractType;
+
+    const matchesDateRange = !dateRange.from && !dateRange.to ? true : (() => {
+      const dueDate = new Date(opp.keyDates.proposalDue);
+      const from = dateRange.from ? new Date(dateRange.from) : null;
+      const to = dateRange.to ? new Date(dateRange.to) : null;
+      
+      if (from && to) {
+        return dueDate >= from && dueDate <= to;
+      } else if (from) {
+        return dueDate >= from;
+      } else if (to) {
+        return dueDate <= to;
+      }
+      return true;
+    })();
+
+    // Include only opportunities with past deadlines
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const dueDate = new Date(opp.keyDates.proposalDue);
+    dueDate.setHours(0, 0, 0, 0);
+    const isPastDue = dueDate < today;
+
+    return matchesSearch && matchesServiceTags && matchesPriority && matchesContractType && matchesDateRange && isPastDue;
+  });
+
   // Apply category filtering
   const categoryFilteredOpportunities = filterByCategories(filteredOpportunities, selectedCategories);
+  const categoryFilteredArchivedOpportunities = filterByCategories(archivedOpportunities, selectedCategories);
 
   // Stats
   const highPriorityCount = categoryFilteredOpportunities.filter(o => o.priority === 'high').length;
@@ -382,6 +422,7 @@ const Index = () => {
             <TabsTrigger value="high-priority">High Priority</TabsTrigger>
             <TabsTrigger value="new">New This Week</TabsTrigger>
             <TabsTrigger value="urgent">Urgent</TabsTrigger>
+            <TabsTrigger value="archived">Archived ({categoryFilteredArchivedOpportunities.length})</TabsTrigger>
           </TabsList>
 
           <TabsContent value="executive" className="space-y-6">
