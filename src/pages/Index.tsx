@@ -137,6 +137,8 @@ const Index = () => {
     const matchesSearch = !searchQuery || 
       opp.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       opp.agency.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      opp.geography.city?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      opp.geography.county?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       opp.summary.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesServiceTags = selectedServiceTags.length === 0 ||
@@ -173,6 +175,33 @@ const Index = () => {
 
   // Apply category filtering
   const categoryFilteredOpportunities = filterByCategories(filteredOpportunities, selectedCategories);
+
+  // Archived opportunities (past due)
+  const archivedOpportunities = opportunities.filter((opp) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const dueDate = new Date(opp.keyDates.proposalDue);
+    dueDate.setHours(0, 0, 0, 0);
+    const isPastDue = dueDate < today;
+
+    // Apply same search/filter logic as active opportunities
+    const matchesSearch = !searchQuery || 
+      opp.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      opp.agency.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      opp.geography.city?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      opp.geography.county?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      opp.summary.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesServiceTags = selectedServiceTags.length === 0 ||
+      selectedServiceTags.some(tag => opp.serviceTags.includes(tag));
+
+    const matchesPriority = selectedPriority === 'all' || opp.priority === selectedPriority;
+    const matchesContractType = selectedContractType === 'all' || opp.contractType === selectedContractType;
+
+    return isPastDue && matchesSearch && matchesServiceTags && matchesPriority && matchesContractType;
+  });
+
+  const categoryFilteredArchivedOpportunities = filterByCategories(archivedOpportunities, selectedCategories);
 
   // Stats
   const highPriorityCount = categoryFilteredOpportunities.filter(o => o.priority === 'high').length;
@@ -382,6 +411,7 @@ const Index = () => {
             <TabsTrigger value="high-priority">High Priority</TabsTrigger>
             <TabsTrigger value="new">New This Week</TabsTrigger>
             <TabsTrigger value="urgent">Urgent</TabsTrigger>
+            <TabsTrigger value="archived">Archived</TabsTrigger>
           </TabsList>
 
           <TabsContent value="executive" className="space-y-6">
@@ -473,6 +503,50 @@ const Index = () => {
                 />
               ))}
             </div>
+          </TabsContent>
+
+          <TabsContent value="archived" className="space-y-6">
+            <div className="bg-muted/50 border border-border rounded-lg p-4 mb-6">
+              <p className="text-sm text-muted-foreground">
+                <strong>Historical Archive:</strong> These opportunities have passed their proposal due dates. Use the search and filters to find specific past opportunities (e.g., "Torrance FD" + "Billing" service tag).
+              </p>
+            </div>
+            
+            <OpportunityFilters
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              selectedServiceTags={selectedServiceTags}
+              onServiceTagToggle={handleServiceTagToggle}
+              selectedCategories={selectedCategories}
+              onCategoryToggle={handleCategoryToggle}
+              selectedPriority={selectedPriority}
+              onPriorityChange={setSelectedPriority}
+              selectedContractType={selectedContractType}
+              onContractTypeChange={setSelectedContractType}
+              dateRange={dateRange}
+              onDateRangeChange={setDateRange}
+              onClearFilters={handleClearFilters}
+            />
+
+            {categoryFilteredArchivedOpportunities.length === 0 ? (
+              <div className="text-center py-12 bg-card border border-border rounded-lg">
+                <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-foreground mb-2">No archived opportunities found</h3>
+                <p className="text-muted-foreground">
+                  No past opportunities match your current filters
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {categoryFilteredArchivedOpportunities.map((opportunity) => (
+                  <OpportunityCard
+                    key={opportunity.id}
+                    opportunity={opportunity}
+                    onViewDetails={setSelectedOpportunity}
+                  />
+                ))}
+              </div>
+            )}
           </TabsContent>
         </Tabs>
       </main>
