@@ -25,6 +25,7 @@ const Demo = () => {
   const [compareMode, setCompareMode] = useState(false);
   const [selectedForComparison, setSelectedForComparison] = useState<string[]>([]);
   const [showComparison, setShowComparison] = useState(false);
+  const [californiaOnly, setCaliforniaOnly] = useState(false);
 
   // Filter opportunities
   const filteredOpportunities = opportunities.filter((opp) => {
@@ -55,7 +56,9 @@ const Demo = () => {
       return true;
     })();
 
-    return matchesSearch && matchesServiceTags && matchesPriority && matchesContractType && matchesDateRange;
+    const matchesCalifornia = !californiaOnly || opp.geography.state.toLowerCase() === 'california';
+
+    return matchesSearch && matchesServiceTags && matchesPriority && matchesContractType && matchesDateRange && matchesCalifornia;
   });
 
   // Apply category filtering
@@ -78,6 +81,7 @@ const Demo = () => {
     setSelectedPriority('all');
     setSelectedContractType('all');
     setDateRange({ from: undefined, to: undefined });
+    setCaliforniaOnly(false);
   };
 
   const handleServiceTagToggle = (tag: ServiceTag) => {
@@ -234,6 +238,8 @@ const Demo = () => {
               dateRange={dateRange}
               onDateRangeChange={setDateRange}
               onClearFilters={handleClearFilters}
+              californiaOnly={californiaOnly}
+              onCaliforniaToggle={setCaliforniaOnly}
             />
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

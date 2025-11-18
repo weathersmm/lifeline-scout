@@ -46,6 +46,7 @@ const Index = () => {
   const [compareMode, setCompareMode] = useState(false);
   const [selectedForComparison, setSelectedForComparison] = useState<string[]>([]);
   const [showComparison, setShowComparison] = useState(false);
+  const [californiaOnly, setCaliforniaOnly] = useState(false);
 
   useEffect(() => {
     fetchOpportunities();
@@ -163,6 +164,8 @@ const Index = () => {
       return true;
     })();
 
+    const matchesCalifornia = !californiaOnly || opp.geography.state.toLowerCase() === 'california';
+
     // Exclude opportunities with past deadlines
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -170,7 +173,7 @@ const Index = () => {
     dueDate.setHours(0, 0, 0, 0);
     const isNotPastDue = dueDate >= today;
 
-    return matchesSearch && matchesServiceTags && matchesPriority && matchesContractType && matchesDateRange && isNotPastDue;
+    return matchesSearch && matchesServiceTags && matchesPriority && matchesContractType && matchesDateRange && matchesCalifornia && isNotPastDue;
   });
 
   // Apply category filtering
@@ -197,8 +200,9 @@ const Index = () => {
 
     const matchesPriority = selectedPriority === 'all' || opp.priority === selectedPriority;
     const matchesContractType = selectedContractType === 'all' || opp.contractType === selectedContractType;
+    const matchesCalifornia = !californiaOnly || opp.geography.state.toLowerCase() === 'california';
 
-    return isPastDue && matchesSearch && matchesServiceTags && matchesPriority && matchesContractType;
+    return isPastDue && matchesSearch && matchesServiceTags && matchesPriority && matchesContractType && matchesCalifornia;
   });
 
   const categoryFilteredArchivedOpportunities = filterByCategories(archivedOpportunities, selectedCategories);
@@ -220,6 +224,7 @@ const Index = () => {
     setSelectedPriority('all');
     setSelectedContractType('all');
     setDateRange({ from: undefined, to: undefined });
+    setCaliforniaOnly(false);
   };
 
   const handleServiceTagToggle = (tag: ServiceTag) => {
@@ -436,6 +441,8 @@ const Index = () => {
               dateRange={dateRange}
               onDateRangeChange={setDateRange}
               onClearFilters={handleClearFilters}
+              californiaOnly={californiaOnly}
+              onCaliforniaToggle={setCaliforniaOnly}
             />
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -526,6 +533,8 @@ const Index = () => {
               dateRange={dateRange}
               onDateRangeChange={setDateRange}
               onClearFilters={handleClearFilters}
+              californiaOnly={californiaOnly}
+              onCaliforniaToggle={setCaliforniaOnly}
             />
 
             {categoryFilteredArchivedOpportunities.length === 0 ? (
