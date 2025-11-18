@@ -64,6 +64,7 @@ export type Database = {
           geography_city: string | null
           geography_county: string | null
           geography_state: string
+          hot_flagged_type: Database["public"]["Enums"]["hot_flag_type"] | null
           id: string
           is_hot: boolean
           issue_date: string | null
@@ -98,6 +99,7 @@ export type Database = {
           geography_city?: string | null
           geography_county?: string | null
           geography_state: string
+          hot_flagged_type?: Database["public"]["Enums"]["hot_flag_type"] | null
           id?: string
           is_hot?: boolean
           issue_date?: string | null
@@ -132,6 +134,7 @@ export type Database = {
           geography_city?: string | null
           geography_county?: string | null
           geography_state?: string
+          hot_flagged_type?: Database["public"]["Enums"]["hot_flag_type"] | null
           id?: string
           is_hot?: boolean
           issue_date?: string | null
@@ -435,6 +438,7 @@ export type Database = {
         | "Sources Sought"
         | "Pre-solicitation"
         | "Sole-Source Notice"
+      hot_flag_type: "manual" | "automatic"
       opportunity_status: "new" | "monitoring" | "in-pipeline" | "archived"
       priority_level: "high" | "medium" | "low"
       service_tag:
@@ -585,6 +589,7 @@ export const Constants = {
         "Pre-solicitation",
         "Sole-Source Notice",
       ],
+      hot_flag_type: ["manual", "automatic"],
       opportunity_status: ["new", "monitoring", "in-pipeline", "archived"],
       priority_level: ["high", "medium", "low"],
       service_tag: [

@@ -27,7 +27,10 @@ export interface Opportunity {
   source: string;
   recommendedAction?: string;
   isHot: boolean;
+  hotFlaggedType?: 'manual' | 'automatic';
 }
+
+export type HotFlagType = 'manual' | 'automatic';
 
 export type ServiceTag = 
   | 'EMS 911'
