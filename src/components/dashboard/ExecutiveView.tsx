@@ -12,26 +12,31 @@ interface ExecutiveViewProps {
 }
 
 export const ExecutiveView = ({ opportunities, onViewDetails }: ExecutiveViewProps) => {
+  // Deduplicate opportunities by ID
+  const uniqueOpportunities = Array.from(
+    new Map(opportunities.map(opp => [opp.id, opp])).values()
+  );
+
   // California opportunities
-  const caOpportunities = opportunities.filter(opp => 
+  const caOpportunities = uniqueOpportunities.filter(opp => 
     opp.geography.state.toLowerCase().includes('california') || 
     opp.geography.state.toLowerCase() === 'ca'
   );
   
-  const otherOpportunities = opportunities.filter(opp => 
+  const otherOpportunities = uniqueOpportunities.filter(opp => 
     !opp.geography.state.toLowerCase().includes('california') && 
     opp.geography.state.toLowerCase() !== 'ca'
   );
 
   // Major sporting events opportunities
-  const majorEventsOpportunities = opportunities.filter(opp => 
+  const majorEventsOpportunities = uniqueOpportunities.filter(opp => 
     opp.serviceTags.some(tag => 
       ['LA28 Olympics', 'Paralympics', 'FIFA World Cup', 'Soccer/Football'].includes(tag)
     )
   );
 
   // Service tag breakdown
-  const serviceTagCounts = opportunities.reduce((acc, opp) => {
+  const serviceTagCounts = uniqueOpportunities.reduce((acc, opp) => {
     opp.serviceTags.forEach(tag => {
       acc[tag] = (acc[tag] || 0) + 1;
     });
@@ -44,9 +49,9 @@ export const ExecutiveView = ({ opportunities, onViewDetails }: ExecutiveViewPro
 
   // Priority breakdown
   const priorityData = [
-    { name: 'High', value: opportunities.filter(o => o.priority === 'high').length, color: 'hsl(var(--destructive))' },
-    { name: 'Medium', value: opportunities.filter(o => o.priority === 'medium').length, color: 'hsl(var(--warning))' },
-    { name: 'Low', value: opportunities.filter(o => o.priority === 'low').length, color: 'hsl(var(--muted))' }
+    { name: 'High', value: uniqueOpportunities.filter(o => o.priority === 'high').length, color: 'hsl(var(--destructive))' },
+    { name: 'Medium', value: uniqueOpportunities.filter(o => o.priority === 'medium').length, color: 'hsl(var(--warning))' },
+    { name: 'Low', value: uniqueOpportunities.filter(o => o.priority === 'low').length, color: 'hsl(var(--muted))' }
   ];
 
   // County breakdown for California opportunities
@@ -157,7 +162,7 @@ export const ExecutiveView = ({ opportunities, onViewDetails }: ExecutiveViewPro
           <CardContent>
             <div className="text-3xl font-bold text-foreground">{caOpportunities.length}</div>
             <p className="text-xs text-muted-foreground mt-1">
-              {((caOpportunities.length / opportunities.length) * 100).toFixed(0)}% of total
+              {uniqueOpportunities.length > 0 ? ((caOpportunities.length / uniqueOpportunities.length) * 100).toFixed(0) : 0}% of total
             </p>
           </CardContent>
         </Card>
