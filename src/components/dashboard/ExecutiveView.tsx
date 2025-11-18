@@ -2,7 +2,7 @@ import { Opportunity } from '@/types/opportunity';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { MapPin, TrendingUp, Calendar, DollarSign, Clock, Trophy } from 'lucide-react';
+import { MapPin, TrendingUp, Calendar, DollarSign, Clock, Trophy, Flame, AlertTriangle } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import { format, differenceInDays } from 'date-fns';
 
@@ -66,6 +66,16 @@ export const ExecutiveView = ({ opportunities, onViewDetails }: ExecutiveViewPro
     .sort((a, b) => b.value - a.value)
     .slice(0, 10); // Top 10 counties
 
+  // HOT Opportunities - time-sensitive, high-value opportunities with deadlines in next 30 days
+  const hotOpportunities = uniqueOpportunities
+    .filter(opp => {
+      const daysUntil = differenceInDays(new Date(opp.keyDates.proposalDue), new Date());
+      const hasHighValue = (opp.estimatedValue?.max || opp.estimatedValue?.min || 0) >= 1000000;
+      const isHighPriority = opp.priority === 'high';
+      return daysUntil <= 30 && daysUntil >= 0 && (hasHighValue || isHighPriority);
+    })
+    .sort((a, b) => new Date(a.keyDates.proposalDue).getTime() - new Date(b.keyDates.proposalDue).getTime());
+
   // High-priority CA opportunities timeline
   const highPriorityCAOpps = caOpportunities
     .filter(opp => opp.priority === 'high')
@@ -76,6 +86,12 @@ export const ExecutiveView = ({ opportunities, onViewDetails }: ExecutiveViewPro
     if (daysUntil <= 7) return 'hsl(var(--destructive))';
     if (daysUntil <= 14) return 'hsl(var(--warning))';
     return 'hsl(var(--primary))';
+  };
+
+  const getUrgencyBadge = (daysUntil: number) => {
+    if (daysUntil <= 7) return { variant: 'destructive' as const, label: `${daysUntil}d`, icon: AlertTriangle };
+    if (daysUntil <= 14) return { variant: 'default' as const, label: `${daysUntil}d`, icon: Clock };
+    return { variant: 'secondary' as const, label: `${daysUntil}d`, icon: Calendar };
   };
 
   // Calculate total estimated value for CA opportunities
@@ -91,6 +107,65 @@ export const ExecutiveView = ({ opportunities, onViewDetails }: ExecutiveViewPro
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(value);
+  };
+
+  const HotOpportunityCard = ({ opp }: { opp: Opportunity }) => {
+    const daysUntil = differenceInDays(new Date(opp.keyDates.proposalDue), new Date());
+    const badge = getUrgencyBadge(daysUntil);
+    const IconComponent = badge.icon;
+    
+    return (
+      <Card className="hover:shadow-lg transition-all cursor-pointer border-2 border-destructive/30 bg-gradient-to-br from-destructive/5 to-warning/5" onClick={() => onViewDetails(opp)}>
+        <CardContent className="p-5">
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-2">
+                <Badge variant={badge.variant} className="font-bold flex items-center gap-1">
+                  <IconComponent className="w-3 h-3" />
+                  {badge.label}
+                </Badge>
+                <Badge variant={opp.priority === 'high' ? 'destructive' : 'default'} className="text-xs">
+                  {opp.priority}
+                </Badge>
+              </div>
+              <h4 className="font-bold text-foreground text-base mb-1 line-clamp-2">{opp.title}</h4>
+              <p className="text-sm text-muted-foreground mb-2">{opp.agency}</p>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <MapPin className="w-3 h-3" />
+                {opp.geography.city ? `${opp.geography.city}, ` : ''}{opp.geography.state}
+              </div>
+            </div>
+          </div>
+          
+          <div className="space-y-2 pt-3 border-t border-border">
+            {opp.estimatedValue && (
+              <div className="flex items-center gap-2 text-sm">
+                <DollarSign className="w-4 h-4 text-primary" />
+                <span className="font-semibold text-foreground">
+                  {formatCurrency(opp.estimatedValue.min || opp.estimatedValue.max || 0)}
+                  {opp.estimatedValue.min && opp.estimatedValue.max && ' - ' + formatCurrency(opp.estimatedValue.max)}
+                </span>
+              </div>
+            )}
+            <div className="flex items-center gap-2 text-sm">
+              <Calendar className="w-4 h-4 text-primary" />
+              <span className="font-semibold text-destructive">
+                Due: {format(new Date(opp.keyDates.proposalDue), 'MMM d, yyyy')}
+              </span>
+            </div>
+            {opp.serviceTags.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-2">
+                {opp.serviceTags.slice(0, 3).map((tag) => (
+                  <Badge key={tag} variant="outline" className="text-xs">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    );
   };
 
   const OpportunityMiniCard = ({ opp }: { opp: Opportunity }) => (
@@ -128,6 +203,41 @@ export const ExecutiveView = ({ opportunities, onViewDetails }: ExecutiveViewPro
 
   return (
     <div className="space-y-6">
+      {/* HOT Opportunities Section */}
+      {hotOpportunities.length > 0 && (
+        <Card className="p-6 border-2 border-destructive bg-gradient-to-r from-red-50/80 to-orange-50/80 dark:from-red-950/30 dark:to-orange-950/30 shadow-lg">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="relative">
+              <Flame className="h-7 w-7 text-destructive animate-pulse" />
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-destructive rounded-full animate-ping" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
+                🔥 HOT Opportunities
+                <Badge variant="destructive" className="text-sm font-bold">
+                  {hotOpportunities.length} Urgent
+                </Badge>
+              </h2>
+              <p className="text-sm text-muted-foreground mt-1">
+                High-value opportunities with deadlines in the next 30 days
+              </p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {hotOpportunities.slice(0, 6).map((opp) => (
+              <HotOpportunityCard key={opp.id} opp={opp} />
+            ))}
+          </div>
+          {hotOpportunities.length > 6 && (
+            <div className="mt-4 text-center">
+              <Button variant="destructive" size="sm" className="font-semibold">
+                View All {hotOpportunities.length} HOT Opportunities
+              </Button>
+            </div>
+          )}
+        </Card>
+      )}
+
       {/* LA28 Olympics & Major Events Section */}
       {majorEventsOpportunities.length > 0 && (
         <Card className="p-6 border-2 border-amber-500/50 bg-gradient-to-r from-amber-50/50 to-orange-50/50 dark:from-amber-950/20 dark:to-orange-950/20">
