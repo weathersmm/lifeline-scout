@@ -65,6 +65,7 @@ export type Database = {
           geography_county: string | null
           geography_state: string
           id: string
+          is_hot: boolean
           issue_date: string | null
           lemsa_site: string | null
           link: string
@@ -98,6 +99,7 @@ export type Database = {
           geography_county?: string | null
           geography_state: string
           id?: string
+          is_hot?: boolean
           issue_date?: string | null
           lemsa_site?: string | null
           link: string
@@ -131,6 +133,7 @@ export type Database = {
           geography_county?: string | null
           geography_state?: string
           id?: string
+          is_hot?: boolean
           issue_date?: string | null
           lemsa_site?: string | null
           link?: string

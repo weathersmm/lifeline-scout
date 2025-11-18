@@ -12,23 +12,17 @@ import { BatchScraperDialog } from '@/components/dashboard/BatchScraperDialog';
 import { RoleSwitcher } from '@/components/dashboard/RoleSwitcher';
 import { ExecutiveView } from '@/components/dashboard/ExecutiveView';
 import { OpportunityUploadDialog } from '@/components/dashboard/OpportunityUploadDialog';
+import { AppSidebar } from '@/components/AppSidebar';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AlertCircle, TrendingUp, FileText, Calendar, LogOut, User, GitCompare, BarChart3, Shield } from 'lucide-react';
+import { AlertCircle, TrendingUp, FileText, Calendar, GitCompare, Upload, Settings } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { filterByCategories } from '@/utils/categoryMapping';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 const Index = () => {
   const { user, userRole, effectiveRole, previewRole, setRolePreview, actualIsAdmin, isAdmin, signOut } = useAuth();
@@ -93,7 +87,8 @@ const Index = () => {
         status: item.status as any,
         source: item.source,
         recommendedAction: item.recommended_action || undefined,
-      }));
+        is_hot: (item as any).is_hot || false,
+      } as any));
 
       setOpportunities(transformedData);
     } catch (error) {
@@ -270,103 +265,69 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card">
-        <div className="container mx-auto px-6 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">
-                LifeLine Pipeline Scout
-              </h1>
-              <p className="text-muted-foreground mt-1">
-                EMS Business Development Opportunity Intelligence
-              </p>
-            </div>
-            <div className="flex items-center gap-3">
-              {actualIsAdmin && (
-                <RoleSwitcher
-                  currentRole={userRole}
-                  previewRole={previewRole}
-                  onRoleChange={setRolePreview}
-                />
-              )}
-              {isAdmin && (
-                <Button variant="outline" onClick={() => navigate('/admin')}>
-                  <Shield className="w-4 h-4 mr-2" />
-                  Admin
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-background">
+        <AppSidebar />
+        
+        <div className="flex-1 flex flex-col">
+          {/* Header with Sidebar Trigger */}
+          <header className="border-b border-border bg-card">
+            <div className="flex items-center gap-4 px-6 py-4">
+              <SidebarTrigger />
+              <div className="flex-1">
+                <h1 className="text-2xl font-bold text-foreground">
+                  LifeLine Pipeline Scout
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  EMS Business Development Opportunity Intelligence
+                </p>
+              </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                {actualIsAdmin && (
+                  <RoleSwitcher
+                    currentRole={userRole}
+                    previewRole={previewRole}
+                    onRoleChange={setRolePreview}
+                  />
+                )}
+                <ExportButtons opportunities={filteredOpportunities} />
+                <NotificationPreferences />
+                <HigherGovSyncDialog />
+                <BatchScraperDialog />
+                <OpportunityUploadDialog />
+                <WebScraperDialog />
+                <Button variant="outline" size="sm" onClick={handleGenerateReport}>
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Report
                 </Button>
-              )}
-              <Button variant="outline" onClick={() => navigate('/analytics')}>
-                <BarChart3 className="w-4 h-4 mr-2" />
-                Analytics
-              </Button>
-              <ExportButtons opportunities={filteredOpportunities} />
-              <NotificationPreferences />
-              <HigherGovSyncDialog />
-              <BatchScraperDialog />
-              <OpportunityUploadDialog />
-              <WebScraperDialog />
-              <Button variant="outline" onClick={handleGenerateReport}>
-                <Calendar className="w-4 h-4 mr-2" />
-                Generate Report
-              </Button>
-              <Button 
-                variant={compareMode ? "default" : "outline"}
-                onClick={() => {
-                  setCompareMode(!compareMode);
-                  if (compareMode) {
-                    setSelectedForComparison([]);
-                  }
-                }}
-              >
-                <GitCompare className="w-4 h-4 mr-2" />
-                Compare ({selectedForComparison.length})
-              </Button>
-              {selectedForComparison.length > 0 && (
-                <Button onClick={() => setShowComparison(true)}>
-                  View Comparison
+                <Button 
+                  variant={compareMode ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => {
+                    setCompareMode(!compareMode);
+                    if (compareMode) {
+                      setSelectedForComparison([]);
+                    }
+                  }}
+                >
+                  <GitCompare className="w-4 h-4 mr-2" />
+                  Compare ({selectedForComparison.length})
                 </Button>
-              )}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="gap-2">
-                    <User className="h-4 w-4" />
-                    {user?.email}
+                {selectedForComparison.length > 0 && (
+                  <Button size="sm" onClick={() => setShowComparison(true)}>
+                    View Comparison
                   </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>
-                    <div className="flex flex-col gap-1">
-                      <span className="text-sm font-medium">{user?.email}</span>
-                      <div className="flex items-center gap-2">
-                        <Badge variant="secondary" className="w-fit text-xs">
-                          {effectiveRole}
-                        </Badge>
-                        {previewRole && (
-                          <Badge variant="outline" className="w-fit text-xs">
-                            Preview Mode
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={signOut} className="gap-2 text-destructive">
-                    <LogOut className="h-4 w-4" />
-                    Sign Out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                )}
+              </div>
             </div>
-          </div>
-        </div>
-      </header>
+          </header>
 
-      {/* Stats Bar */}
-      <div className="bg-card border-b border-border">
-        <div className="container mx-auto px-6 py-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {/* Main Content */}
+          <main className="flex-1 overflow-auto">
+            {/* Stats Bar */}
+            <div className="bg-card border-b border-border">
+              <div className="container mx-auto px-6 py-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-primary/10 rounded-lg">
                 <FileText className="w-5 h-5 text-primary" />
@@ -407,8 +368,8 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-6 py-8">
+      {/* Tabs Content */}
+      <div className="container mx-auto px-6 py-8">
         <Tabs defaultValue="executive" className="space-y-6">
           <TabsList>
             <TabsTrigger value="executive">Executive View</TabsTrigger>
@@ -423,6 +384,7 @@ const Index = () => {
             <ExecutiveView 
               opportunities={categoryFilteredOpportunities}
               onViewDetails={setSelectedOpportunity}
+              onHotToggle={fetchOpportunities}
             />
           </TabsContent>
 
@@ -454,6 +416,7 @@ const Index = () => {
                   showCompareCheckbox={compareMode}
                   isSelected={selectedForComparison.includes(opportunity.id)}
                   onSelectionChange={(selected) => handleComparisonToggle(opportunity.id, selected)}
+                  onHotToggle={fetchOpportunities}
                 />
               ))}
             </div>
@@ -478,6 +441,7 @@ const Index = () => {
                   key={opportunity.id}
                   opportunity={opportunity}
                   onViewDetails={setSelectedOpportunity}
+                  onHotToggle={fetchOpportunities}
                 />
               ))}
             </div>
@@ -490,6 +454,7 @@ const Index = () => {
                   key={opportunity.id}
                   opportunity={opportunity}
                   onViewDetails={setSelectedOpportunity}
+                  onHotToggle={fetchOpportunities}
                 />
               ))}
             </div>
@@ -507,6 +472,7 @@ const Index = () => {
                   key={opportunity.id}
                   opportunity={opportunity}
                   onViewDetails={setSelectedOpportunity}
+                  onHotToggle={fetchOpportunities}
                 />
               ))}
             </div>
@@ -552,13 +518,15 @@ const Index = () => {
                     key={opportunity.id}
                     opportunity={opportunity}
                     onViewDetails={setSelectedOpportunity}
+                    onHotToggle={fetchOpportunities}
                   />
                 ))}
               </div>
             )}
           </TabsContent>
         </Tabs>
-      </main>
+      </div>
+    </main>
 
       {/* Detail Dialog */}
       <OpportunityDetailDialog
@@ -574,7 +542,9 @@ const Index = () => {
         onOpenChange={setShowComparison}
         onRemove={handleRemoveFromComparison}
       />
-    </div>
+        </div>
+      </div>
+    </SidebarProvider>
   );
 };
 
