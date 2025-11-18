@@ -55,6 +55,7 @@ export default function Analytics() {
         status: item.status as any,
         source: item.source,
         recommendedAction: item.recommended_action || undefined,
+        isHot: (item as any).is_hot || false,
       }));
 
       setOpportunities(transformedData);

@@ -17,7 +17,7 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AlertCircle, TrendingUp, FileText, Calendar, GitCompare, Upload, Settings } from 'lucide-react';
+import { AlertCircle, TrendingUp, FileText, Calendar, GitCompare, Upload, Settings, Flame } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -87,7 +87,7 @@ const Index = () => {
         status: item.status as any,
         source: item.source,
         recommendedAction: item.recommended_action || undefined,
-        is_hot: (item as any).is_hot || false,
+        isHot: (item as any).is_hot || false,
       } as any));
 
       setOpportunities(transformedData);
@@ -205,6 +205,7 @@ const Index = () => {
   // Stats
   const highPriorityCount = categoryFilteredOpportunities.filter(o => o.priority === 'high').length;
   const newOpportunitiesCount = categoryFilteredOpportunities.filter(o => o.status === 'new').length;
+  const hotOpportunitiesCount = categoryFilteredOpportunities.filter(o => o.isHot).length;
   const urgentCount = categoryFilteredOpportunities.filter(o => {
     const daysUntilDue = Math.ceil(
       (new Date(o.keyDates.proposalDue).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
@@ -373,6 +374,10 @@ const Index = () => {
         <Tabs defaultValue="executive" className="space-y-6">
           <TabsList>
             <TabsTrigger value="executive">Executive View</TabsTrigger>
+            <TabsTrigger value="hot" className="gap-2">
+              <Flame className="w-4 h-4" />
+              HOT Opportunities
+            </TabsTrigger>
             <TabsTrigger value="all">All Opportunities</TabsTrigger>
             <TabsTrigger value="high-priority">High Priority</TabsTrigger>
             <TabsTrigger value="new">New This Week</TabsTrigger>
@@ -386,6 +391,42 @@ const Index = () => {
               onViewDetails={setSelectedOpportunity}
               onHotToggle={fetchOpportunities}
             />
+          </TabsContent>
+
+          <TabsContent value="hot" className="space-y-6">
+            <div className="mb-6 p-6 bg-gradient-to-r from-destructive/10 via-warning/10 to-destructive/10 border border-destructive/20 rounded-lg">
+              <div className="flex items-center gap-3 mb-2">
+                <Flame className="w-6 h-6 text-destructive" />
+                <h2 className="text-xl font-bold text-foreground">HOT Opportunities</h2>
+                <Badge variant="destructive" className="ml-auto">
+                  {hotOpportunitiesCount} Flagged
+                </Badge>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Manually and automatically flagged high-priority opportunities requiring immediate attention
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {categoryFilteredOpportunities.filter(o => o.isHot).map((opportunity) => (
+                <OpportunityCard
+                  key={opportunity.id}
+                  opportunity={opportunity}
+                  onViewDetails={setSelectedOpportunity}
+                  onHotToggle={fetchOpportunities}
+                />
+              ))}
+            </div>
+
+            {hotOpportunitiesCount === 0 && (
+              <div className="text-center py-12">
+                <Flame className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">No HOT opportunities yet</h3>
+                <p className="text-muted-foreground">
+                  Flag opportunities as HOT by clicking the flame button on any opportunity card
+                </p>
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="all" className="space-y-6">
