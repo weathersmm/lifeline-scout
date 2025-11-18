@@ -26,6 +26,7 @@ export interface Opportunity {
   status: OpportunityStatus;
   source: string;
   recommendedAction?: string;
+  isHot: boolean;
 }
 
 export type ServiceTag = 
