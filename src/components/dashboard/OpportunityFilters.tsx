@@ -30,6 +30,8 @@ interface OpportunityFiltersProps {
   dateRange?: { from: Date | undefined; to: Date | undefined };
   onDateRangeChange: (range: { from: Date | undefined; to: Date | undefined }) => void;
   onClearFilters: () => void;
+  californiaOnly: boolean;
+  onCaliforniaToggle: (value: boolean) => void;
 }
 
 const serviceTags: ServiceTag[] = [
@@ -56,7 +58,9 @@ export const OpportunityFilters = ({
   onContractTypeChange,
   dateRange,
   onDateRangeChange,
-  onClearFilters
+  onClearFilters,
+  californiaOnly,
+  onCaliforniaToggle
 }: OpportunityFiltersProps) => {
   const hasActiveFilters = 
     searchQuery || 
@@ -65,19 +69,29 @@ export const OpportunityFilters = ({
     selectedPriority !== 'all' || 
     selectedContractType !== 'all' ||
     dateRange?.from ||
-    dateRange?.to;
+    dateRange?.to ||
+    californiaOnly;
 
   return (
     <div className="space-y-4">
-      {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-        <Input
-          placeholder="Search opportunities..."
-          value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
-          className="pl-10"
-        />
+      {/* Search and California Toggle */}
+      <div className="flex gap-3 items-center">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            placeholder="Search opportunities..."
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+        <Button
+          variant={californiaOnly ? "default" : "outline"}
+          onClick={() => onCaliforniaToggle(!californiaOnly)}
+          className="whitespace-nowrap font-semibold"
+        >
+          {californiaOnly ? "✓ " : ""}California Only
+        </Button>
       </div>
 
       {/* Category Filters */}
