@@ -178,7 +178,17 @@ serve(async (req) => {
         try {
           const response = await fetch(url, {
             headers: {
-              'User-Agent': 'Mozilla/5.0 (compatible; EMSScout/1.0; +https://scout.ewproto.com)',
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+              'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+              'Accept-Language': 'en-US,en;q=0.9',
+              'Accept-Encoding': 'gzip, deflate, br',
+              'DNT': '1',
+              'Connection': 'keep-alive',
+              'Upgrade-Insecure-Requests': '1',
+              'Sec-Fetch-Dest': 'document',
+              'Sec-Fetch-Mode': 'navigate',
+              'Sec-Fetch-Site': 'none',
+              'Cache-Control': 'max-age=0',
             },
           });
           
@@ -186,10 +196,10 @@ serve(async (req) => {
             return response;
           }
           
-          // If server error (5xx), retry with exponential backoff
-          if (response.status >= 500 && attempt < maxRetries) {
+          // If client error (403, 429, etc.) or server error, log and retry
+          if ((response.status === 403 || response.status === 429 || response.status >= 500) && attempt < maxRetries) {
             const delay = initialDelay * Math.pow(2, attempt);
-            console.log(`Server error ${response.status}, retrying in ${delay}ms... (attempt ${attempt + 1}/${maxRetries})`);
+            console.log(`HTTP ${response.status} error, retrying in ${delay}ms... (attempt ${attempt + 1}/${maxRetries})`);
             await new Promise(resolve => setTimeout(resolve, delay));
             continue;
           }
@@ -347,7 +357,14 @@ Return ONLY a valid JSON array of opportunities. If none found, return [].`
       opportunities = JSON.parse(jsonString);
     } catch (parseError) {
       console.error("Failed to parse AI response:", parseError);
-      throw new Error("Failed to parse opportunities from AI response");
+      // Check if AI returned a message indicating no opportunities found
+      if (extractedText.toLowerCase().includes("no") && 
+          (extractedText.toLowerCase().includes("opportunities") || extractedText.toLowerCase().includes("unable"))) {
+        console.log("AI indicated no opportunities found, returning empty array");
+        opportunities = [];
+      } else {
+        throw new Error("Failed to parse opportunities from AI response");
+      }
     }
 
     console.log(`Extracted ${opportunities.length} opportunities`);
