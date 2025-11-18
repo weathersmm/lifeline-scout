@@ -58,7 +58,10 @@ export const OpportunityCard = ({
     try {
       const { error } = await supabase
         .from('opportunities')
-        .update({ is_hot: !isHot })
+        .update({ 
+          is_hot: !isHot,
+          hot_flagged_type: !isHot ? 'manual' : null
+        })
         .eq('id', opportunity.id);
 
       if (error) throw error;
@@ -69,6 +72,21 @@ export const OpportunityCard = ({
           ? "This opportunity has been removed from HOT opportunities" 
           : "This opportunity is now marked as HOT",
       });
+
+      // Send notification if opportunity was flagged as HOT
+      if (!isHot) {
+        try {
+          await supabase.functions.invoke('send-hot-opportunity-notification', {
+            body: {
+              opportunityId: opportunity.id,
+              flaggedType: 'manual'
+            }
+          });
+        } catch (notifError) {
+          console.error('Failed to send HOT opportunity notification:', notifError);
+          // Don't show error to user - notification failure shouldn't block the main action
+        }
+      }
 
       if (onHotToggle) onHotToggle();
     } catch (error) {

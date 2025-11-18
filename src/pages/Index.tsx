@@ -41,6 +41,7 @@ const Index = () => {
   const [selectedForComparison, setSelectedForComparison] = useState<string[]>([]);
   const [showComparison, setShowComparison] = useState(false);
   const [californiaOnly, setCaliforniaOnly] = useState(false);
+  const [hotFilterType, setHotFilterType] = useState<'all' | 'manual' | 'automatic'>('all');
 
   useEffect(() => {
     fetchOpportunities();
@@ -88,6 +89,7 @@ const Index = () => {
         source: item.source,
         recommendedAction: item.recommended_action || undefined,
         isHot: (item as any).is_hot || false,
+        hotFlaggedType: (item as any).hot_flagged_type || undefined,
       } as any));
 
       setOpportunities(transformedData);
@@ -407,15 +409,47 @@ const Index = () => {
               </p>
             </div>
 
+            {/* Filter Tabs */}
+            <div className="flex items-center gap-2 border-b border-border pb-4">
+              <span className="text-sm font-medium text-muted-foreground mr-2">Filter by:</span>
+              <Button
+                variant={hotFilterType === 'all' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setHotFilterType('all')}
+              >
+                All ({categoryFilteredOpportunities.filter(o => o.isHot).length})
+              </Button>
+              <Button
+                variant={hotFilterType === 'manual' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setHotFilterType('manual')}
+              >
+                Manual ({categoryFilteredOpportunities.filter(o => o.isHot && o.hotFlaggedType === 'manual').length})
+              </Button>
+              <Button
+                variant={hotFilterType === 'automatic' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setHotFilterType('automatic')}
+              >
+                Automatic ({categoryFilteredOpportunities.filter(o => o.isHot && o.hotFlaggedType === 'automatic').length})
+              </Button>
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {categoryFilteredOpportunities.filter(o => o.isHot).map((opportunity) => (
-                <OpportunityCard
-                  key={opportunity.id}
-                  opportunity={opportunity}
-                  onViewDetails={setSelectedOpportunity}
-                  onHotToggle={fetchOpportunities}
-                />
-              ))}
+              {categoryFilteredOpportunities
+                .filter(o => {
+                  if (!o.isHot) return false;
+                  if (hotFilterType === 'all') return true;
+                  return o.hotFlaggedType === hotFilterType;
+                })
+                .map((opportunity) => (
+                  <OpportunityCard
+                    key={opportunity.id}
+                    opportunity={opportunity}
+                    onViewDetails={setSelectedOpportunity}
+                    onHotToggle={fetchOpportunities}
+                  />
+                ))}
             </div>
 
             {hotOpportunitiesCount === 0 && (
@@ -424,6 +458,20 @@ const Index = () => {
                 <h3 className="text-lg font-semibold mb-2">No HOT opportunities yet</h3>
                 <p className="text-muted-foreground">
                   Flag opportunities as HOT by clicking the flame button on any opportunity card
+                </p>
+              </div>
+            )}
+            
+            {hotOpportunitiesCount > 0 && categoryFilteredOpportunities.filter(o => {
+              if (!o.isHot) return false;
+              if (hotFilterType === 'all') return true;
+              return o.hotFlaggedType === hotFilterType;
+            }).length === 0 && (
+              <div className="text-center py-12">
+                <Flame className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">No {hotFilterType} flagged opportunities</h3>
+                <p className="text-muted-foreground">
+                  Try selecting a different filter to see other HOT opportunities
                 </p>
               </div>
             )}
