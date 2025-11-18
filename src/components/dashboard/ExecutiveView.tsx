@@ -9,9 +9,10 @@ import { format, differenceInDays } from 'date-fns';
 interface ExecutiveViewProps {
   opportunities: Opportunity[];
   onViewDetails: (opp: Opportunity) => void;
+  onHotToggle?: () => void;
 }
 
-export const ExecutiveView = ({ opportunities, onViewDetails }: ExecutiveViewProps) => {
+export const ExecutiveView = ({ opportunities, onViewDetails, onHotToggle }: ExecutiveViewProps) => {
   // Deduplicate opportunities by ID
   const uniqueOpportunities = Array.from(
     new Map(opportunities.map(opp => [opp.id, opp])).values()
@@ -66,15 +67,26 @@ export const ExecutiveView = ({ opportunities, onViewDetails }: ExecutiveViewPro
     .sort((a, b) => b.value - a.value)
     .slice(0, 10); // Top 10 counties
 
-  // HOT Opportunities - time-sensitive, high-value opportunities with deadlines in next 30 days
+  // HOT Opportunities - time-sensitive, high-value opportunities with deadlines in next 30 days OR manually marked
   const hotOpportunities = uniqueOpportunities
     .filter(opp => {
+      // Include if manually marked as HOT
+      if ((opp as any).is_hot) return true;
+      
+      // Or if it meets the automatic criteria
       const daysUntil = differenceInDays(new Date(opp.keyDates.proposalDue), new Date());
       const hasHighValue = (opp.estimatedValue?.max || opp.estimatedValue?.min || 0) >= 1000000;
       const isHighPriority = opp.priority === 'high';
       return daysUntil <= 30 && daysUntil >= 0 && (hasHighValue || isHighPriority);
     })
-    .sort((a, b) => new Date(a.keyDates.proposalDue).getTime() - new Date(b.keyDates.proposalDue).getTime());
+    .sort((a, b) => {
+      // Sort manually marked HOT opportunities first
+      const aIsManuallyHot = (a as any).is_hot ? 1 : 0;
+      const bIsManuallyHot = (b as any).is_hot ? 1 : 0;
+      if (aIsManuallyHot !== bIsManuallyHot) return bIsManuallyHot - aIsManuallyHot;
+      // Then sort by due date
+      return new Date(a.keyDates.proposalDue).getTime() - new Date(b.keyDates.proposalDue).getTime();
+    });
 
   // High-priority CA opportunities timeline
   const highPriorityCAOpps = caOpportunities

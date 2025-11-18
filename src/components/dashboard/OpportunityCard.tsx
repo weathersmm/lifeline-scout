@@ -3,8 +3,11 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Calendar, MapPin, DollarSign, ExternalLink, Clock, Building2 } from 'lucide-react';
+import { Calendar, MapPin, DollarSign, ExternalLink, Clock, Building2, Flame } from 'lucide-react';
 import { format } from 'date-fns';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import { useState } from 'react';
 
 interface OpportunityCardProps {
   opportunity: Opportunity;
@@ -12,6 +15,7 @@ interface OpportunityCardProps {
   isSelected?: boolean;
   onSelectionChange?: (selected: boolean) => void;
   showCompareCheckbox?: boolean;
+  onHotToggle?: () => void;
 }
 
 const priorityColors = {
@@ -34,16 +38,53 @@ export const OpportunityCard = ({
   onViewDetails,
   isSelected = false,
   onSelectionChange,
-  showCompareCheckbox = false
+  showCompareCheckbox = false,
+  onHotToggle
 }: OpportunityCardProps) => {
+  const { toast } = useToast();
+  const [isTogglingHot, setIsTogglingHot] = useState(false);
+  const isHot = (opportunity as any).is_hot || false;
+
   const daysUntilDue = Math.ceil(
     (new Date(opportunity.keyDates.proposalDue).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
   );
   
   const isUrgent = daysUntilDue <= 14;
 
+  const handleToggleHot = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsTogglingHot(true);
+    
+    try {
+      const { error } = await supabase
+        .from('opportunities')
+        .update({ is_hot: !isHot })
+        .eq('id', opportunity.id);
+
+      if (error) throw error;
+
+      toast({
+        title: isHot ? "Removed from HOT" : "Marked as HOT",
+        description: isHot 
+          ? "This opportunity has been removed from HOT opportunities" 
+          : "This opportunity is now marked as HOT",
+      });
+
+      if (onHotToggle) onHotToggle();
+    } catch (error) {
+      console.error('Error toggling HOT status:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update HOT status",
+        variant: "destructive",
+      });
+    } finally {
+      setIsTogglingHot(false);
+    }
+  };
+
   return (
-    <Card className={`p-6 hover:shadow-lg transition-shadow ${isSelected ? 'ring-2 ring-primary' : ''}`}>
+    <Card className={`p-6 hover:shadow-lg transition-shadow ${isSelected ? 'ring-2 ring-primary' : ''} ${isHot ? 'border-destructive/50 bg-destructive/5' : ''}`}>
       <div className="space-y-4">
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
@@ -55,19 +96,35 @@ export const OpportunityCard = ({
             />
           )}
           <div className="flex-1">
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
               <Badge className={priorityColors[opportunity.priority]}>
                 {opportunity.priority.toUpperCase()}
               </Badge>
               <Badge variant="outline" className={contractTypeColors[opportunity.contractType]}>
                 {opportunity.contractType}
               </Badge>
+              {isHot && (
+                <Badge variant="destructive" className="flex items-center gap-1">
+                  <Flame className="w-3 h-3" />
+                  HOT
+                </Badge>
+              )}
               {isUrgent && (
                 <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">
                   <Clock className="w-3 h-3 mr-1" />
                   {daysUntilDue}d left
                 </Badge>
               )}
+              <Button
+                variant={isHot ? "destructive" : "outline"}
+                size="sm"
+                className="ml-auto h-7 px-2 gap-1"
+                onClick={handleToggleHot}
+                disabled={isTogglingHot}
+              >
+                <Flame className="w-3 h-3" />
+                {isHot ? "Remove HOT" : "Mark HOT"}
+              </Button>
             </div>
             <h3 className="text-lg font-semibold text-foreground mb-1">
               {opportunity.title}
