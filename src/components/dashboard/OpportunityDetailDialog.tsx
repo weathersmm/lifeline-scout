@@ -31,6 +31,7 @@ import { OpportunityTasks } from './OpportunityTasks';
 import { ProposalContentRepository } from './ProposalContentRepository';
 import { ProposalTemplateLibrary } from './ProposalTemplateLibrary';
 import { ProposalGenerator } from './ProposalGenerator';
+import { ProposalOutlineBuilder } from './ProposalOutlineBuilder';
 import { CompetitiveAssessmentDashboard } from './CompetitiveAssessmentDashboard';
 import { PTWAnalysis } from './PTWAnalysis';
 import { GoNoGoMatrix } from './GoNoGoMatrix';
