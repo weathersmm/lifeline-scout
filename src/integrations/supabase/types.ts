@@ -291,6 +291,68 @@ export type Database = {
         }
         Relationships: []
       }
+      proposal_content_block_versions: {
+        Row: {
+          change_description: string | null
+          content: string
+          content_block_id: string
+          content_type: Database["public"]["Enums"]["content_block_type"]
+          created_at: string
+          created_by: string | null
+          id: string
+          is_template: boolean | null
+          lifecycle_stages:
+            | Database["public"]["Enums"]["opportunity_lifecycle_stage"][]
+            | null
+          metadata: Json | null
+          tags: string[] | null
+          title: string
+          version_number: number
+        }
+        Insert: {
+          change_description?: string | null
+          content: string
+          content_block_id: string
+          content_type: Database["public"]["Enums"]["content_block_type"]
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_template?: boolean | null
+          lifecycle_stages?:
+            | Database["public"]["Enums"]["opportunity_lifecycle_stage"][]
+            | null
+          metadata?: Json | null
+          tags?: string[] | null
+          title: string
+          version_number: number
+        }
+        Update: {
+          change_description?: string | null
+          content?: string
+          content_block_id?: string
+          content_type?: Database["public"]["Enums"]["content_block_type"]
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_template?: boolean | null
+          lifecycle_stages?:
+            | Database["public"]["Enums"]["opportunity_lifecycle_stage"][]
+            | null
+          metadata?: Json | null
+          tags?: string[] | null
+          title?: string
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_content_block_versions_content_block_id_fkey"
+            columns: ["content_block_id"]
+            isOneToOne: false
+            referencedRelation: "proposal_content_blocks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       proposal_content_blocks: {
         Row: {
           content: string

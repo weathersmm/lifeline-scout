@@ -268,6 +268,7 @@ export const OpportunityDetailDialog = ({
             <ProposalContentRepository
               currentStage={opportunity.lifecycleStage || 'identified'}
               opportunityId={opportunity.id}
+              opportunity={opportunity}
             />
           </TabsContent>
 
