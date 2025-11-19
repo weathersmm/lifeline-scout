@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { Loader2, FileText, Download, AlertCircle, Clock } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { RequirementGapAnalysis } from "./RequirementGapAnalysis";
 import * as XLSX from 'xlsx';
 
 interface ProposalOutlineBuilderProps {
@@ -52,6 +54,7 @@ export function ProposalOutlineBuilder({ opportunityId, documents, onRequirement
   const [extractedData, setExtractedData] = useState<ExtractedData | null>(null);
   const [extractionProgress, setExtractionProgress] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [extractionId, setExtractionId] = useState<string | undefined>(undefined);
 
   // Load previously extracted requirements on mount
   useEffect(() => {
@@ -68,6 +71,7 @@ export function ProposalOutlineBuilder({ opportunityId, documents, onRequirement
         if (error) throw error;
 
         if (data) {
+          setExtractionId(data.id);
           setExtractedData({
             requirements: (data.requirements || []) as unknown as Requirement[],
             deliverableSpecs: data.deliverable_specs as DeliverableSpecs | undefined,
@@ -331,50 +335,67 @@ export function ProposalOutlineBuilder({ opportunityId, documents, onRequirement
         )}
 
         {extractedData?.requirements && extractedData.requirements.length > 0 && (
-          <div>
-            <h3 className="text-lg font-semibold mb-2">
-              Requirements ({extractedData.requirements.length})
-            </h3>
-            <ScrollArea className="h-[400px] rounded-md border">
-              <div className="p-4 space-y-3">
-                {extractedData.requirements.map((req, idx) => (
-                  <Card key={idx} className="bg-muted/30">
-                    <CardContent className="pt-4 space-y-2">
-                      <div className="flex items-start justify-between gap-2">
-                        <Badge variant="outline">{req.id}</Badge>
-                        <Badge>{req.type}</Badge>
-                      </div>
-                      {req.category && (
-                        <Badge variant="secondary" className="mr-2">
-                          {req.category}
-                        </Badge>
-                      )}
-                      {req.tags && req.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1">
-                          {req.tags.map((tag, tagIdx) => (
-                            <Badge key={tagIdx} variant="outline" className="text-xs">
-                              {tag}
+          <Tabs defaultValue="requirements" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="requirements">Requirements</TabsTrigger>
+              <TabsTrigger value="gap-analysis">Gap Analysis</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="requirements" className="space-y-4">
+              <div>
+                <h3 className="text-lg font-semibold mb-2">
+                  Requirements ({extractedData.requirements.length})
+                </h3>
+                <ScrollArea className="h-[400px] rounded-md border">
+                  <div className="p-4 space-y-3">
+                    {extractedData.requirements.map((req, idx) => (
+                      <Card key={idx} className="bg-muted/30">
+                        <CardContent className="pt-4 space-y-2">
+                          <div className="flex items-start justify-between gap-2">
+                            <Badge variant="outline">{req.id}</Badge>
+                            <Badge>{req.type}</Badge>
+                          </div>
+                          {req.category && (
+                            <Badge variant="secondary" className="mr-2">
+                              {req.category}
                             </Badge>
-                          ))}
-                        </div>
-                      )}
-                      {req.subsection && (
-                        <p className="text-sm font-medium text-muted-foreground">
-                          {req.subsection}
-                        </p>
-                      )}
-                      <p className="text-sm">{req.text}</p>
-                      {req.pageLimit && (
-                        <p className="text-xs text-muted-foreground">
-                          Page limit: {req.pageLimit}
-                        </p>
-                      )}
-                    </CardContent>
-                  </Card>
-                ))}
+                          )}
+                          {req.tags && req.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1">
+                              {req.tags.map((tag, tagIdx) => (
+                                <Badge key={tagIdx} variant="outline" className="text-xs">
+                                  {tag}
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
+                          {req.subsection && (
+                            <p className="text-sm font-medium text-muted-foreground">
+                              {req.subsection}
+                            </p>
+                          )}
+                          <p className="text-sm">{req.text}</p>
+                          {req.pageLimit && (
+                            <p className="text-xs text-muted-foreground">
+                              Page limit: {req.pageLimit}
+                            </p>
+                          )}
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </ScrollArea>
               </div>
-            </ScrollArea>
-          </div>
+            </TabsContent>
+
+            <TabsContent value="gap-analysis">
+              <RequirementGapAnalysis 
+                opportunityId={opportunityId}
+                requirements={extractedData.requirements}
+                extractionId={extractionId}
+              />
+            </TabsContent>
+          </Tabs>
         )}
 
         {extractedData?.rawContent && !extractedData?.requirements?.length && (

@@ -563,12 +563,6 @@ export function ProposalAssemblyInterface({ opportunityId, requirements }: Propo
         </CardContent>
       </Card>
 
-      <RequirementGapAnalysis
-        opportunityId={opportunityId}
-        requirements={requirementSlots}
-        onAddBlock={handleAddBlock}
-      />
-
       <ProposalQualityScorer opportunityId={opportunityId} />
 
       <FormatValidationDialog
