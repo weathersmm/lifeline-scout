@@ -15,6 +15,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/
 import { ScrapingHistoryDashboard } from '@/components/dashboard/ScrapingHistoryDashboard';
 import { ScrapingQualityDashboard } from '@/components/dashboard/ScrapingQualityDashboard';
 import { AuditLogViewer } from '@/components/dashboard/AuditLogViewer';
+import { BulkSensitivityClassifier } from '@/components/dashboard/BulkSensitivityClassifier';
 
 interface RateLimitRecord {
   id: string;
@@ -360,6 +361,10 @@ const AdminDashboard = () => {
               <Shield className="w-4 h-4 mr-2" />
               Security Audit
             </TabsTrigger>
+            <TabsTrigger value="classification">
+              <Shield className="w-4 h-4 mr-2" />
+              Bulk Classification
+            </TabsTrigger>
             <TabsTrigger value="users">Users</TabsTrigger>
             <TabsTrigger value="actions">Actions</TabsTrigger>
             <TabsTrigger value="recent">Recent Activity</TabsTrigger>
@@ -438,6 +443,10 @@ const AdminDashboard = () => {
 
           <TabsContent value="audit">
             <AuditLogViewer />
+          </TabsContent>
+
+          <TabsContent value="classification">
+            <BulkSensitivityClassifier />
           </TabsContent>
 
           <TabsContent value="user-management" className="space-y-6">
