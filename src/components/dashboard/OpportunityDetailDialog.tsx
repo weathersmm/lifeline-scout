@@ -29,7 +29,10 @@ import { OpportunityDocuments } from './OpportunityDocuments';
 import { OpportunityLifecycle } from './OpportunityLifecycle';
 import { OpportunityTasks } from './OpportunityTasks';
 import { ProposalContentRepository } from './ProposalContentRepository';
+import { ProposalTemplateLibrary } from './ProposalTemplateLibrary';
+import { ProposalGenerator } from './ProposalGenerator';
 import { useAuth } from '@/hooks/useAuth';
+import { useState } from 'react';
 
 interface OpportunityDetailDialogProps {
   opportunity: Opportunity | null;
@@ -46,8 +49,16 @@ export const OpportunityDetailDialog = ({
 }: OpportunityDetailDialogProps) => {
   const { effectiveRole } = useAuth();
   const canEdit = effectiveRole === 'admin' || effectiveRole === 'member';
+  const [templateLibraryOpen, setTemplateLibraryOpen] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
+  const [proposalGeneratorOpen, setProposalGeneratorOpen] = useState(false);
 
   if (!opportunity) return null;
+
+  const handleTemplateSelected = (template: any) => {
+    setSelectedTemplate(template);
+    setProposalGeneratorOpen(true);
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -265,17 +276,52 @@ export const OpportunityDetailDialog = ({
           </TabsContent>
 
           <TabsContent value="content" className="mt-4">
-            <ProposalContentRepository
-              currentStage={opportunity.lifecycleStage || 'identified'}
-              opportunityId={opportunity.id}
-              opportunity={opportunity}
-            />
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold">Proposal Content</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Generate proposals from templates or browse reusable content blocks
+                  </p>
+                </div>
+                {canEdit && (
+                  <Button onClick={() => setTemplateLibraryOpen(true)}>
+                    <FileText className="w-4 h-4 mr-2" />
+                    Generate from Template
+                  </Button>
+                )}
+              </div>
+              <ProposalContentRepository
+                currentStage={opportunity.lifecycleStage || 'identified'}
+                opportunityId={opportunity.id}
+                opportunity={opportunity}
+              />
+            </div>
           </TabsContent>
 
           <TabsContent value="history" className="mt-4">
             <OpportunityChangeHistory opportunityId={opportunity.id} />
           </TabsContent>
         </Tabs>
+
+        {/* Proposal Template Library */}
+        <ProposalTemplateLibrary
+          open={templateLibraryOpen}
+          onOpenChange={setTemplateLibraryOpen}
+          opportunityId={opportunity.id}
+          currentStage={opportunity.lifecycleStage}
+          onTemplateSelected={handleTemplateSelected}
+        />
+
+        {/* Proposal Generator */}
+        {selectedTemplate && (
+          <ProposalGenerator
+            open={proposalGeneratorOpen}
+            onOpenChange={setProposalGeneratorOpen}
+            opportunity={opportunity}
+            template={selectedTemplate}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );
