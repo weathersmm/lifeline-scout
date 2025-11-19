@@ -873,6 +873,65 @@ export type Database = {
           },
         ]
       }
+      proposal_quality_scores: {
+        Row: {
+          alignment_score: number
+          category_scores: Json | null
+          completeness_score: number
+          created_at: string
+          evaluated_at: string
+          evaluated_by: string | null
+          id: string
+          keyword_coverage_score: number
+          missing_keywords: string[] | null
+          opportunity_id: string
+          overall_score: number
+          recommendations: string[] | null
+          strengths: string[] | null
+          weaknesses: string[] | null
+        }
+        Insert: {
+          alignment_score: number
+          category_scores?: Json | null
+          completeness_score: number
+          created_at?: string
+          evaluated_at?: string
+          evaluated_by?: string | null
+          id?: string
+          keyword_coverage_score: number
+          missing_keywords?: string[] | null
+          opportunity_id: string
+          overall_score: number
+          recommendations?: string[] | null
+          strengths?: string[] | null
+          weaknesses?: string[] | null
+        }
+        Update: {
+          alignment_score?: number
+          category_scores?: Json | null
+          completeness_score?: number
+          created_at?: string
+          evaluated_at?: string
+          evaluated_by?: string | null
+          id?: string
+          keyword_coverage_score?: number
+          missing_keywords?: string[] | null
+          opportunity_id?: string
+          overall_score?: number
+          recommendations?: string[] | null
+          strengths?: string[] | null
+          weaknesses?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_quality_scores_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       proposal_requirement_mappings: {
         Row: {
           content_block_ids: string[] | null

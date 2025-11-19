@@ -31,6 +31,7 @@ import { Separator } from "@/components/ui/separator";
 import { exportProposalToPDF, exportProposalToDOCX } from "@/utils/proposalExportUtils";
 import { RequirementGapAnalysis } from "./RequirementGapAnalysis";
 import { FormatValidationDialog } from "./FormatValidationDialog";
+import { ProposalQualityScorer } from "./ProposalQualityScorer";
 
 interface RequirementSlot {
   id: string;
@@ -567,6 +568,8 @@ export function ProposalAssemblyInterface({ opportunityId, requirements }: Propo
         requirements={requirementSlots}
         onAddBlock={handleAddBlock}
       />
+
+      <ProposalQualityScorer opportunityId={opportunityId} />
 
       <FormatValidationDialog
         open={showValidationDialog}
