@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, FileText, Download, AlertCircle } from "lucide-react";
+import { Loader2, FileText, Download, AlertCircle, Clock } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Progress } from "@/components/ui/progress";
 import * as XLSX from 'xlsx';
 
 interface ProposalOutlineBuilderProps {
@@ -49,6 +50,21 @@ export function ProposalOutlineBuilder({ opportunityId, documents, onRequirement
   const { toast } = useToast();
   const [extracting, setExtracting] = useState(false);
   const [extractedData, setExtractedData] = useState<ExtractedData | null>(null);
+  const [extractionProgress, setExtractionProgress] = useState(0);
+
+  const getFileSizeInMB = async (filePath: string): Promise<number> => {
+    try {
+      const { data, error } = await supabase.storage
+        .from('opportunity-documents')
+        .download(filePath);
+      
+      if (error) throw error;
+      return data.size / (1024 * 1024); // Convert bytes to MB
+    } catch (error) {
+      console.error('Error getting file size:', error);
+      return 0;
+    }
+  };
 
   const handleExtractRequirements = async () => {
     if (!documents || documents.length === 0) {
@@ -60,10 +76,27 @@ export function ProposalOutlineBuilder({ opportunityId, documents, onRequirement
       return;
     }
 
+    const rfpDoc = documents[0];
+    
+    // Check file size and warn if large
+    const fileSizeMB = await getFileSizeInMB(rfpDoc.file_path);
+    
+    if (fileSizeMB > 5) {
+      toast({
+        title: "Large document detected",
+        description: `Document is ${fileSizeMB.toFixed(1)}MB. Processing may take 30-60 seconds.`,
+      });
+    }
+
     setExtracting(true);
+    setExtractionProgress(0);
+    
+    // Simulate progress during extraction
+    const progressInterval = setInterval(() => {
+      setExtractionProgress(prev => Math.min(prev + 10, 90));
+    }, 3000);
+    
     try {
-      const rfpDoc = documents[0]; // Use first document for now
-      
       toast({
         title: "Extracting requirements...",
         description: `Analyzing ${rfpDoc.name} with AI`,
@@ -76,6 +109,9 @@ export function ProposalOutlineBuilder({ opportunityId, documents, onRequirement
           opportunityId
         }
       });
+
+      clearInterval(progressInterval);
+      setExtractionProgress(100);
 
       if (error) throw error;
 
@@ -103,7 +139,9 @@ export function ProposalOutlineBuilder({ opportunityId, documents, onRequirement
         variant: "destructive",
       });
     } finally {
+      clearInterval(progressInterval);
       setExtracting(false);
+      setExtractionProgress(0);
     }
   };
 
@@ -182,6 +220,22 @@ export function ProposalOutlineBuilder({ opportunityId, documents, onRequirement
             </Button>
           )}
         </div>
+
+        {extracting && (
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4" />
+                <span>Processing document...</span>
+              </div>
+              <span>{extractionProgress}%</span>
+            </div>
+            <Progress value={extractionProgress} className="h-2" />
+            <p className="text-xs text-muted-foreground text-center">
+              Large documents may take up to 60 seconds to process
+            </p>
+          </div>
+        )}
 
         {extractedData?.error && (
           <Alert variant="destructive">
