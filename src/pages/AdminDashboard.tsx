@@ -14,6 +14,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { ScrapingHistoryDashboard } from '@/components/dashboard/ScrapingHistoryDashboard';
 import { ScrapingQualityDashboard } from '@/components/dashboard/ScrapingQualityDashboard';
+import { AuditLogViewer } from '@/components/dashboard/AuditLogViewer';
 
 interface RateLimitRecord {
   id: string;
@@ -355,6 +356,10 @@ const AdminDashboard = () => {
               <UserCog className="w-4 h-4 mr-2" />
               User Management
             </TabsTrigger>
+            <TabsTrigger value="audit">
+              <Shield className="w-4 h-4 mr-2" />
+              Security Audit
+            </TabsTrigger>
             <TabsTrigger value="users">Users</TabsTrigger>
             <TabsTrigger value="actions">Actions</TabsTrigger>
             <TabsTrigger value="recent">Recent Activity</TabsTrigger>
@@ -429,6 +434,10 @@ const AdminDashboard = () => {
 
           <TabsContent value="scraping-quality">
             <ScrapingQualityDashboard />
+          </TabsContent>
+
+          <TabsContent value="audit">
+            <AuditLogViewer />
           </TabsContent>
 
           <TabsContent value="user-management" className="space-y-6">

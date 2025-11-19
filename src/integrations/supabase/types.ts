@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_logs: {
+        Row: {
+          accessed_at: string | null
+          action: string
+          id: string
+          ip_address: string | null
+          metadata: Json | null
+          record_id: string | null
+          table_name: string
+          user_id: string | null
+          user_role: Database["public"]["Enums"]["app_role"] | null
+        }
+        Insert: {
+          accessed_at?: string | null
+          action: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          record_id?: string | null
+          table_name: string
+          user_id?: string | null
+          user_role?: Database["public"]["Enums"]["app_role"] | null
+        }
+        Update: {
+          accessed_at?: string | null
+          action?: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          record_id?: string | null
+          table_name?: string
+          user_id?: string | null
+          user_role?: Database["public"]["Enums"]["app_role"] | null
+        }
+        Relationships: []
+      }
       competitive_assessments: {
         Row: {
           competitive_advantage: string | null
@@ -25,6 +61,9 @@ export type Database = {
           opportunities: string[] | null
           opportunity_id: string
           risk_mitigation: string | null
+          sensitivity_level:
+            | Database["public"]["Enums"]["data_sensitivity_level"]
+            | null
           strategic_recommendation: string | null
           strengths: string[] | null
           threats: string[] | null
@@ -41,6 +80,9 @@ export type Database = {
           opportunities?: string[] | null
           opportunity_id: string
           risk_mitigation?: string | null
+          sensitivity_level?:
+            | Database["public"]["Enums"]["data_sensitivity_level"]
+            | null
           strategic_recommendation?: string | null
           strengths?: string[] | null
           threats?: string[] | null
@@ -57,6 +99,9 @@ export type Database = {
           opportunities?: string[] | null
           opportunity_id?: string
           risk_mitigation?: string | null
+          sensitivity_level?:
+            | Database["public"]["Enums"]["data_sensitivity_level"]
+            | null
           strategic_recommendation?: string | null
           strengths?: string[] | null
           threats?: string[] | null
@@ -87,6 +132,9 @@ export type Database = {
           metadata: Json | null
           pricing_strategy_notes: string | null
           primary_markets: string[] | null
+          sensitivity_level:
+            | Database["public"]["Enums"]["data_sensitivity_level"]
+            | null
           service_specialties: string[] | null
           size_category: string | null
           total_bids: number | null
@@ -110,6 +158,9 @@ export type Database = {
           metadata?: Json | null
           pricing_strategy_notes?: string | null
           primary_markets?: string[] | null
+          sensitivity_level?:
+            | Database["public"]["Enums"]["data_sensitivity_level"]
+            | null
           service_specialties?: string[] | null
           size_category?: string | null
           total_bids?: number | null
@@ -133,6 +184,9 @@ export type Database = {
           metadata?: Json | null
           pricing_strategy_notes?: string | null
           primary_markets?: string[] | null
+          sensitivity_level?:
+            | Database["public"]["Enums"]["data_sensitivity_level"]
+            | null
           service_specialties?: string[] | null
           size_category?: string | null
           total_bids?: number | null
@@ -232,6 +286,9 @@ export type Database = {
           recommendation: string | null
           roi_potential_notes: string | null
           roi_potential_score: number | null
+          sensitivity_level:
+            | Database["public"]["Enums"]["data_sensitivity_level"]
+            | null
           strategic_fit_notes: string | null
           strategic_fit_score: number | null
           timeline_feasibility_notes: string | null
@@ -258,6 +315,9 @@ export type Database = {
           recommendation?: string | null
           roi_potential_notes?: string | null
           roi_potential_score?: number | null
+          sensitivity_level?:
+            | Database["public"]["Enums"]["data_sensitivity_level"]
+            | null
           strategic_fit_notes?: string | null
           strategic_fit_score?: number | null
           timeline_feasibility_notes?: string | null
@@ -284,6 +344,9 @@ export type Database = {
           recommendation?: string | null
           roi_potential_notes?: string | null
           roi_potential_score?: number | null
+          sensitivity_level?:
+            | Database["public"]["Enums"]["data_sensitivity_level"]
+            | null
           strategic_fit_notes?: string | null
           strategic_fit_score?: number | null
           timeline_feasibility_notes?: string | null
@@ -367,6 +430,9 @@ export type Database = {
           proposal_due: string
           questions_due: string | null
           recommended_action: string | null
+          sensitivity_level:
+            | Database["public"]["Enums"]["data_sensitivity_level"]
+            | null
           service_tags: Database["public"]["Enums"]["service_tag"][]
           source: string
           status: Database["public"]["Enums"]["opportunity_status"]
@@ -407,6 +473,9 @@ export type Database = {
           proposal_due: string
           questions_due?: string | null
           recommended_action?: string | null
+          sensitivity_level?:
+            | Database["public"]["Enums"]["data_sensitivity_level"]
+            | null
           service_tags?: Database["public"]["Enums"]["service_tag"][]
           source: string
           status?: Database["public"]["Enums"]["opportunity_status"]
@@ -447,6 +516,9 @@ export type Database = {
           proposal_due?: string
           questions_due?: string | null
           recommended_action?: string | null
+          sensitivity_level?:
+            | Database["public"]["Enums"]["data_sensitivity_level"]
+            | null
           service_tags?: Database["public"]["Enums"]["service_tag"][]
           source?: string
           status?: Database["public"]["Enums"]["opportunity_status"]
@@ -864,6 +936,9 @@ export type Database = {
           pricing_strategy: string | null
           recommended_price: number | null
           risk_assessment: string | null
+          sensitivity_level:
+            | Database["public"]["Enums"]["data_sensitivity_level"]
+            | null
           target_margin_percent: number | null
           updated_at: string
           win_probability_percent: number | null
@@ -885,6 +960,9 @@ export type Database = {
           pricing_strategy?: string | null
           recommended_price?: number | null
           risk_assessment?: string | null
+          sensitivity_level?:
+            | Database["public"]["Enums"]["data_sensitivity_level"]
+            | null
           target_margin_percent?: number | null
           updated_at?: string
           win_probability_percent?: number | null
@@ -906,6 +984,9 @@ export type Database = {
           pricing_strategy?: string | null
           recommended_price?: number | null
           risk_assessment?: string | null
+          sensitivity_level?:
+            | Database["public"]["Enums"]["data_sensitivity_level"]
+            | null
           target_margin_percent?: number | null
           updated_at?: string
           win_probability_percent?: number | null
@@ -1130,6 +1211,9 @@ export type Database = {
           our_price: number | null
           outcome: string
           price_differential_percent: number | null
+          sensitivity_level:
+            | Database["public"]["Enums"]["data_sensitivity_level"]
+            | null
           winning_competitor: string | null
           winning_price: number | null
         }
@@ -1150,6 +1234,9 @@ export type Database = {
           our_price?: number | null
           outcome: string
           price_differential_percent?: number | null
+          sensitivity_level?:
+            | Database["public"]["Enums"]["data_sensitivity_level"]
+            | null
           winning_competitor?: string | null
           winning_price?: number | null
         }
@@ -1170,6 +1257,9 @@ export type Database = {
           our_price?: number | null
           outcome?: string
           price_differential_percent?: number | null
+          sensitivity_level?:
+            | Database["public"]["Enums"]["data_sensitivity_level"]
+            | null
           winning_competitor?: string | null
           winning_price?: number | null
         }
@@ -1267,6 +1357,15 @@ export type Database = {
         }
         Returns: boolean
       }
+      log_data_access: {
+        Args: {
+          _action: string
+          _metadata?: Json
+          _record_id: string
+          _table_name: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "member" | "viewer"
@@ -1286,6 +1385,7 @@ export type Database = {
         | "Sources Sought"
         | "Pre-solicitation"
         | "Sole-Source Notice"
+      data_sensitivity_level: "public" | "internal" | "restricted"
       hot_flag_type: "manual" | "automatic"
       opportunity_lifecycle_stage:
         | "identified"
@@ -1463,6 +1563,7 @@ export const Constants = {
         "Pre-solicitation",
         "Sole-Source Notice",
       ],
+      data_sensitivity_level: ["public", "internal", "restricted"],
       hot_flag_type: ["manual", "automatic"],
       opportunity_lifecycle_stage: [
         "identified",
