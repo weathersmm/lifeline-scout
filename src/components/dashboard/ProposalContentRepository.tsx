@@ -5,8 +5,10 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Search, Plus, Edit, Trash2, Copy, FileText } from 'lucide-react';
+import { Search, Plus, Edit, Trash2, Copy, FileText, History, Sparkles } from 'lucide-react';
 import { ContentBlockEditor } from './ContentBlockEditor';
+import { ContentBlockVersionHistory } from './ContentBlockVersionHistory';
+import { AIContentGenerator } from './AIContentGenerator';
 import {
   Select,
   SelectContent,
@@ -15,7 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { LifecycleStage } from '@/types/opportunity';
+import { LifecycleStage, Opportunity } from '@/types/opportunity';
 import { useAuth } from '@/hooks/useAuth';
 
 interface ContentBlock {
@@ -33,6 +35,7 @@ interface ContentBlock {
 interface ProposalContentRepositoryProps {
   currentStage?: LifecycleStage;
   opportunityId?: string;
+  opportunity?: Opportunity;
 }
 
 const CONTENT_TYPE_LABELS: Record<string, string> = {
@@ -48,7 +51,8 @@ const CONTENT_TYPE_LABELS: Record<string, string> = {
 
 export const ProposalContentRepository = ({
   currentStage,
-  opportunityId
+  opportunityId,
+  opportunity
 }: ProposalContentRepositoryProps) => {
   const [contentBlocks, setContentBlocks] = useState<ContentBlock[]>([]);
   const [filteredBlocks, setFilteredBlocks] = useState<ContentBlock[]>([]);
@@ -57,6 +61,9 @@ export const ProposalContentRepository = ({
   const [isLoading, setIsLoading] = useState(true);
   const [editorOpen, setEditorOpen] = useState(false);
   const [editingBlock, setEditingBlock] = useState<ContentBlock | null>(null);
+  const [versionHistoryOpen, setVersionHistoryOpen] = useState(false);
+  const [selectedBlockForHistory, setSelectedBlockForHistory] = useState<string>('');
+  const [aiGeneratorOpen, setAiGeneratorOpen] = useState(false);
   const { toast } = useToast();
   const { effectiveRole } = useAuth();
   const canEdit = effectiveRole === 'admin' || effectiveRole === 'member';
@@ -161,6 +168,32 @@ export const ProposalContentRepository = ({
     setEditorOpen(true);
   };
 
+  const handleViewHistory = (blockId: string) => {
+    setSelectedBlockForHistory(blockId);
+    setVersionHistoryOpen(true);
+  };
+
+  const handleAIGenerate = () => {
+    setAiGeneratorOpen(true);
+  };
+
+  const handleContentGenerated = async (content: string, type: string) => {
+    // Auto-populate editor with AI-generated content
+    const newBlock = {
+      id: '',
+      title: `AI Generated - ${CONTENT_TYPE_LABELS[type]} - ${new Date().toLocaleDateString()}`,
+      content: content,
+      content_type: type,
+      lifecycle_stages: currentStage ? [currentStage] : [],
+      tags: opportunity?.serviceTags || [],
+      created_by: null,
+      created_at: new Date().toISOString(),
+      is_template: false,
+    };
+    setEditingBlock(newBlock);
+    setEditorOpen(true);
+  };
+
   const groupedBlocks = filteredBlocks.reduce((acc, block) => {
     const type = block.content_type;
     if (!acc[type]) acc[type] = [];
@@ -179,10 +212,16 @@ export const ProposalContentRepository = ({
           </p>
         </div>
         {canEdit && (
-          <Button onClick={handleCreateNew}>
-            <Plus className="w-4 h-4 mr-2" />
-            New Content Block
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={handleAIGenerate}>
+              <Sparkles className="w-4 h-4 mr-2" />
+              AI Generate
+            </Button>
+            <Button onClick={handleCreateNew}>
+              <Plus className="w-4 h-4 mr-2" />
+              New Content Block
+            </Button>
+          </div>
         )}
       </div>
 
@@ -257,6 +296,14 @@ export const ProposalContentRepository = ({
                         <Button
                           size="icon"
                           variant="ghost"
+                          onClick={() => handleViewHistory(block.id)}
+                          title="Version history"
+                        >
+                          <History className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          size="icon"
+                          variant="ghost"
                           onClick={() => handleCopyContent(block.content)}
                           title="Copy content"
                         >
@@ -316,6 +363,22 @@ export const ProposalContentRepository = ({
         onOpenChange={setEditorOpen}
         block={editingBlock}
         onSaved={fetchContentBlocks}
+      />
+
+      {/* Version History Dialog */}
+      <ContentBlockVersionHistory
+        open={versionHistoryOpen}
+        onOpenChange={setVersionHistoryOpen}
+        contentBlockId={selectedBlockForHistory}
+        onRestore={fetchContentBlocks}
+      />
+
+      {/* AI Content Generator */}
+      <AIContentGenerator
+        open={aiGeneratorOpen}
+        onOpenChange={setAiGeneratorOpen}
+        opportunity={opportunity}
+        onContentGenerated={handleContentGenerated}
       />
     </div>
   );
