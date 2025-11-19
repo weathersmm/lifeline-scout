@@ -96,13 +96,14 @@ export const OpportunityDetailDialog = ({
         </DialogHeader>
 
         <Tabs defaultValue="details" className="mt-4">
-          <TabsList className="grid w-full grid-cols-7">
+          <TabsList className="grid w-full grid-cols-8">
             <TabsTrigger value="details">Details</TabsTrigger>
             <TabsTrigger value="competitive">Competitive</TabsTrigger>
             <TabsTrigger value="ptw">PTW</TabsTrigger>
             <TabsTrigger value="gonogo">Go/No-Go</TabsTrigger>
             <TabsTrigger value="ml">ML Predict</TabsTrigger>
             <TabsTrigger value="capture">Capture Plan</TabsTrigger>
+            <TabsTrigger value="content">Proposal</TabsTrigger>
             <TabsTrigger value="docqa">Doc Q&A</TabsTrigger>
           </TabsList>
 
