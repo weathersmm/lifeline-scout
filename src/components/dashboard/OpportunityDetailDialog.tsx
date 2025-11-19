@@ -27,6 +27,7 @@ import { format } from 'date-fns';
 import { OpportunityChangeHistory } from './OpportunityChangeHistory';
 import { OpportunityDocuments } from './OpportunityDocuments';
 import { OpportunityLifecycle } from './OpportunityLifecycle';
+import { OpportunityTasks } from './OpportunityTasks';
 import { useAuth } from '@/hooks/useAuth';
 
 interface OpportunityDetailDialogProps {
@@ -70,7 +71,7 @@ export const OpportunityDetailDialog = ({
         </DialogHeader>
 
         <Tabs defaultValue="details" className="mt-4">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="details">Details</TabsTrigger>
             <TabsTrigger value="documents">
               <Upload className="w-4 h-4 mr-2" />
@@ -79,6 +80,10 @@ export const OpportunityDetailDialog = ({
             <TabsTrigger value="lifecycle">
               <GitBranch className="w-4 h-4 mr-2" />
               Lifecycle
+            </TabsTrigger>
+            <TabsTrigger value="tasks">
+              <FileText className="w-4 h-4 mr-2" />
+              Tasks
             </TabsTrigger>
             <TabsTrigger value="history">
               <History className="w-4 h-4 mr-2" />
@@ -242,6 +247,14 @@ export const OpportunityDetailDialog = ({
               currentStage={opportunity.lifecycleStage || 'identified'}
               lifecycleNotes={opportunity.lifecycleNotes}
               onUpdate={() => onUpdate?.()}
+              canEdit={canEdit}
+            />
+          </TabsContent>
+
+          <TabsContent value="tasks" className="mt-4">
+            <OpportunityTasks
+              opportunityId={opportunity.id}
+              currentStage={opportunity.lifecycleStage || 'identified'}
               canEdit={canEdit}
             />
           </TabsContent>

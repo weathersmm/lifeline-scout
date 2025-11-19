@@ -81,6 +81,46 @@ export const OpportunityDocuments = ({
       });
 
       onDocumentsUpdate();
+
+      // Trigger AI parsing for PDF and DOCX files
+      const parsableExtensions = ['pdf', 'docx', 'doc'];
+      if (fileExt && parsableExtensions.includes(fileExt.toLowerCase())) {
+        toast({
+          title: "Analyzing document",
+          description: "AI is extracting requirements and deadlines...",
+        });
+
+        // Get public URL for the document
+        const { data: urlData } = await supabase.storage
+          .from('opportunity-documents')
+          .createSignedUrl(fileName, 3600); // 1 hour expiry
+
+        if (urlData?.signedUrl) {
+          // Call parse function (non-blocking)
+          supabase.functions.invoke('parse-opportunity-document', {
+            body: {
+              documentUrl: fileName,
+              documentName: file.name,
+              opportunityId: opportunityId
+            }
+          }).then(({ data, error }) => {
+            if (error) {
+              console.error('Parse error:', error);
+              toast({
+                title: "Parsing completed with warnings",
+                description: "Document uploaded but AI analysis had issues",
+                variant: "destructive",
+              });
+            } else if (data?.success) {
+              toast({
+                title: "Document analyzed",
+                description: "Requirements and deadlines extracted successfully",
+              });
+              onDocumentsUpdate();
+            }
+          });
+        }
+      }
     } catch (error) {
       console.error('Upload error:', error);
       toast({
