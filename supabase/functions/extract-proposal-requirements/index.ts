@@ -40,9 +40,18 @@ serve(async (req) => {
       throw new Error(`Failed to download document: ${downloadError.message}`);
     }
 
-    // Convert to base64
+    // Convert to base64 in chunks to avoid stack overflow
     const arrayBuffer = await fileData.arrayBuffer();
-    const base64Doc = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+    const uint8Array = new Uint8Array(arrayBuffer);
+    const chunkSize = 8192;
+    let binaryString = '';
+    
+    for (let i = 0; i < uint8Array.length; i += chunkSize) {
+      const chunk = uint8Array.subarray(i, i + chunkSize);
+      binaryString += String.fromCharCode(...chunk);
+    }
+    
+    const base64Doc = btoa(binaryString);
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {
