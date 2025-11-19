@@ -1,0 +1,2646 @@
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+© 2025 OKRV 
+All Rights Reserved 
+Contents 
+1 Introduction ............................................................................................................................ 1 1.1 Style Guide Organization ............................................................................................... 1 
+
+1.2 Overriding Principles ...................................................................................................... 1 
+
+
+
+
+2 Proposal Layout and Design.................................................................................................. 2 2.1 Title Pages ..................................................................................................................... 2 
+
+2.2 Table of Contents and Other Lists ................................................................................. 2 
+
+2.3 Body of the Proposal ..................................................................................................... 3 2.3.1 Template/Module Examples .................................................................................. 3 
+
+
+
+
+2.4 Copyright Notice ............................................................................................................ 4 
+
+2.5 Appendices .................................................................................................................... 4 2.5.1 Landscape Pages .................................................................................................. 5 
+
+
+
+
+2.6 Artwork Integration ......................................................................................................... 5 2.6.1 Figures ................................................................................................................... 5 
+
+2.6.2 Tables .................................................................................................................... 6 
+
+
+
+
+2.7 Action Captions.............................................................................................................. 6 2.7.1 Figure Sequencing ................................................................................................. 6 
+
+
+
+
+
+
+
+3 Styles for Documents ............................................................................................................ 8 3.1 Styles for Text ................................................................................................................ 8 
+
+3.2 Headers and Footers ..................................................................................................... 9 3.2.1 Identity Artwork .................................................................................................... 10 
+
+3.2.2 Page Numbering .................................................................................................. 11 
+
+
+
+
+3.3 Headings ..................................................................................................................... 11 
+
+3.4 Body Text .................................................................................................................... 12 3.4.1 Theme ................................................................................................................. 13 
+
+3.4.2 Bullet 1 and Bullet 2 ............................................................................................. 13 
+
+3.4.3 Comment Text ..................................................................................................... 13 
+
+
+
+
+3.5 Tables .......................................................................................................................... 14 3.5.1 Table Head .......................................................................................................... 14 
+
+3.5.2 Table Subhead .................................................................................................... 14 
+
+3.5.3 Table Body ........................................................................................................... 14 
+
+3.5.4 Table Bullet .......................................................................................................... 14 
+
+
+
+
+3.6 Focus Box .................................................................................................................... 15 
+
+3.7 Basic Template Toolbar ............................................................................................... 16 
+
+
+
+
+4 Proposal Figures ................................................................................................................. 17 4.1 Tools Overview ........................................................................................... 18 
+
+4.2 Artwork Frames ........................................................................................................... 18 4.2.1 Style configuration Using Tools Lite .......................................................... 18 
+
+
+
+
+4.3 Foldouts and Full Page Artwork ................................................................................... 19 
+
+4.4 Action Captions............................................................................................................ 19 
+
+4.5 Art Control ................................................................................................................... 20 
+
+4.6 Cross References ........................................................................................................ 20 
+
+
+
+
+5 Artwork Development .......................................................................................................... 21 5.1 General Artwork Guidelines ......................................................................................... 21 5.1.1 Font Selection ...................................................................................................... 21 
+
+5.1.2 Point Sizes ........................................................................................................... 21 5.1.3 Palettes ................................................................................................................................................................................................................................................................................................................................................
+
+5.1.4 Classified Artwork ................................................................................................ 21 
+
+
+
+
+5.2 Artwork Templates and Guidelines .............................................................................. 21 5.2.1 Single-Column, Full-Width and Full Page Art Template ....................................... 23 
+
+5.2.2 Foldouts ............................................................................................................... 23 
+
+5.2.3 Foldout Pages with Artwork and Text .................................................................. 24 
+
+
+
+
+5.3 Examples of Figures .................................................................................................... 24 5.3.1 Tables .................................................................................................................. 24 
+
+5.3.2 Basic Drawings .................................................................................................... 25 
+
+5.3.3 Complex Figures .................................................................................................. 27 
+
+
+
+
+
+
+
+6 Final Production Media ........................................................................................................ 30 6.1 Printing guidelines ....................................................................................................... 30 
+
+6.2 Front and Back Cover, and Spine Guidelines .............................................................. 30 
+
+6.3 Tabs ............................................................................................................................. 31 
+
+6.4 CD-ROM Media ........................................................................................................... 31 6.4.1 CD Labels and Inserts ......................................................................................... 31 
+
+
+
+
+6.5 Packing Media ............................................................................................................. 31 
+
+
+
+
+7 Writing Style ........................................................................................................................ 32 7.1 Punctuation .................................................................................................................. 32 7.1.1 Period .................................................................................................................. 32 
+
+7.1.2 Colon ................................................................................................................... 32 
+
+7.1.3 Semicolon ............................................................................................................ 32 
+
+7.1.4 Comma ................................................................................................................ 33 
+
+7.1.5 Question Mark ..................................................................................................... 33 
+
+7.1.6 Exclamation Point ................................................................................................ 33 
+
+7.1.7 Dashes ................................................................................................................ 33 
+
+7.1.8 Parentheses ......................................................................................................... 34 
+
+7.1.9 Square Brackets .................................................................................................. 34 
+
+7.1.10 Points of Ellipsis ................................................................................................... 35 
+
+7.1.11 Apostrophe .......................................................................................................... 35 
+
+7.1.12 Solidus ................................................................................................................. 35 
+
+7.1.13 Quotation Marks .................................................................................................. 36 
+
+7.1.14 Typography of Punctuation .................................................................................. 36 
+
+
+
+
+7.2 Shortened Forms ......................................................................................................... 36 7.2.1 Definitions ............................................................................................................ 36 
+
+7.2.2 Use ...................................................................................................................... 37 
+
+7.2.3 Acronyms ............................................................................................................. 37 
+
+7.2.4 Addresses ............................................................................................................ 37 
+
+7.2.5 Ampersand .......................................................................................................... 37 
+
+7.2.6 Apostrophe .......................................................................................................... 38 
+
+7.2.7 Beginning a Sentence .......................................................................................... 38 
+
+7.2.8 Capitals ................................................................................................................ 38 
+
+7.2.9 Compass Points ................................................................................................... 38 
+
+7.2.10 Days, Months and Times ..................................................................................... 38 
+
+7.2.11 Latin Abbreviations .............................................................................................. 39 
+
+7.2.12 Measures ............................................................................................................. 39 
+
+7.2.13 Names of Countries ............................................................................................. 39 7.2.14 Names of People ................................................................................................................................................................................................................................................................................................
+
+7.2.15 Number ................................................................................................................ 39 
+
+7.2.16 Plurals .................................................................................................................. 40 
+
+7.2.17 Using ‘a’ or ‘an’ .................................................................................................... 40 
+
+7.2.18 Versus ................................................................................................................. 40 
+
+
+
+
+7.3 Numbers ...................................................................................................................... 40 7.3.1 Numbers Expressed in Figures ............................................................................ 40 
+
+7.3.2 Roman Numerals ................................................................................................. 41 
+
+7.3.3 Numbers Expressed as Words ............................................................................ 41 
+
+7.3.4 Fractions .............................................................................................................. 41 
+
+7.3.5 Ordinals ............................................................................................................... 41 
+
+7.3.6 Large Numbers .................................................................................................... 41 
+
+7.3.7 Dates ................................................................................................................... 42 
+
+7.3.8 Time of Day ......................................................................................................... 42 
+
+7.3.9 Temperature ........................................................................................................ 42 
+
+7.3.10 Currency .............................................................................................................. 43 
+
+
+
+
+7.4 Measurement ............................................................................................................... 43 7.4.1 SI Units ................................................................................................................ 43 
+
+7.4.2 Decimal Multiples and Submultiples of SI Units ................................................... 45 
+
+7.4.3 Non-SI Units in Common Use .............................................................................. 45 
+
+7.4.4 Expression of Units .............................................................................................. 47 
+
+
+
+
+7.5 Spelling ........................................................................................................................ 47 7.5.1 Official Bodies ...................................................................................................... 48 
+
+7.5.2 Plurals .................................................................................................................. 48 
+
+7.5.3 Foreign Geographical Names .............................................................................. 48 
+
+7.5.4 Word Division ....................................................................................................... 48 
+
+
+
+
+7.6 Capitals ........................................................................................................................ 49 7.6.1 Personal Names .................................................................................................. 49 
+
+7.6.2 Nationalities ......................................................................................................... 50 
+
+7.6.3 Names of Objects ................................................................................................ 50 
+
+7.6.4 Geographical Names ........................................................................................... 50 
+
+7.6.5 Historical, Chronological and Ceremonial ............................................................ 50 
+
+7.6.6 Commercial Terms .............................................................................................. 51 
+
+7.6.7 Title of Formal Compositions ............................................................................... 51 
+
+7.6.8 Typographical Uses of Capitals ........................................................................... 51 
+
+
+
+
+7.7 Italics ........................................................................................................................... 52 7.7.1 Titles of Books and Names of Periodicals ............................................................ 52 
+
+7.7.2 Names of Ships, Aircraft and other Vehicles ........................................................ 52 
+
+7.7.3 Words and Letters Cited as such ......................................................................... 52 
+
+7.7.4 Foreign Words and Phrases ................................................................................ 52 
+
+
+
+
+7.8 Latin Abbreviations ...................................................................................................... 53 
+
+7.9 Common Diacriticals .................................................................................................... 54 
+
+7.10 Roman Numerals ......................................................................................................... 54 
+
+7.11 The Greek Alphabet ..................................................................................................... 55 
+
+7.12 Shortcut Keys .............................................................................................................. 56 
+
+
+
+
+
+1 INTRODUCTION 
+The OKRV Style Guide is a standard baseline. It is not intended as a ‘must-do’ manual for the seasoned OKRV Production Associate on creating art or integrating proposal products. 
+The purpose of this Style Guide is to show various examples of minimum standards for the appearance and style of documents we produce, and our incremental products for developing a professional looking proposal. 
+1.1 STYLE GUIDE ORGANIZATION 
+The Style Guide includes the following sections: 
+2 – Proposal Layout and Design 
+– discusses preface material and the body of a proposal document 
+3 – Styles for Documents 
+– offers guidelines for text, header and footer, body, and figure caption styles, as well as guidelines for custom toolbar development 
+4 – Proposal Figures 
+– covers placement of figures and their callouts, and includes an overview   
+5 – Artwork Development 
+– deals with text styles for artwork, sizing standards, and template design standards 
+6 – Final Production Media 
+– offers guidelines for cover and CD artwork, tabs, and shipping materials 
+7 – Writing Style 
+– is a basic proposal grammar reference guide 
+1.2 OVERRIDING PRINCIPLES 
+The OKRV Style Guide is the baseline for creating proposals that grammatically and aesthetically meet this established OKRV quality standard. 
+Each proposal development effort presents different challenges, requirements and specifications. A high quality product is the goal. Nevertheless, the first rule is: 
+ 
+2 PROPOSAL LAYOUT AND DESIGN 
+The majority of proposals, including individual volumes of a proposal, follow the layout below. Note that headers and footers always start on the title page. 
+¦ Title page 
+Always follow the RFP requirements! 
+
+
+
+¦ Table of contents 
+
+¦ Other lists [optional] 
+
+¦ Copyright notice 
+
+¦ Body of proposal 
+
+¦ Appendices 
+
+
+2.1 TITLE PAGES 
+Title pages must be compliant with the RFP. They may be similar to the cover, or simple in appearance. At a minimum, include the title of the document, submission date, solicitation number, client name and contact information, intended customer, and complete copyright or proprietary notice text. Note that some of this information may need to be repeated on the document cover. 
+2.2 TABLE OF CONTENTS AND OTHER LISTS 
+Proposals must include tables of contents, which must be compliant with the RFP. Generate a table of contents from the headings within the body of the proposal. 
+Include heading levels deep enough to make it easy for the evaluator to locate a particular section. 
+The style of a table of contents should be consistent with the proposal template. 
+If not requested in the RFP, a list of figures is optional. The style of a list of figures should be consistent with the proposal template. 
+ 
+2.3 BODY OF THE PROPOSAL 
+ 
+2.3.1 Template/Module Examples 
+For the purposes of this Style Guide, a template is a document on which the proposal products, i.e. AMUs and Mod Drafts, are based. The template contains styles for headings and body, etc., to maintain a consistent look and feel to the entire proposal. 
+
+2.3.1.1 One-Column, No Page Limit 
+
+
+
+
+
+A one-column template used for a non-page limited proposal allows for flexibility in page design. In the example below, the left page shows a template sample with a wide left margin, flush-left headings, generous space between paragraphs and a 
+5.5” full-width artwork size. 
+ 
+2.3.1.2 One-Column, Page Limited 
+
+
+
+
+
+In a page-limited proposal, increase the usable space in the one-column template as much as possible. In the example in 2.3.1.1 above, the right page shows 1.0” margins on all sides, headings flush with the margin, no spacing before headings, no spacing before or after paragraphs, a 0.25” first line indent to delineate paragraphs, and a 6.5” full-width artwork size. 
+2.3.1.3 Two-Column, No Page Limit 
+
+
+
+
+
+A two-column layout provides better economy of space, allowing authors more lines per page. Adjust column widths and spacing between columns to maximize this allowance. 
+In the examples below, the left page shows a template sample with 1” margins on all sides; headings flush with the margins, with spacing before and after headings, 3-point spacing before and after paragraphs, and no first line indent. The focus box bullet text has 3-point spacing before and 2-point spacing after. 
+
+ 
+2.3.1.4 Two-Column, Page Limited 
+
+
+
+
+
+In the example above, the right page shows a template sample with flush left headings, no spacing before or after headings, no spacing before or after paragraphs, and a first line indent to delineate paragraphs. The focus box bullet text has 1-point spacing before and after. 
+2.4 COPYRIGHT NOTICE 
+As a minimum, include the ‘© yyyy Client Name’ statement in the footer of all proposal volumes, along with any nondisclosure statement and/or required security markings. 
+2.5 APPENDICES 
+Generally, appendices are denoted A, B, C, etc. The document identification and the relevant appendix identifier should show in the appendix footer. 
+
+Sometimes, appendices are required to be within the main document, i.e. share a common page numbering scheme. Prefix the appendix identifier of these paragraphs, e.g. A.1. However, Word does not allow two different styles of numbering within the same document, even if they are in different sections. 
+Therefore, add the headings for the appendix manually. The Appendix 1, 2, 3 and 
+4 styles mimic the Heading 1, etc., styles, except that they have no numbering. Using an Appendix 1 style works well in this case. 
+2.5.1 Landscape Pages 
+Landscape (rotated) pages are discouraged in OKRV proposals. Occasionally, a graphic or table is more suited to a landscape page rather than a portrait page. 
+Where possible, rotate the graphic insertion, and leave the portrait page with its header and footer intact. If necessary, insert a landscape page in the middle of a portrait-orientated document (or vice-versa) by inserting section breaks before and after, and then decoupling the headers and footers for each of the sections. 
+Depending on the software used to create the artwork, it may be better to rotate the artwork before insertion into the Word document. 
+2.6 ARTWORK INTEGRATION 
+Generally, figures appear in the corners of the pages, in the first available corner following the callout to that figure in the text. In other words, if a callout is at the bottom of the right column, in a two-column template, then place the figure in the upper left corner of the next page. This rule applies as well for full-width figures, which go in the next available corner/space, at either the upper half or lower half of the page, following the callout to that figure in the text. It is acceptable to place a full-width figure at the lower half of a page where the callout first appears in the second column. 
+2.6.1 Figures 
+There is no specific application that is better than another for creating proposal graphics. Products such as Microsoft® PowerPoint®,  Adobe® Illustrator® or PhotoShop®, can all be used. 
+ 
+The optimum format for inserting a graphic into a proposal is to Paste Special as a Picture (Enhanced Metafile). Alternatively, paste special the graphic as a Picture (Windows Metafile), as a JPEG bitmap or as a GIF bitmap. 
+Never create artwork using the drawing tools built in to Microsoft Word. 
+2.6.2 Tables 
+In proposal modules, tables are classified as artwork figures. Tables can be created in separate Word documents, or in PowerPoint. Excel tables should first be exported to a separate Word document, or to PowerPoint prior to insertion into the proposal module. 
+2.7 ACTION CAPTIONS 
+Captions appear adjacent to a figure—either above, below, or in some cases, to the right or left of the figure. Captions may have varying syntaxes, for example: 
+ 
+or simply 
+ 
+Preferably, use only one style for both the figure number and caption. 
+2.7.1 Figure Sequencing 
+Figure numbering may include the chapter/section number and the figure sequence. 
+ 
+¦ Figures may be sequential starting with the first figure to appear in a volume, to the last 
+
+¦ In some cases, the sequence repeats following chapter/section designation 
+Figure number. Title. Action Caption, 
+
+
+
+¦ The objective is to use a logical sequence that enables the evaluator to find what they are looking for, and that is compliant 
+
+¦ Refer to the RFP for formatting requirements regarding captions, especially minimum font sizes 
+Figure Number. Action Caption. 
+
+
+
+
+ 
+Figure Sequencing Examples 
+ 
+Sequential Throughout the Volume 
+ Sequential by Major Section 
+ Sequence Starts at Chapter/Section Levels 
+ 
+Figure 1–1 
+Figure 1–2 
+Figure 1.1–3 
+Figure 1.1–4 
+Figure 1.2–5 
+Figure 1.2–6 
+Figure 1.2.1–7 
+Figure 2–8 
+Figure 2–9 
+Figure 2.1-10 
+ Figure 1–1 
+Figure 1–2 
+Figure 1.1–3 
+Figure 1.1–4 
+Figure 1.2–5 
+Figure 1.2–6 
+Figure 1.2.1–7 
+Figure 2–1 
+Figure 2–2 
+Figure 2.1-3 
+ Figure 1–1 
+Figure 1–2 
+Figure 1.1–1 
+Figure 1.1–2 
+Figure 1.2–3 
+Figure 1.2–4 
+Figure 1.2.1–5 
+Figure 2–1 
+Figure 2–2 
+Figure 2.1-3 
+ 
+
+The following figure shows caption field codes. 
+ 
+Figure Sequencing Fields 
+ 
+Field 
+ Function 
+ Example 
+ 
+{STYLEREF 2 \s} 
+ Inserts the number x correlating to heading level x 
+ Where x is 2: Figure 2.8-y 
+ 
+{SEQ Figure \ * ARABIC \s 1 } 
+ Inserts the figure number in sequence starting with 1 
+ Figure 2.8-1 
+ 
+{SEQ Figure \ * ARABIC \r 15 } 
+ Inserts the figure number in sequence starting with 15 
+ Figure 2.8-15 
+ 
+Figure {STYLEREF 2 \s} - {SEQ Figure \ * ARABIC \r 9 } 
+ Figure 2.8-9 
+ 
+Figure {STYLEREF 2 \s} - {SEQ Figure \ * ARABIC \n } 
+ Figure 2.8-10 
+ 
+
+3 STYLES FOR DOCUMENTS 
+Guidelines and Tips for Action Captions and Figure Sequencing 
+
+
+3.1 STYLES FOR TEXT 
+Formatting requirements are different for every proposal. Set styles to be compliant with the RFP. The figure below shows the example template default style settings for a one-column template with no page limitation. 
+ 
+ 
+Styles for Text 
+ 
+Style Name 
+ Template Default Settings 
+ 
+Header 
+ Font: Arial, 14 pt, Italic, English (U.S.), Flush left, Line spacing single, Widow/orphan control, Tabs: 3.25" centered, 6.5" right flush 
+ 
+Footer 
+ Font: Arial, 10 pt, English (U.S.), Flush left, Line spacing single, Widow/orphan control, Tabs: 
+3.25" centered, 6.5" right flush 
+ 
+Heading 1 
+ Style for Next Paragraph: Body Text Font: Arial, 12 pt, Bold, All caps, Font color: Custom Color(RGB(41,84,141)), English (U.S.), Kern at 14 pt, Indent: Hanging 0.3" Flush left, Line spacing exactly 14 pt, Space after 6 pt, Widow/orphan control, Keep with next, Keep lines together, L... 
+ 
+Heading 2 
+ Style for Next Paragraph: Body Text Heading 1 + Small caps, Not All caps, Indent: Hanging 0.4", Space before 6 pt, Level 2, Tabs: 0.4" ,Not at 0.3" 
+ 
+Heading 3 
+ Style for Next Paragraph: Body Text Heading 2 + Not Small caps, Indent: Hanging 0.5", Level 3, Tabs: 0.5" , 0.56",Not at 0.4" 
+ 
+Heading 4 
+ Style for Next Paragraph: Body Text Heading 3 + Font: 11 pt, Indent: Hanging 0.6", Level 4, Tabs: 0.6" ,Not at 0.5", 0.56" 
+ 
+Heading 5 
+ Style for Next Paragraph: Body Text Heading 4 + Indent: Hanging 0.5", Level 5, Tabs: 0.5" 
+,Not at 0.6" 
+ 
+Heading 6 
+ Style for Next Paragraph: Body Text Heading 5 + Small caps, Indent: Hanging 0.8", Space after 3 pt, Level 6, Tabs: 0.8" ,Not at 0.5" 
+ 
+Heading 7 
+ Style for Next Paragraph: Body Text Heading 6 + Indent: Hanging 0.9", Level 7, Tabs: 0.9" 
+,Not at 0.8" 
+ 
+Heading 8 
+ Style for Next Paragraph: Body Text Heading 7 + Indent: Hanging 1", Level 8, Tabs: 1" ,Not at 0.9" 
+ 
+Heading 9 
+ Style for Next Paragraph: Body Text Heading 8 + Indent: Hanging 1.1", Level 9, Tabs: 1.1" 
+,Not at 1" 
+ 
+Body Text 
+ Font: Times New Roman, 12 pt, English (U.S.), Indent: Left 1" Flush left, Line spacing exactly 14 pt, Space before 3 pt after 3 pt, Widow/orphan control 
+ 
+Theme 
+ Body Text + Font: Italic 
+ 
+Bullet 1 
+ Body Text + Indent: Left 0.99" Hanging 0.2", Bulleted, Tabs: 1.24" 
+ 
+Bullet 2 
+ Bullet 1 + Indent: Left 1.25", Bulleted, Tabs: 1.5" ,Not at 1.24" 
+ 
+Table Body Text 
+ Body Text + Font: Arial, 9 pt, Indent: Left 0", Line spacing exactly 9 pt, Tabs: 0.24", 0.49" 
+ 
+Table Bullet 
+ Table Body Text + Indent: Hanging 0.2", Bulleted, Tabs: 0.2" , 0.36",Not at 0.24", 0.49" 
+ 
+Table Heading 
+ Table Body Text + Font: Bold, Italic, Font color: White, Centered, Keep with next, Keep lines together 
+ 
+Table Subheading 
+ Table Heading + Font color: Black, Flush left 
+ 
+Focus Box Bullet 
+ Focus Box Heading + Font: 10 pt, Not Bold, Not Italic, Font color: Black, Indent: Hanging 0.2" Justified, Line spacing single, Space before 0 pt after 0 pt, Bulleted, Pattern: Clear (Custom Color(RGB(240,240,215))), Tabs: 0.2", 0.25" , 0.39", 0.59" 
+ 
+Focus Box Heading 
+ Style for Next Paragraph: Normal Font: Arial, 11 pt, Bold, Italic, Font color: White, English (U.S.), Centered, Line spacing exactly 11 pt, Space before 3 pt after 2 pt, Widow/orphan control, Keep with next, Keep lines together, Border: Box (Single solid line, Custom Color(RGB(0,85,170)) 
+ 
+
+SG002 
+Guidelines and Tips for Styles  
+¦ Use the “$” sign preceding the style name to put it at the top of the style combo box list 
+
+¦ Always base text styles on “no style” or on other template styles; never on “Normal” 
+
+¦ Build a custom toolbar with proposal template styles for one-click formatting 
+
+¦ Automatic sequences save time for reorganizing volumes, inserting cross- references, and compiling Tables of Contents and other lists 
+
+
+3.2 HEADERS AND FOOTERS 
+Headers and footers identify the document, our client, explicit section and/or page identification, and identification of the intended party/customer. They normally are set up outside any format margin requirements for proposal content. That is to say that a 1” margin requirement on all sides of each page does not exclude using that margin for headers and footer. 
+ 
+Headers and footers must be compliant with the RFP. As a guideline, place the client logo in the header, flush with the left margin. Place the title of the document, and any RFP required information, to the right. Place the delivery date, copyright information, and section and/or page numbering in the footer. 
+Headers and footers can vary in appearance, and most are acceptable, as long as the layout is compliant. 
+ 
+Guidelines and Tips for Headers and Footers  
+¦ Include all necessary information for headers and footers to be compliant 
+
+¦ Use correct security, copyright and trademark markings 
+
+¦ In Page Setup, use a minimum 0.2” ‘From edge’ setting 
+
+¦ It is acceptable to use a ‘work-in-progress’ header and footer during proposal development, time permitting, and to insert the final quality header and footer during final production 
+
+¦ Follow RFP instructions for pagination at a minimum 
+
+¦ Keep pagination simple, but unambiguous, so that if the customer takes apart the sections for evaluation, reassembly is easy 
+
+¦ Set headers and footers in the margin, outside the content space 
+
+¦ Creativity is fine, but artwork and text in the content should attract the evaluator’s attention 
+
+¦ Use a graphics application to properly resize artwork, to minimize the file size for artwork as much as possible 
+
+
+3.2.1 Identity Artwork 
+Use artwork in the headers and footers only where that artwork quality is high. Clean up pixilation, blurring, discoloration or fading. 
+ 
+Guidelines and Tips for Identity Artwork  
+¦ Use a graphics application to reduce the file size of identity artwork as much as possible 
+
+ 
+
+
+3.2.2 Page Numbering 
+An RFP may specify how to format and number pages. The instructions may specify sequence, location on the page, and style. 
+As a general guideline, use an unambiguous sequence. If the customer takes the proposal or volume apart to review, facilitate reassembling the proposal or volume with a clear sequence. 
+ 
+Page Sequencing Fields 
+ 
+Field 
+ Function 
+ Example 
+ 
+Page 
+ Inserts the number x of the current page 
+ “Page 1” 
+ 
+NumPages 
+ Inserts the number of pages y in the document 
+ “Page 1 of 75” 
+ 
+{StyleRef n \s}  
+ Inserts the number of the specified heading level n  
+ “Section 2.3 – Page 12 of 75  
+ 
+
+ 
+Guidelines and Tips for Page Numbering  
+¦ 
+ 
+¦ 
+¦ 
+3.3 HEADINGS 
+Keep pagination simple, but unambiguous, so that if the customer takes apart the sections for evaluation, reassembly is easy 
+Use fields to facilitate section and page sequencing 
+Follow the RFP format instructions so pagination is complaint 
+Section heading names should be the same as those the RFP identifies. Usually, the RFP requires the sequence of the response to be the same as in the RFP. 
+Use the built-in Word heading styles to format headings, and automatically number headings with the numbering format requirement. 
+ 
+ 
+ 
+Guidelines and Tips for Headings  
+¦ 
+¦ 
+ 
+¦ 
+¦ 
+¦ 
+ 
+¦ 
+¦ 
+3.4 BODY TEXT 
+Follow the RFP format instructions to determine the sequence for headings 
+Use the built-in Word heading styles to format headings, and automatically number headings with the numbering format requirement 
+Use hidden text to force automatic numbering at the start of a module Heading levels should correlate to those in the RFP 
+Use unnumbered headings for topics within sections which do not correlate to heading numbering in the RFP 
+Preferably, use a sans serif font/typeface for headings, e.g. Arial 
+Never leave one widow or orphan line at the end or at the top of a column 
+‘Normal’ is the style on which all others (unless based on “No style”) are based. If the font or paragraph formatting of the Normal style changes, it will ripple through most other document styles. It is better to use other styles intended for specific purposes when building structured proposal documents. 
+The ‘Body Text’ style is intended for the body of a proposal document. By default it is identical to ‘Normal’ except for having 6-point spacing after, i.e. each Body Text paragraph is followed by half a vertical line of space. For more or less space, a first-line indent, a different font or any other change, customize the Body Text style without affecting other styles except for those in the Body Text family, i.e. the ‘Theme’, ‘Bullet 1’ and ‘Bullet 2’ styles. 
+ 
+Guidelines and Tips for Body Text  
+¦ In a page-limited proposal, set the points before and after paragraphs to zero, use a first-line, and the minimum allowable font size 
+
+¦ In a proposal without page limits, use at least 3 points of space before and after paragraphs 
+
+¦ Follow the RFP instructions for minimum font and/or line spacing point size 
+
+¦ Preferably, use Arial or Times New Roman for the Body Text style, since these fonts are standard to Microsoft Windows 
+
+¦ Use a single space between sentences, and do not use blank lines between text paragraphs 
+
+¦ Never leave one widow or orphan line at the end or at the top of a column 
+
+¦ “Bottom out” or balance columns on the last page of major sections, during final production 
+
+
+3.4.1 Theme 
+The Theme style is for theme statements made at the beginning of a module, following the Section title (Heading). Generally, it is an italicized version of the Body text style. Use of an alternate text color is optional. 
+ 
+ 
+Guidelines and Tips for Theme styles  
+¦ In a page limited proposal, use the minimum allowable font size 
+
+¦ Italicize the Theme style 
+
+¦ Base the Theme style on Body text 
+
+¦ With management approval, use an alternate color for the Theme style 
+
+
+3.4.2 Bullet 1 and Bullet 2 
+¦ The ‘Bullet 1’ style is flush with the left text margin in the template, with a hanging indent for text 
+
+¦ Bullet 1 style is based on the Body Text style ¦ ‘Bullet 2’ is flush left with the start of the Bullet 1 style text 
+
+¦ The bullet character or symbol is the bullet line punctuation. Therefore, no period is required, unless the bulleted item contains more than one complete sentence 
+
+
+
+
+
+3.4.3 Comment Text 
+Build a comment text style to use during content development, as an alternative to using the Track Changes feature in Word. Do not use Track Changes in proposal modules. 
+Guidelines and Tips for Comment styles  
+¦ Add character attributes such as color or shading to distinguish comment styles from body text styles 
+
+¦ Search for and remove all comment styles during final production 
+
+
+ 
+3.5 TABLES 
+ 
+ 
+Tables are containers for the text they contain. Therefore, in a page-limited proposal, set the width to 0.2” wider than the available space for text. For a page with 1” margins, the full-width available for text is 6.5”. Set the table width to 6.7”. The text (contents) will be within the margins. 
+Adjust column widths, and use adjacent cells with invisible inside borders for bullet lists, to minimize the height of the table. 
+ 
+Table Head 
+ 
+Table Subhead 
+ Table Subhead 
+ Table Subhead 
+ Table Subhead 
+ 
+Table Subhead 
+ Table text may be centered or flush left 
+ ¦ 
+¦ 
+¦ 
+ ¦ 
+¦ 
+¦ 
+ 
+Table Subhead 
+ Table text table text table text table text table text table text table text table text table text table text 
+ ¦ 
+¦ 
+ ¦ 
+¦ 
+ 
+Table Subhead 
+ Table text table text table text table text table text table text table text table text table text table text 
+ Table text table text  table text table text  table text table text  
+ Table text should align at the top of the row 
+ 
+
+3.5.1 Table Head 
+Use the ‘Table Head’ style for the first row of a table, which is usually the title or purpose of the table. 
+3.5.2 Table Subhead 
+Use the ‘Table Subhead’ style for column headings and/or row headings. Use Title Case for text in table subheads. 
+3.5.3 Table Body 
+Use the ‘Table Body’ style for text in a table. Use sentence case for text. 
+3.5.4 Table Bullet 
+The ‘Table Bullet’ style is based on the ‘Table Body’ style. Use sentence case for text. 
+ 
+Guidelines and Tips for Tables  
+
+¦ Follow the RFP instructions for minimum point size in tables 
+
+¦ Use a minimum 9 point typeface for table headings 
+
+¦ Use a minimum 8 point typeface for table subheadings, table text, and table bullets 
+
+¦ Center table headings vertically and horizontally 
+
+
+ 
+¦  
+
+¦  
+
+¦  
+
+
+ 
+¦  
+
+¦  
+
+
+3.6 FOCUS BOX 
+Top align table text and table bullets 
+Treat all tables as figures, regardless of the application used to build them 
+In a page-limited proposal, minimize table attributes, e.g. border widths, cell margins, space above and below text 
+Reduce cell margins to save space 
+Adjust column widths as necessary to reduce vertical space 
+
+
+Authors are responsible for editorial changes to focus box content in modules. Focus boxes are not under art control. 
+ 
+ 
+Guidelines and Tips for Focus Boxes  
+¦ Always follow the RFP instructions for minimum point size in focus boxes 
+
+¦ Use a minimum 9 point typeface for focus box headings 
+
+¦ Use a minimum 8 point typeface for focus box bullets 
+
+¦ Set the same frame width for the Focus Box Heading style and the Focus Box Bullet style 
+
+¦ Anchor the focus box frame to the theme paragraph, or the first paragraph on the page 
+
+¦ In a two-column format, place the focus box at the upper right margin, and make it the same width as the column 
+
+
+3.7 BASIC TEMPLATE TOOLBAR 
+Build a template toolbar, to reduce introducing incorrect styles, or corrupt material into modules/sections. 
+
+ 
+4 PROPOSAL FIGURES 
+In a proposal, place figures in the next available corner following the first callout/ cross-reference to that figure. For example, if the first callout/cross-reference is at the bottom of the left column in a two-column format, place the figure frame at the top of the right column, provided the width of the figure is one-column. 
+Place full-width figures in the next available space following the callout/cross- reference, at either the upper half or the lower half of the page. 
+Use frame styles to contain the figures. 
+ 
+Style Name 
+ ArtFrames Default Style Settings 
+ 
+$ ArtCapt LH 
+ Normal + Font: Arial, 11 pt, Bold, Italic, Centered, Position: Left horiz. Relative To Margin, 0.13" From text horiz., Bottom vert. Relative To Margin, 0.13" From text vert., Width: Exactly 6.5", Text wraps around 
+ 
+$ ArtCapt LL 
+ $ ArtCapt LH + Width: Exactly 3" 
+ 
+$ ArtCapt LR 
+ $ ArtCapt LH + Position: Right horiz. Relative To Margin, Width: Exactly 3" 
+ 
+$ ArtCapt UH 
+ Font: Arial, 11 pt, Bold, Italic, English (U.S.), Centered, Line spacing single, Widow/orphan control, Position: Left horiz. Relative To Margin, 0.13" From text horiz., Top vert. Relative To Margin, 0.13" From text vert., Width: Exactly 6.5", Tex. 
+ 
+$ ArtCapt UL 
+ $ ArtCapt UH + Width: Exactly 3" 
+ 
+$ ArtCapt UR 
+ $ ArtCapt UH + Position: Right horiz. Relative To Margin, Width: Exactly 3" 
+ 
+$ ArtCtrl LH 
+ Normal + Font: Arial, 6 pt, Flush Right, Position: Left horiz. Relative To Margin, 0.13" From text horiz., Bottom vert. Relative To Margin, 0.13" From text vert., Width: Exactly 6.5", Text wraps around 
+ 
+$ ArtCtrl LL 
+ $ ArtCtrl LH + Width: Exactly 3" 
+ 
+$ ArtCtrl LR 
+ Style for Next Paragraph: $ ArtCapt LR $ ArtCtrl LH + Position: Right horiz. Relative To Margin, Width: Exactly 3" 
+ 
+$ ArtCtrl UH 
+ Style for Next Paragraph: $ ArtCapt UH $ ArtCapt UH + Font: 6 pt, Not Bold, Not Italic, Flush Right 
+ 
+$ ArtCtrl UL 
+ $ ArtCtrl UH + Width: Exactly 3" 
+ 
+$ ArtCtrl UR 
+ $ ArtCtrl UH + Position: Right horiz. Relative To Margin, Width: Exactly 3" 
+ 
+$ Artwork LH 
+ Normal + Centered, Line spacing exactly 12 pt, Border: Box (Single solid line, Auto, 
+¾ pt Line width), Border spacing: 1 pt, Position: Left horiz. Relative To Margin, 0.13" From text horiz., Bottom vert. Relative To Margin, 0.13" From text vert., ... 
+ 
+$ Artwork LL 
+ Style for Next Paragraph: Normal $ Artwork LH + Width: Exactly 3" 
+ 
+$ Artwork LR 
+ Style for Next Paragraph: Normal $ Artwork LH + Position: Right horiz. Relative To Margin, Width: Exactly 3" 
+ 
+$ Artwork UH 
+ Font: Times New Roman, 12 pt, English (U.S.), Centered, Line spacing exactly 12 pt, Widow/orphan control, Border: Box (Single solid line, Auto, ¾ pt Line width), Border spacing: 1 pt, Position: Left horiz. Relative To Margin, 0.13" From text horiz. 
+ 
+$ Artwork UL 
+ Style for Next Paragraph: Normal $ Artwork UH + Width: Exactly 3" 
+ 
+$ Artwork UR 
+ Style for Next Paragraph: Normal $ Artwork UH + Position: Right horiz. Relative To Margin, Width: Exactly 3" 
+ 
+
+4.1 TOOLS  OVERVIEW 
+ uses frame styles in the proposal template to build frames at various positions on the page. The  toolbar automates frame insertion, and frame height modification to estimate the height of an anticipated graphic. 
+ 
+4.2 ARTWORK FRAMES 
+An artwork frame contains three paragraphs; one to hold the artwork itself, a second for the art control number, and a third for the action caption. 
+ 
+ 
+ 
+4.2.1 Style configuration 
+ 
+?? in each style represents two uppercase letters as follows: 
+ 
+?? 
+ Frame Position on Page 
+ 
+UL 
+ Half-width art in upper left corner of page 
+ 
+UH 
+ Full-width art in upper half of page 
+ 
+UR 
+ Half-width art in upper right corner of page 
+ 
+LL 
+ Half-width art in lower left corner of page 
+ 
+LH 
+ Full-width art in lower half of page 
+ 
+LR 
+ Half-width art in lower right corner of page 
+ 
+FP 
+ Full-width, full page art 
+ 
+FO 
+ Fold out art 
+ 
+
+There are three basic frame styles: 
+¦ $ Artwork ?? – artwork itself 
+
+¦ $ ArtCtrl ?? – art control number (ACN) at the lower right of the artwork 
+
+¦ $ ArtCapt ?? – action caption 
+
+
+
+ 
+A half-width artwork placeholder in the upper right corner of the page, similar to the icon below, would use the following three styles: 
+ A full-width artwork placeholder in the lower half of the page, similar to the icon below, would use the following three styles: 
+ 
+ 
+  
+ 
+¦ $ Artwork UR 
+
+
+ ¦ $ Artwork LH 
+
+
+ 
+¦ $ ArtCtrl UR 
+
+
+ ¦ $ ArtCtrl LH 
+
+
+ 
+¦ $ ArtCapt UR 
+
+
+ ¦ $ ArtCapt LH 
+
+
+ 
+
+ 
+If template changes, e.g. left and right margins, the style for the width of the frames will require modification. For full-width frames, modify the $ Artwork UH and 
+$ ArtCapt UH frame width styles only. For half-width frames, modify the frame width of all the half-width styles identified above. 
+4.3 FOLDOUTS AND FULL PAGE ARTWORK 
+Foldouts and full-page figures do not require using frames. Place full-page figures, their art control number and action caption in line with text. 
+Please refer to Section 5.2 regarding foldout variations. 
+4.4 ACTION CAPTIONS 
+Action caption styles can vary. Follow the RFP instructions regarding minimum font size for text or figures, especially any specifically about captions. Depending of the column format, place captions either above or below the figure. In a one- column format, the caption may be placed to the left of the figure. 
+There are variations on figure sequencing. The acceptable syntax for figure sequencing is Figure X-Y where ‘X’ is the volume/chapter number and ‘Y’ is the figure sequence. If the chapter correlates to a section beginning with a subordinate section, i.e. Heading 2 or Heading 3, the sequence for the figure number can repeat at the start of each new chapter. 
+ 
+Page Sequencing Fields 
+ 
+Field 
+ Function 
+ Example 
+ 
+StyleRef 1 \s 
+ Inserts the heading level 1 
+ “Figure 1-x” 
+ 
+SEQ Figure \* ARABIC \s 1 
+ Inserts the figure number, setting the number style to Arabic, and starting the sequence at 1 
+ “Figure 1” 
+ 
+StyleRef 2 \s - SEQ Figure \* ARABIC \s 1 
+ Inserts the heading level2 and Inserts the figure number, setting the number style to Arabic, and starting the sequence at 1 
+ “Figure 2.3 – 1 
+ 
+
+ 
+4.5 ART CONTROL 
+Place the art control number on the second paragraph in the frame to match it with the artwork. Many clients will have established standards for Art Control Numbers. Check first before establishing your own standard. 
+ 
+Guidelines and Tips for Art Styles  
+¦ Follow the RFP instructions for minimum point size in figures 
+
+¦ position figures on the pages 
+
+¦ Insert source files/artwork from PowerPoint, JASC, or Adobe as pictures 
+
+¦ Do not use the track changes feature in proposal modules. Track Changes will increase the file size, sometimes more than doubling it, after each figure update 
+
+
+4.6 CROSS REFERENCES 
+Use Word’s cross-reference facility to refer to and hyperlink to information in an- other part of the document file or to another file or document. If the content of or location of the information changes, select and update the cross-references by pressing F9. 
+Various types of information can have cross-references and links, including headings, page numbers (not recommended), and figures numbers. 
+Cross-references should only include the figure number and label, not the full text. 
+5 ARTWORK DEVELOPMENT 
+5.1 GENERAL ARTWORK GUIDELINES 
+ 
+Guidelines and Tips for Artwork  
+¦ Use a sans-serif font for figures, such as Arial or Arial Narrow 
+
+¦ The use of fonts not part of the standard Windows collection is discouraged 
+
+¦ Generally, use a minimum 8 point font in artwork 
+
+¦ Use the smallest type possible, down to the minimum allowable in the RFP instructions 
+
+¦ Do not use ALL CAPS, except where appropriate 
+
+¦ Correct pixels-per-inch (ppi) to minimize file size—
+
+¦ Reduce the number of colors where possible to minimize file size 
+
+
+5.1.1 Font Selection 
+Generally, use a sans-serif font for figures, such as Arial or Arial Narrow for artwork. The use of fonts not part of the standard Windows collection is discouraged. 
+
+5.1.2 Point Sizes 
+Unless the RFP specifies otherwise, use a minimum of 9 or 8-point type for object titles, and a minimum of 8-point type for text and bullets. 
+Lines/rules/strokes should generally be minimal. 
+5.1.3 Palettes 
+Proposal palettes are for producing a consistent appearance of artwork throughout the documents. At a minimum, assign consistent harmonious colors for focus boxes and tables. 
+Verify that colors selected are distinguishable in black and white print. 
+5.1.4 Classified Artwork 
+Follow the security guidelines and instructions to mark classified artwork appropriately. 
+5.2 ARTWORK TEMPLATES AND GUIDELINES 
+Artwork sells the detail, text sells the argument. The basic key to proposal artwork aesthetics is two fold: balanced arrangement and economy of space. In some cases, such as in a table, balancing columns may not contribute to an economy of space. 
+Guidelines and Tips for general art development  
+¦ Warm colors advance (reds, yellows) 
+
+¦ Cool colors recede (greens, blues) 
+
+¦ Use solid colors and shades/tints to increase the apparent number of colors without increasing the overall number of colors in the scheme 
+
+¦ Keep it simple: generally a maximum of seven colors 
+
+¦ Blue generally works well as a background color 
+
+¦ Use complementary colors for basic schemes 
+
+¦ Use split complements for a more subtle effect 
+
+¦ When using a color wheel to select a palette, true color wheel triads are created from a Red/Yellow/Blue wheel (RYB—paint primaries), rather than a Red/ Green/Blue wheel (RGB—light primaries) 
+
+¦ Check colors on the printer designated for final production: ¦ Calibrating just prior to final production may produce unexpected results. Calibrate for color check and final on printer(s) which don’t regularly recalibrate themselves, or don’t recalibrate at all 
+
+
+
+
+¦ For emphasis, use highly saturated warm colors sparingly 
+
+¦ Break down color tints/shades in 10% minimum increments 
+
+¦ Work with the authors on using color to the best effect 
+Table bullet 
+
+Table bullet 
+
+Table bullet 
+
+Table bullet 
+
+Table bullet 
+
+Table bullet 
+
+
+¦ Use colors consistently 
+
+
+Use artwork templates in PowerPoint so that development of full-width, single- column width, full page and foldout graphics are consistent in proportion and app- earance. Provide guidelines for arrowhead styles, stroke/line weight, type styles and sizes, and colors. 
+Use only the art control number on artwork slide to identify the file. Keep all other identification in the art log and/or on the master slide. Use the art control number to cross-refer to the art log. 
+5.2.1 Single-Column, Full-Width and Full Page Art Template 
+Set up an art template that is easy to use, and that conforms to the RFP requirements for artwork. Verify that colors selected are distinguishable in black and white print. 
+ 
+5.2.2 Foldouts 
+A full foldout includes a figure number and an action caption. 
+ 
+5.2.3 Foldout Pages with Artwork and Text 
+ 
+5.3 EXAMPLES OF FIGURES 
+ 
+5.3.1 Tables 
+ 
+5.3.2 Basic Drawings 
+ 
+5.3.2.1 Photographs 
+
+
+
+
+
+
+5.3.2.2 Simple Graphs 
+
+
+
+
+
+ 
+ 
+5.3.3 Complex Figures 
+5.3.3.1 Flow Diagrams 
+
+
+
+
+
+ 
+5.3.3.2 Drawings 
+
+
+
+
+
+ 
+5.3.3.3 Organizational Charts 
+
+
+
+
+
+ 
+5.3.3.4 Schedules 
+
+
+
+
+
+ 
+Table bullet 
+
+Table bullet 
+
+Table bullet 
+
+Table bullet 
+
+6 FINAL PRODUCTION MEDIA 
+6.1 PRINTING GUIDELINES 
+Maintain a master hard-copy proposal as a “go-by” and as a reference during final printing. Ultimately, the go-by can stay with the client as a reference for assembling in-house sets of the proposal. 
+Final checks before printing include verifying correct headers and footers, titles and logos, solicitation number, page numbering, figure sequencing, styles and page layout. 
+Check that the correct security markings are on each page, and those that may require additional markings. 
+Print check colors on the printer designated for final production. Calibrating just prior to final production may produce unexpected results. Calibrate for color check and final on printer(s) that are not recalibrated on a regular basis. 
+Quality check the proposal sets after printing for color, tone, registration, smudging, and that all pages are included. 
+6.2 FRONT AND BACK COVER, AND SPINE GUIDELINES 
+The figure below shows several examples of covers, typical of the winning proposals on the walls at OKRV headquarters. Covers can be simple or complex. Always follow the RFP requirements for content on covers and spines. 
+ 
+ 
+6.3 TABS 
+
+
+
+ 
+ 
+Check the RFP requirements for tabs (dividers). Produce in-house or outsource tabs, depending on resources, time and appropriateness for the particular proposal. 
+Lamination can produce a very nice looking book, especially in colors when available. However, errors or changes to tab order can cause delays and additional cost. Verify tab labeling and sequences with the proposal manager before placing orders. 
+6.4 CD-ROM MEDIA 
+
+
+
+Follow the RFP requirements for electronic deliverables. Some are specific about packing and packaging the electronic deliverables. In most cases, design the 
+CD-ROM media to match the physical deliverable covers. 
+6.4.1 CD Labels and Inserts 
+ 
+6.5 PACKING MEDIA 
+Follow the RFP requirements for packing lists, packing labels, contents of boxes, etc. 
+7 WRITING STYLE 
+The following section is a useful guide to punctuation, spelling and the use of the English language. Examples are shown in a sans-serif font. For more complex writing issues, you should invest in a Chicago or Franklin style guide. 
+7.1 PUNCTUATION 
+The purpose of punctuation is to make the meaning of the text as clear as possible. Incorrect or insufficient punctuation can cause ambiguity; unnecessary punctuation may be unsightly. The modern tendency is to use punctuation sparingly. However, providing it is used correctly, respect the author’s preferences. 
+7.1.1 Period 
+For the use of periods with abbreviations and initials, see para. 7.2. Do not use periods: 
+¦ 
+¦ 
+e the punctuation for a focus b 
+
+¦ Focus box bullets are Sentence case 
+
+ 
+
+ 
+¦ 
+column 
+
+¦ 
+ 
+¦ 
+7.1.2 Colon 
+At the end of a title or subtitle 
+After captions which are incomplete sentences. A caption comprising an incomplete sentence and a complete sentence requires a period after each sentence. 
+After dates or signatures 
+Within or after abbreviations consisting of one or more capital letter, or after contractions 
+After the symbols for units of measurement or currency 
+Use a colon to mark a pause or degree of separation shorter than a period. Use a colon, also, to introduce a run-in list or one set off from the text, for example: 
+
+The receiver comprises the following modules: 
+¦ Pre/Post-Selector 
+
+
+A colon is also used to indicate a ratio, e.g. VSWR of 1.3:1. Note that no spaces are used before or after the colon. 
+7.1.3 Semicolon 
+A semicolon separates parts of a sentence that require a stronger break than a comma, but are too closely related to be broken into two separate sentences. 
+Semicolons should be used to precede clauses introduced by words such as 
+however, nevertheless, thus, accordingly, therefore, that is and namely. 
+7.1.4 Comma 
+The comma is used in a wide variety of different situations that are too numerous to list in this document; however, commas should not be used: 
+¦ After such abbreviations as i.e., e.g. and viz. 
+
+¦ In addresses 
+
+¦ In dates 
+
+¦ Before text in parentheses 
+
+¦ Before or after text in dashes 
+
+
+7.1.5 Question Mark 
+Although the use of a question mark it is not common within proposal text, a few simple do’s and don’ts are listed below: 
+¦ The question mark is used to show text that represents a direct question, a rhetorical or unspoken question or indicates doubt. 
+
+¦ The question mark should not be used to show text that represents an indirect question, a statement of fact that includes words of interrogation or after single interrogative words in a sentence. 
+
+
+7.1.6 Exclamation Point 
+Generally, do not use an exclamation mark within proposal text. 
+7.1.7 Dashes 
+A dash may refer to several different marks. Their typographical representation and use is outlined below. 
+7.1.7.1 Dash (Em Rule) 
+
+
+
+
+
+This is represented by —, and is obtained by Ctrl+Alt+Num-. It is used instead of parentheses within a sentence, but note that only one set of em rules should be used within a single sentence; parentheses should be used for two or more parenthetical elements. 
+7.1.7.2 En rule 
+
+
+
+
+
+The en rule is represented by –, and is obtained by Ctrl+Num-. Although a hyphen (see para. 7.1.7.3) will generally suffice, an en rule should be used: 
+¦ In spans of figures, e.g. pages 45–7, 1996–7 financial year. It should not be used where figures could have negative quantities, e.g. -5 to +10dBm, not 
+
+
+
+
+
+
+-5–+10dBm 
+¦ To express association between words which retain their separate identity, e.g. 
+
+
+
+
+
+
+Thomson–Marconi joint venture 
+A spaced en rule ( – ) should be used where the unspaced en rule may cause the text to be reread, e.g. Thomson – GEC–Marconi team. 
+7.1.7.3 Hyphen 
+
+
+
+
+
+This is the most commonly used dash and its uses are to numerous to list here. Note that, in common with mot modern word processing software, Microsoft® Word has three different hyphens available: 
+¦ The normal hyphen, obtained by - 
+
+¦ The hard, or non-breaking, hyphen, obtained by Ctrl+Shift+-. This is used if you do not want the hyphenated word to break over the end of a line. It must also be used when a minus sign is required to stop the minus sign and its associated number becoming separated at the end of a line, e.g. -10 dBm 
+
+¦ The soft hyphen, obtained by Ctrl+-. This can be inserted to break long words at the end of line to avoid excessive white space in the preceding line. However, its general use must be carefully considered 
+
+
+
+
+
+
+7.1.8 Parentheses 
+Parentheses, i.e. ( and ), are used to enclose expressions that are not essential to the meaning of the sentence but that amplify or clarify. Note the following: 
+¦ When a parenthesis within a parenthesis is required, two pairs of parentheses should be used, not a combination of parentheses, square brackets and/or ‘curly’ brackets. Alternatively, a combination of dashes and parentheses could be used 
+
+¦ The punctuation within parentheses is governed by the grammatical demands of the enclosed expression 
+
+¦ A comma follows closing parentheses only if a comma would have been used if there had been no parentheses 
+
+¦ A complete sentence within parentheses has its punctuation mark within the parentheses 
+
+
+7.1.9 Square Brackets 
+Originally used to denote words or phrases inserted into the text by someone other than the author, the use of square brackets, i.e. [ and ], should be reserved for such expressions as [continued overleaf] and [Turn to page 44]. 
+7.1.10 Points of Ellipsis 
+The three points of ellipsis (…), obtained by Alt+Ctrl+., are principally used to mark omission of words in quoted matter, e.g. “Protective statements…ensure the protection of Company Intellectual Property Rights…” No punctuation mark should precede or follow the three points. 
+7.1.11 Apostrophe 
+The principal use of the apostrophe, normally preceded or followed by s is to denote possession. It is only used with nouns. The pronouns his, its, etc., are already possessive and do not need the apostrophe. Note that it’s means it is, while its means belonging to it. 
+The possessive is formed for any singular or plural noun that ends in any letter other than s by adding apostrophe-s, e.g. a child’s toy. Plural nouns ending in s are made possessive by adding an apostrophe, e.g. the Smiths’ house. Singular nouns ending in s take apostrophe-s, e.g. Dickens’s novels, unless the word is either biblical or ancient. 
+A distinction is sometimes made between animate and inanimate nouns, e.g. the person’s legs but the legs of the table rather than the table’s legs. 
+When the sense of a noun is adjectival rather than possessive, the apostrophe-s is frequently omitted, e.g. travelers checks, since this would be rephrased with the preposition for rather than of, i.e. checks for travelers. 
+The apostrophe is omitted in expressions of time, e.g. in two months time. Place names are also spelt without the apostrophe, e.g. St Johns Church. 
+An apostrophe is also used to indicate the omission of letters, e.g. don’t means do not. However, the use of the shortened forms such as this is not recommended in proposal text. The apostrophe can also prevent confusion, e.g. dot the i’s and cross the t’s. 
+7.1.12 Solidus 
+The solidus (/), also known as a virgule or slash, is used to: 
+¦ indicate alternative, e.g. yes/no 
+
+¦ to form standard abbreviations, e.g. a/c 
+
+¦ to denote a fraction, e.g. 1/3 
+
+¦ to express per, e.g. 20 km/h 
+
+
+and should not be used instead of other punctuation marks. 
+7.1.13 Quotation Marks 
+The principal use of quotation marks is to enclose the exact words of a writer or speaker, whether or not these form a complete sentence or sentences. Single quotation marks should be used. Double quotation marks are only used for quotations within quotations. 
+7.1.14 Typography of Punctuation 
+Print punctuation marks in the same style as the preceding word or phrase if they belong to that word or phrase. If they relate to the text as a whole, they are set in the style of the text. For example, A, B, C and D are related (see 10a). 
+7.2 SHORTENED FORMS 
+ 
+7.2.1 Definitions 
+There are four shortened forms of words. 
+
+7.2.1.1 Abbreviation 
+
+
+
+
+
+An abbreviation is a shortened form of a word or words that consists only of the initial letter, or of the initial letter and other letters, but not the final letter. 
+Abbreviations written with lower-case letters only or with an initial capital are given full stops: 
+
+Mon. Jan. vol. p. op. cit. M. i.e. e.g. 
+Abbreviations that consist of more than one capital letter or of capital letters only, are written without full stops: 
+ASPCA PhD USA DoD ISBN 
+7.2.1.2 Contractions 
+
+
+
+
+
+A contraction is a shortened form that consists of at least the first and last letters of a word. It is written without a full stop: 
+Dept vols Ltd Govt 
+7.2.1.3 Acronyms 
+
+
+
+
+
+An acronym is a shortened form that is always pronounced as a word. It may be formed from the initial letters of other words: 
+¦ Nato (from North Atlantic Treaty Organization) 
+
+
+
+
+
+
+or from a number of letters belonging to the phrase being shortened: 
+¦ sonar (sound navigation and ranging) 
+
+
+
+
+
+
+Acronyms are written without periods. 
+7.2.1.4 Symbols 
+
+
+
+
+
+A symbol is an internationally recognized representation of a unit of measurement or of a concept—not an abbreviation and, as such, written without a period: 
+km (kilometer) A (ampere) g (gram) Hz (Hertz) p (probability) 
+7.2.2 Use 
+Shortened forms save space and make reading easier by eliminating needless repetition. They should only be used with core words that by repetition in the text become familiar to the reader. A shortened form should never be used only once in the text. 
+Some contractions, abbreviations and symbols are conventionally used without explanation, e.g. Mr.; Dr.; a.m.; p.m.; kg; and Ltd. Notes, tables and figures traditionally use shortened forms to save space. 
+Other shortened forms should be presented at the earliest possible opportunity in the text, but not in a preface or other preliminary matter. The name, term or expression should be given in full at the first mention, followed by the shortened form in parentheses, e.g. Steven Myers & Associates (OKRV). 
+Consult the proposal manager or volume lead when two expressions have the same shortened form. 
+7.2.3 Acronyms 
+Acronyms formed from phrases written with lower-case letters throughout do not take initial capitals, e.g. radar (radio detection and ranging). Acronyms formed from the names of organizations written with initial capitals may retain the initial capital only, e.g. Nato. When the use of lower-case letters in acronyms would give rise to confusion, or when the acronyms are less well known, capitals should be used, e.g. WHO (World Health Organization). 
+7.2.4 Addresses 
+Addresses should be spelt out in full, except for references to post office boxes, which should be of the form PO Box 1. 
+7.2.5 Ampersand 
+The ampersand (&) is a shortened form of and. The use of the ampersand should be restricted to tables and captions where space is at a premium. It should also be used where it is normally used by a third party, e.g. P&O, being the shortened form used by the Peninsular and Oriental Steam Navigation Company. 
+7.2.6 Apostrophe 
+The apostrophe can be used with shortened forms in the normal manner to indicate possession, e.g. Nato’s policy… The apostrophe is always required in contractions such as can’t, but the use of these contractions is not recommended in proposal text. It is not required for every omission, e.g. Dept, not Dep’t. Common shortened forms are rarely written with an apostrophe, e.g. phone. 
+7.2.7 Beginning a Sentence 
+Providing that the full name has been given earlier, acronyms, etc., may be used at the beginning of a sentence, e.g. Nato proposals… In body text, the full forms of vol., fig., etc., should always be used at the beginning of a sentence, e.g. Figure 3 shows…, not Fig. 3 shows… The abbreviated forms may be used, with a lower- case initial, at the beginning of notes, etc., that are not full sentences, e.g. vol. 3. 
+7.2.8 Capitals 
+An initial capital should always be used for an abbreviation or contraction if the word normally bears an initial capital. Conversely, a word that is used only in its shortened form, and that begins with a lower-case letter, does not take an initial capital, even at the beginning of a note, e.g. cf. fig. 3. 
+Sometimes, capitals are required for abbreviations that do not ordinarily have an initial capital, e.g. TV (television). Acronyms may only need an initial capital if well known (Nato), capitals throughout if less well known or confusing (WHO) or no capitals at all (radar) except when used to begin a sentence. 
+7.2.9 Compass Points 
+In tables and figures, each point of the compass is abbreviated to its first letter or letters, e.g. N, SSE. Compass points should be spelt out in general text, e.g. At latitude 22º12’30” south… not lat. 22º15’30” S… 
+References to geographical areas should be spelt out in general text (south east Asia) but may be abbreviated in tables and figures (SE Asia). 
+7.2.10 Days, Months and Times 
+The names of the days should be abbreviated as follows: 
+Sun. Mon. Tues. Wed. Thurs. Fri. Sat. 
+The names of the months should be abbreviated as follows: 
+Jan. Feb. Mar. Apr. Aug.  Sept.  Oct. Nov. Dec. 
+May, June and July should not be shortened. The abbreviations above should not be used in body text but are reserved for tables, etc., where space is at a premium. 
+
+The forms a.m. and p.m. should be used for times, with a hard space after the figures, e.g. 5.00 p.m. Time zones are abbreviated to initial capitals, e.g. GMT. 
+
+Units of time are symbols, not abbreviations, i.e. s (second), min (minute), 
+h (hour) and d (day). They do not take a full stop or an apostrophe when used with numbers greater than one. 
+7.2.11 Latin Abbreviations 
+A list of the common Latin abbreviations is contained in para. 7.8. Of these, only 
+e.g. and i.e. appear frequently. Be careful with their use in documents intended for countries where English is not the main language. In most cases, they can be replaced by for example and that is respectively. 
+The use of abbreviations such as q.v. and viz. should be avoided. The use of etc. should not be frequent, as this can suggest a lack of facts or an offhand approach. If a list is preceded by such as, it is incorrect to add etc. The alternative &c. should never be used. 
+7.2.12 Measures 
+The international symbols for measures should only be used with a number. In all other cases their names should be used, e.g. a milliliter or 1 mL not a mL. 
+7.2.13 Names of Countries 
+The names of countries should be spelt out in text. Standard abbreviations can be used in tables, captions or other areas where space is at a premium, e.g. UK, USA. 
+7.2.14 Names of People 
+Initials should be separated by and followed by hard spaces, but periods are not necessary, e.g. J F Kennedy, J-P Sartre. 
+7.2.15 Number 
+The word number can be represented by no. (plural: nos), being the contraction of the Italian equivalent (numero). A full stop is used to prevent confusion with the word no. An initial capital is not needed unless they are used throughout the expression, e.g. Report No. 2. 
+In text, the word—not the contraction—should be used at the beginning of a sentence and in any expression not set off by parentheses, e.g. Number 6 in the series, The most recent issue (No. 4) of the journal… 
+A hard space is always used between no., No., nos, Nos and the numeral or numerals. 
+7.2.16 Plurals 
+Plurals of most shortened forms are formed by adding s without an apostrophe, 
+e.g. VDUs, vols, figs, nos. When plurals are indicated by repeating a letter, a period is used after the final letter, e.g. pp. 
+7.2.17 Using ‘a’ or ‘an’ 
+The use of a or an before a shortened form should be guided by the spoken sound, 
+e.g. an RN frigate but a Royal Navy frigate. In this case, the abbreviation RN is spoken letter by letter. Similarly, acronyms are spoken as words, e.g. A UN force… 
+7.2.18 Versus 
+The word versus should not be abbreviated in text. In tables and figures, the abbreviation vs. may be used. Note this is often written v. in non-US English. 
+7.3 NUMBERS 
+Numbers can be expressed in figures or words. Figures are preferred but words can look better in descriptive text. There is no absolute rule. Figures should always be used when there is an accompanying symbol or unit of measurement, and in tables. Figures may also be preferable in a sentence with a series of related numbers. The following paragraphs lay out some basic guidelines for the use of numbers. 
+7.3.1 Numbers Expressed in Figures 
+A comma should be used to separate each group of three figures in numbers greater than 999, e.g. 1,234,567. However, note that some countries, especially those in continental Europe, use a comma instead of a period as a decimal point marker. 
+When a decimal number is less than unity, a zero should be placed before the decimal point, e.g. 0.25 not .25. 
+An en-dash should be used rather than a hyphen to link spans of figures, e.g. pp. 402–54. An en-dash can be obtained by Ctrl+Num-. 
+An en-dash should not be used where numbers have, or could have, negative quantities, e.g. –10 to +55ºC not –10–55ºC. 
+No space is need between the figure and symbol or between the symbol and figure in such expressions as 9%, 15ºC, $10m, 5c and 2nd. 
+However, a non-breaking space should follow the figure in expressions such as 
+10.30 a.m., 9 per cent, 50 ., 100 W. A non-breaking space can be obtained by 
+Ctrl+Shift+Space. 
+7.3.2 Roman Numerals 
+These should not be used unless referring to their use by the customer or to denote plates—see para. 7.10. 
+7.3.3 Numbers Expressed as Words 
+Numbers less than 100 are generally expressed in words in descriptive text and numbers under ten should always be expressed in words, as this is more readable. 
+Numbers over ninety-nine can be shown in words where an approximation is being expressed, e.g. over five hundred aircraft have been sold worldwide. 
+Numbers that open a sentence should always be expressed in words. If the number has an associated symbol, e.g. $3m has been invested over a three-year period…, the sentence should be recast, e.g. Over a three-year period, $3m has been… 
+A comma should separate two sets of numbers that follow each other, e.g. In 1995, 143 units… 
+7.3.4 Fractions 
+Hyphens should be used when fractions are expressed as words, e.g. one-third. 
+When expressing fractions as figures, only ., ¼, ., ., ½, ., ., ¾ and . are available as existing symbols. Others should be formed by using superscript and subscript, e.g. 11/32” bolt. 
+7.3.5 Ordinals 
+Words should be used for ordinal numbers, e.g. first, up to and including ninety- nine, and figures thereafter. Words are preferred for round numbers and figures in lists and tables. 
+7.3.6 Large Numbers 
+The International System of Units (SI) defines the following terms: 
+ 
+Term 
+ Significance 
+ Corresponding Decimal Factor 
+ 
+million 
+ thousand x thousand 
+ 106 
+ 
+billion 
+ million x million 
+ 1012 
+ 
+trillion 
+ million x billion 
+ 1018 
+ 
+quadrillion 
+ million x trillion 
+ 1024 
+ 
+
+Because of confusion with the occasional commercial use of the term billion to signify a thousand times a million (109), it is recommended that the only term that should be used is million. 
+Scientific and engineering terms avoid this confusion by the prefixes mega to indicate a million and giga to indicate a thousand million. However, note that in the context of computers, mega is applied to base 2, not base 10. Thus, a 
+ 
+ 
+
+ 
+ 
+ 
+ 
+7.3.7 Dates 
+megabyte is 220 or 1048576 bytes. Similarly, a kilobyte is 210 or 1024 bytes, not 1000 bytes. 
+ 
+ 
+The following form should be used when a date is given in full: 
+¦ 19 January 2003. This extends to incomplete dates, e.g. 19 January or 
+
+
+January 2003 
+However, words should be used where figure would start a sentence, e.g. The first of January 2001 was the first day of the new century. 
+When the name of the day is followed by the date, a comma should be used, e.g. 
+Sunday, 19 January. 
+The following form should be used when a date is expressed entirely in figures: 
+¦ 1/19/03 
+
+
+However, remember when dealing with overseas countries that this may be ambiguous. For example, 6/1/03 implies 1 June 2003 in the USA but 6 January 2003 in the UK. It may be better to use the full form expressed above. 
+Decades are expressed as, for example, the 1960s, not the 1960’s 
+The words biweekly and bimonthly each have two meanings. To avoid confusion, use the following as appropriate: 
+Twice weekly or Fortnightly Two-monthly or Twice monthly 
+Biannual and biennial each have only one meaning. However, these are often confused and the terms twice yearly or two-yearly should be used. 
+7.3.8 Time of Day 
+When using the 12-hour clock, the abbreviations a.m. (ante meridiem, before noon) and p.m. (post meridiem, after noon) should be used in lower case with periods. A hard space should be inserted between the figure and the abbreviation, 
+e.g. 10.45 p.m. Two zeroes are used to indicate even hours, e.g. 9.00 a.m. 
+In the 24-hour system, four digits should be used without punctuation, e.g. 0045 
+(= 0.45 a.m.). 
+In either system, figures should always be used. Terms such as ten o’clock or five- forty should not be used. 
+7.3.9 Temperature 
+Temperature should normally be expressed using the Celsius scale in figures with the degree symbol (º). This symbol is obtained by Ctrl+@ followed by a space. 
+Note that there is no space between the figure, the symbol and the letter, e.g. 55ºC or -10ºC. A hard hyphen should be used for negative quantities, obtained by Ctrl+Shift+-. 
+When temperature needs to be expressed using the Kelvin scale, no degree symbol is used, and, in common with other SI units, a hard space should be inserted between the figure and the letter, e.g. 5200 K. 
+For temperature less than one degree, a zero should be used before the decimal point, e.g. -0.5ºC. 
+When the words from and between are used (or implied), ranges of temperatures should be expressed thus: -10 to +55ºC. 
+7.3.10 Currency 
+The $ and £ currency symbols should precede the figures without spaces. Other currencies should include a hard space, e.g. € 18m or ¥ 15,000. 
+Commas should be used to separate each group of three figures. However, note that some countries, especially those in continental Europe, use a comma instead of a full stop as a decimal point marker. 
+Where sums of money are expressed in two or more currencies within the same document, each should be qualified, e.g. C$ for Canadian dollars and US$ for US dollars. 
+Millions of any currency may be expressed in three ways: 
+¦ In full, e.g. $1,000,000 
+
+¦ Using the symbol m with no preceding space, e.g. $2.345m 
+
+¦ Using the word million preceded by a hard space, e.g. € 17 million 
+
+
+7.4 MEASUREMENT 
+ 
+7.4.1 SI Units 
+
+Units of measurement should follow the International System of Units (Système international d’unités, abbreviated SI). There are seven base units and two supplementary units: 
+ 
+Base and Supplementary SI Units 
+ 
+Quantity 
+ Name of Unit 
+ Symbol 
+ 
+SI Base Units 
+ 
+length 
+ meter 
+ m 
+ 
+mass 
+ kilogram 
+ kg 
+ 
+time 
+ second 
+ s 
+ 
+electric current 
+ ampere 
+ A 
+ 
+
+ 
+
+thermodynamic temperature 
+ kelvin 
+ K 
+ 
+luminous intensity 
+ candela 
+ cd 
+ 
+amount of substance 
+ mole 
+ Mol 
+ 
+SI Supplementary Units 
+ 
+plane angle 
+ radian 
+ rad 
+ 
+solid angle 
+ steradian 
+ sr 
+ 
+
+All other necessary units can be derived from base units. The following tables list some of these units: 
+ 
+Derived SI Units with Special Names 
+ 
+Physical Quantity 
+ Name of Unit 
+ Symbol 
+ Derivation 
+ 
+energy 
+ joule 
+ J 
+ 1 kgm2/s2 
+ 
+force 
+ newton 
+ N 
+ 1 kgm/s2 
+ 
+pressure 
+ pascal 
+ Pa 
+ 1 kg/ms2 
+ 
+power 
+ watt 
+ W 
+ 1 kgm2/s3 
+ 
+electric charge 
+ coulomb 
+ C 
+ - 
+ 
+electric potential 
+ volt 
+ V 
+ 1 kgm2/As3 
+ 
+electric resistance 
+ ohm 
+ . 
+ 1 kgm2/A2s3 
+ 
+electric conductance 
+ siemens 
+ S 
+ 1 A2s3/kgm2 
+ 
+electric capacitance 
+ farad 
+ F 
+ 1 A2s4/kgm2 
+ 
+magnetic flux 
+ weber 
+ Wb 
+ 1 kgm2/As2 
+ 
+inductance 
+ henry 
+ H 
+ 1 kgm2/A2s2 
+ 
+magnetic flux density 
+ tesla 
+ T 
+ 1 kg/As2 
+ 
+luminous flux 
+ lumen 
+ lm 
+ - 
+ 
+illuminance 
+ lux 
+ lx 
+ 1 cd.sr/m2 
+ 
+frequency 
+ hertz 
+ Hz 
+ 1 s-1 
+ 
+activity (radioactive) 
+ becquerel 
+ Bq 
+ - 
+ 
+absorbed dose (radiation) 
+ gray 
+ Gy 
+ - 
+ 
+Other Derived SI Units 
+ 
+area 
+ square meter 
+ m2 
+  
+ 
+volume 
+ cubic meter 
+ m3 
+  
+ 
+density 
+ kilogram per cubic meter 
+ kg/m3 
+  
+ 
+velocity 
+ meter per second 
+ m/s 
+  
+ 
+angular velocity 
+ radian per second 
+ rad/s 
+  
+ 
+acceleration 
+ meter per second squared 
+ m/s2 
+  
+ 
+kinematic viscosity 
+ square meter per second 
+ m2/s 
+  
+ 
+dynamic viscosity 
+ pascal second 
+ Pa.s 
+  
+ 
+
+ 
+
+Derived SI Units with Special Names 
+ 
+Physical Quantity 
+ Name of Unit 
+ Symbol 
+ Derivation 
+ 
+electric field strength 
+ volt per meter 
+ V/m 
+  
+ 
+magnetic field strength 
+ ampere per meter 
+ A/m 
+  
+ 
+luminance 
+ candela per square meter 
+ cd/m2 
+  
+ 
+heat capacity 
+ joule per kelvin 
+ J/K 
+  
+ 
+thermal conductivity 
+ watt per meter kelvin 
+ W/mK 
+  
+ 
+surface tension 
+ newton per meter 
+ N/m 
+  
+ 
+
+7.4.2 Decimal Multiples and Submultiples of SI Units 
+Some of the SI prefixes and their symbols are listed below: 
+ 
+Prefixes for SI Units 
+ 
+Prefix 
+ Symbol 
+ Value 
+ 
+giga 
+ G 
+ 109 
+ 1,000,000,000 
+ 
+mega 
+ M 
+ 106 
+ 1,000,000 
+ 
+kilo 
+ k 
+ 103 
+ 1,000 
+ 
+hecto 
+ h 
+ 102 
+ 100 
+ 
+deka * 
+ da 
+ 101 
+ 10 
+ 
+deci 
+ d 
+ 10-1 
+ 0.1 
+ 
+centi 
+ c 
+ 10-2 
+ 0.01 
+ 
+milli 
+ m 
+ 10-3 
+ 0.001 
+ 
+micro 
+ µ 
+ 10-6 
+ 0.0000001 
+ 
+nano 
+ n 
+ 10-9 
+ 0.0000000001 
+ 
+pico 
+ p 
+ 10-12 
+ 0.0000000000001 
+ 
+
+* ‘Deka’ is sometimes spelt ‘deca’. This is a rarely used prefix and should be avoided 
+
+Note that the final vowel of a prefix ending in a or o is dropped when added to ohm, e.g. megohm not megaohm. In general, only multiples and submultiples involving powers of 1000 (103) should be used. 
+7.4.3 Non-SI Units in Common Use 
+There are also a number of units in popular use, which only differ from SI units by powers of ten. Some of these are listed in the table below. 
+
+ 
+Non-SI Units that are Decimal Fractions or Multiples of SI Units 
+ 
+Physical Quantity 
+ Name of Unit 
+ Symbol 
+ Definition in terms of other Metric Units 
+ 
+length 
+ angstrom 
+ A or Å 
+ 10-10 m 
+ 
+area 
+ hectare 
+ ha 
+ 104 m2 
+ 
+volume 
+ liter 
+ L 
+ 10-3 m3 
+ 
+mass 
+ tonne 
+ t 
+ 103 kg 
+ 
+pressure 
+ bar 
+ bar, b 
+ 105 Pa 
+ 
+magnetic flux 
+ maxwell 
+ Mx 
+ 10-8 Wb 
+ 
+magnetic flux density (magnetic induction) 
+ gauss 
+ G, Gs 
+ 10-4 T 
+ 
+absorbed dose (radiation) 
+ rad 
+ rad, rd 
+ 10-2 Gy 
+ 
+
+Some units outside the SI should only be used for the specific purposes listed below: 
+ 
+Units with Restricted Application 
+ 
+Name of Unit 
+ Symbol 
+ Definition in terms of other Metric Units 
+ Physical Quantity 
+ Purpose(s) 
+ 
+international nautical mile 
+ n mile 
+ 1852 m 
+ length 
+ marine navigation, 
+ 
+knot 
+ kn 
+ (1852/3600) m/s 
+ speed 
+ aerial navigation and meteorology 
+ 
+millibar 
+ mb 
+ 100 Pa 
+ pressure 
+ meteorology 
+ 
+kilowatt hour 
+ kWh 
+ 3.6 x 106 J 
+ energy 
+ measurement of electric energy 
+ 
+
+Other non-SI units can be used without restriction: 
+ 
+
+Non-SI Units that are Decimal Fractions or Multiples of SI Units 
+ 
+Name of Unit 
+ Symbol 
+ Definition in terms of other Metric Units 
+ Physical Quantity 
+ 
+degree 
+ º 
+ (p/180) rad 
+ plane angle 
+ 
+minute 
+ ‘ 
+ (p/10.8) x 10-3 rad 
+ plane angle 
+ 
+second 
+ “ 
+ (p/648) x 10-3 rad 
+ plane angle 
+ 
+hectare 
+ ha 
+ 104 m2 
+ area 
+ 
+liter 
+ L 
+ 10-3 m3 
+ volume 
+ 
+milliliter 
+ mL 
+ 10-6 m3 
+ volume 
+ 
+day 
+ d 
+ 86.4 x 103 s 
+ time interval 
+ 
+hour 
+ h 
+ 3.6 x 103 s 
+ time interval 
+ 
+minute 
+ min 
+ 60 s 
+ time interval 
+ 
+kilometer per hour 
+ km/h 
+ (1/3.6) m/s 
+ velocity, speed 
+ 
+tonne 
+ t 
+ 103 kg 
+ mass 
+ 
+degree Celsius 
+ ºC 
+ The Celsius temperature, ºC, is given by tc = tk - 273.15 where tk is the thermo- dynamic temperature in kelvins 
+ temperature 
+ 
+degree Celsius 
+ ºC 
+ 1 K 
+ temperature interval 
+ 
+
+7.4.4 Expression of Units 
+Names of units and prefixes are expressed in lower-case when written in full, except at the beginning of a sentence, with the only exception of the capital C in degrees Celsius. 
+¦ 
+ 
+ 
+
+ 
+¦ 
+ 
+
+¦ 
+ 
+¦ 
+
+ 
+¦ 
+
+ 
+¦ 
+ 
+¦ 
+ 
+ 
+¦ 
+ 
+ 
+7.5 SPELLING 
+Unit names only take a plural-s when associated with numbers greater than unity, e.g. 0.5 meter, 1.5 meters. Hertz, lux and siemens are not changed in the plural. Names remain in the singular when used as an adjective, e.g. a 50 ohm load 
+
+Unit names and symbols should not be mixed in the same context, e.g. km/h 
+not km/hour 
+Per should only be used with words and the solidus (/) should only be used with symbols, e.g. kilometers per hour or km/h 
+Symbols do not take periods or take the plural-s when associated with number greater than unity, e.g. 2 kg not 2 kgs 
+All prefixes except those representing a million or more, e.g. mega (M), have lower-case symbols 
+A zero should be placed before measurements of less than unity, e.g. 0.25 m 
+not .25 m 
+Unit names and symbols should be separated from associated numbers by a hard space, obtained by Ctrl+Shift+Space, the only exceptions being degree (º), minute (‘), second (“) and degree Celsius (ºC), e.g. 27 m, 27ºC 
+The unit should be chosen so that the numerical value of the statement lies between 0.1 and 1000, e.g. 47.32 m not 0.04732 km, 500 kHz or 0.5 MHz not 
+500,000 Hz 
+Check the spelling in the document before printing, but examine the following: 
+I have a spelling checker, It came with my PC. 
+It plane lee marks four my revue, Miss steaks aye can knot sea. 
+The spell checker does not identify words, which, although correctly spelt, are incorrect in context. For spelling checks, the book or Internet versions of The Merriam-Webster Dictionary or The American Heritage® Dictionary of the English Language should be used where the Spelling function in Microsoft Word is not definitive. Particular points of spelling and usage are described below. 
+
+7.5.1 Official Bodies 
+The full names of official bodies should always be spelt exactly as the bodies spell them. For example, the s in Organisation should not be changed to a z. Similarly, pay attention to the use of capitals, hyphens and apostrophes in official names, e.g. International Organization for Standardization. The spelling of non-US organiz- ations should not be changed, e.g. Ministry of Defence. 
+7.5.2 Plurals 
+Beware of words such as data, media, criteria and phenomena. These are plural nouns but are frequently treated as singular nouns. 
+7.5.3 Foreign Geographical Names 
+Accepted English forms should be used for foreign place names, e.g. Genoa rather than Genova, or Rome rather than Roma. However, the spelling of place names in other English-speaking countries should not be changed, e.g. Poole Harbour rather than Poole Harbor. 
+7.5.4 Word Division 
+Word division, i.e. the breaking of a word at the end of a line by a hyphen, is acceptable in fully justified text where horrendous word spacing might occur, or where a one-word last line of a paragraph can be avoided. Whether anything can be gained by word division can be checked by temporarily changing the body text to left flush. Any short lines, followed by breakable words on the following line, will become obvious. The text should be put back to fully justified afterwards by forcing the body text style. The rules for word division are outlined below: 
+¦ Words should be divided by using a soft hyphen, obtained by Ctrl+- 
+
+¦ The word division should be sensible. The part of the word before the hyphen should suggest the remainder of the word 
+
+¦ Never break words of one syllable. Do not break words of two syllables unless unavoidable 
+
+¦ Never break words of less than six letters. Never take fewer than three letters over to a new line 
+
+¦ Where possible, the part of the word taken over should begin with a consonant rather than a vowel, e.g. regu / late rather than regul / ate. However, this rule should not be applied where confusion may arise, e.g. draw / ings rather than dra / wings 
+
+¦ Words with two consonants between vowels are divided after the first consonant, e.g. pic / ture, cus / tomer and plat / form 
+
+
+ 
+¦  
+
+
+ 
+ 
+¦  
+
+
+ 
+¦  
+
+
+ 
+ 
+¦  
+
+¦  
+
+
+ 
+¦  
+
+
+ 
+¦  
+
+¦  
+
+
+ 
+ 
+¦  
+
+
+7.6 CAPITALS 
+When a word has double consonants, the division should be between the consonants, e.g. admit / tance, but when the two consonants are part of the same root, divide after the second consonant, e.g. pass / ing 
+Never break a word before a vowel that forms a syllable, e.g. modu / late 
+rather than mod / ulate 
+Words with two or more vowels in succession should be divided by sound, 
+e.g. ami / able, but letters indicating one sound must not be divided, e.g. 
+crea / ture 
+Divide a word after a prefix, e.g. proto / type, sub / sequent 
+Divide compound words and hyphenated words only between the component parts, e.g. copy / right, self- / addressed 
+Never break figures or separate them from associated words, e.g. 50 W not 
+50 / W. Never break abbreviations or contractions 
+It is preferable not to break a name between initials and surname 
+Never break a date expressed entirely in figures. A date expresses in words and figure should only be broken after the month, e.g. 6 July / 1996 not 
+6 / July 1996 
+Never break the last word of a paragraph. What is the point? 
+Proper names are distinguished from common names by the use of an initial capital. Fully capitalized words, i.e. where every letter is in capitals, are only used in headings and, occasionally, to emphasize words (see later). 
+7.6.1 Personal Names 
+The names of all individuals are always capitalized, e.g. George Washington. However, when personal names have become general words, the initial capital is dropped, e.g. diesel. 
+Particles that precede surnames should not have an initial capital, e.g. Leonardo da Vinci. The particle is normally omitted when the first name is omitted, e.g. Otto von Bismarck but Bismarck. An example of when it is not omitted is Charles de Gaulle but de Gaulle. People living in English-speaking countries sometimes capitalize the initial letter of particles in their names, e.g. Van Der Meer, or form one word, e.g. Vandermeer. 
+An initial capital is sometimes given to abstract ideas that are personified, usually in poetry. Nicknames and epithets usually have initial capitals, e.g. the Iron Lady. 
+7.6.2 Nationalities 
+Initial capitals should always be given to names that identify nationalities, etc., 
+e.g. American, Christian and Londoner. An initial capital should not be given to a national or geographical name that appears as part of an expression with a specialized meaning, e.g. french fries. 
+In the full names of organizations, all components except articles, prepositions and conjunctions are given an initial capital letter, e.g. the United States Air Force. 
+There is no rule when the organization is referred to by its generic component and an initial capital is optional, e.g. the Department of Defense but the department, providing that the use is consistent throughout the document. 
+7.6.3 Names of Objects 
+The names of specific ships, etc., should be given an initial capital and italicized, 
+e.g. USS Wasp and HMS Norfolk. The names of brands, models, etc., should just be given an initial capital, e.g. a Harris Falcon II radio. 
+7.6.4 Geographical Names 
+The official names of specific parts of countries, or cities and towns, always have initial capitals, e.g. California and Los Angeles. 
+The names of countries are also always given initial capitals, e.g. the People’s Republic of China and China. 
+Initial capitals should be given to names that designate geographical or political groupings, e.g. South-East Asia and Western Europe. Lower case should be used for descriptive and unofficial names, e.g. southern Africa. 
+Street names, etc., are always given an initial capital, e.g. MacArthur Court. 
+Topographical names are given an initial capital when written in full but not when referred by the generic element, e.g. the Mississippi River but the river. The initial capital is retained, however, when the abbreviated form is commonly used to refer to the place as well, e.g. the Arabian Gulf but the Gulf. The names of public buildings and place are similarly treated, e.g. the Queen Elizabeth II Bridge but the bridge. 
+Compass directions are always capitalized (without periods) when abbreviated, 
+e.g. ENE, but lower-case when used in full, e.g. east-northeast. 
+7.6.5 Historical, Chronological and Ceremonial 
+Standard expressions for historical and cultural events are normally given initial capitals but abbreviated references are not, e.g. the First World War but this war. 
+Capitals are not required for numerical expressions, e.g. the twentieth century. 
+The names of acts, treaties, conventions, protocols, conferences, etc., should receive initial capitals when written in full, e.g. the Treaty of Versailles. Incomplete refer- ences, generic references and plural references should not. 
+The names of days of the week and months of the year should have an initial capi- tal but the names of the four seasons should not, e.g. Monday, January, but winter. 
+Initial capitals should be used for time zones when spelt out and full capitals when abbreviated, e.g. GMT and Greenwich Mean Time. 
+7.6.6 Commercial Terms 
+Many trademarks, brand names and proprietary names have become household words, appear to be generic designations for the thing to which they refer, and are written in lower case by those unaware of their origins. However, registered trademarks, brand names, etc., should be written with an initial capital and to print one without may suggest a generic term and thus infringe its trademark status. 
+Ideally, trademarks and proprietary names should be avoided and must always be written with an initial capital if they must be used, e.g. Perspex and Velcro. 
+Computer terms have to be handled with care, e.g. 
+¦ BASIC but Pascal 
+
+¦ UNIX but Microsoft Word 
+
+¦ Apple Macintosh but IBM PC 
+
+
+7.6.7 Title of Formal Compositions 
+The titles of books, etc., should be italicized and written in title case, i.e. maximal capitalization, e.g. Jane’s Defense Weekly. 
+The elements of a book should be lowercased except where they begin a sentence, 
+e.g. section 10. 
+7.6.8 Typographical Uses of Capitals 
+Although not recommended, if capitals are to be used for complete words or phrases within the main body of the text, either full capitals or small capitals can be used, providing that the document is consistent. Compare the following examples: 
+ 
+¦ The time for which the receiver stays on a frequency is called the DWELL TIME 
+
+¦ The time for which the receiver stays on a frequency is called the DWELL TIME 
+
+
+
+
+To create small capitals, type the word in lower case first, then select the text, go to Format > Font… and check the Small caps box. 
+ 
+7.7 ITALICS 
+ 
+ 
+Italics are selected by placing the cursor in the middle of a word (or selecting multiple words) and pressing Ctrl+I. Normal text is called ‘roman’ in printer’s terms. The following rules are applied to the use of italics. 
+7.7.1 Titles of Books and Names of Periodicals 
+Italics are used for the titles of books and the names of periodicals, etc., e.g. 
+Jane’s Military Communications 1995-6, Jane’s Defense Weekly. 
+Where the definite article is required to precede the name, it should be written in roman with a lower-case initial letter unless beginning a sentence, e.g. the Los Angeles Times. 
+Plural-s and possessive-s should be in roman, e.g. six Daily Heralds and the 
+Herald’s editor. Note in the last example that the apostrophe is also roman. 
+7.7.2 Names of Ships, Aircraft and other Vehicles 
+The names of specific ships, aircraft and other vehicles should be italicized, but not such abbreviations as HMS or USS preceding them, e.g. HMS Norfolk and USS Wasp. 
+Where the definite article is required to precede the name it should be written in roman with a lower-case initial letter unless beginning a sentence, e.g. the Southern Cross. The article never forms part of the official name. 
+7.7.3 Words and Letters Cited as such 
+A word (or words) cited as such is frequently italicized, as is a letter cited as a letter, e.g. The term dwell time is used to describe… 
+Alternatively, single quotation marks can be used, especially if the text has other italicized words 
+7.7.4 Foreign Words and Phrases 
+A foreign word or phrase should only be used if it conveys a sense or nuance that cannot be accurately rendered in English. Such a word or phrase is usually set in italics unless it is considered as anglicized. This is sometimes difficult to determine and no help is generally provided by dictionaries. 
+If a word or phrase is italicized, then diacritical marks should be included (and capitalized nouns, if German), e.g. Plus ça change, plus c’est la même chose. Most diacritical marks are available from simple keystrokes—see para. 7.9. 
+Diacriticals are often omitted when words or phrases are set in roman. However, they should be retained when omission would alter the pronunciation, e.g. résumé compared with resume. 
+7.8 LATIN ABBREVIATIONS 
+ 
+Abbreviation 
+ Latin Word(s) 
+ English Translation 
+ 
+c. 
+ circa 
+ about a certain date 
+ 
+cf. 
+ confer 
+ compare 
+ 
+e.g. 
+ exempli gratia 
+ for example 
+ 
+et al. 
+ et alii 
+ and others 
+ 
+etc. 
+ et cetera 
+ and so forth 
+ 
+et seq. 
+ et sequentes 
+ and following 
+ 
+ibid. 
+ ibidem 
+ in the same work 
+ 
+id. 
+ idem 
+ the same 
+ 
+i.e. 
+ id est 
+ that is 
+ 
+inf. 
+ infra 
+ below 
+ 
+loc. cit. 
+ loco citato 
+ in the place cited 
+ 
+MS (plural: MSS) 
+ manuscriptum(a) 
+ manuscript(s) 
+ 
+NB 
+ nota bene 
+ take careful note 
+ 
+non seq. 
+ non sequitur 
+ it does not follow 
+ 
+op. cit. 
+ opere citato 
+ in the work cited 
+ 
+PPS 
+ post postscriptum 
+ second postscript 
+ 
+PS (plural: PSS) 
+ postscriptum(a) 
+ postscript(s) 
+ 
+q.v. (plural: qq.v.) 
+ quod vide 
+ which see 
+ 
+sup. 
+ supra 
+ above 
+ 
+vs. or v. 
+ versus 
+ against 
+ 
+viz. 
+ videlicet 
+ namely 
+ 
+
+ 
+7.9 COMMON DIACRITICALS 
+Diacriticals can be added to letters by pressing the following keys then the letter: 
+ 
+Diacritical 
+ Keys 
+ Example 
+ 
+acute accent 
+ Ctrl+‘ 
+ Ctrl+‘ then e = é 
+ 
+grave accent 
+ Ctrl+` 
+ Ctrl+` then e = è 
+ 
+circumflex 
+ Ctrl+^ 
+ Ctrl+^ then o = ô 
+ 
+cedilla 
+ Ctrl+, 
+ Ctrl+, then c = ç 
+ 
+tilde 
+ Ctrl+~ 
+ Ctrl+~ then n = ñ 
+ 
+diphthong 
+ Ctrl+& 
+ Ctrl+& then o = œ 
+ 
+circle above 
+ Ctrl+@ 
+ Ctrl+@ then a = å 
+ 
+inverse circumflex 
+ Alt+Ctrl+^ 
+ Alt+Ctrl+^ then s = š 
+ 
+backslash 
+ Ctrl+/ 
+ Ctrl+/ then o = ø 
+ 
+
+7.10 ROMAN NUMERALS 
+Roman numerals should only be used for appendices. The basic roman system is based on: 
+I = 1 V = 5 X = 10 L = 50 
+C = 100 D = 500 M = 1000 
+Thus the numbers from one to twelve are: 
+ 
+1 
+ I 
+ 2 
+ II 
+ 3 
+ III 
+ 4 
+ IV 
+ 
+5 
+ V 
+ 6 
+ VI 
+ 7 
+ VII 
+ 8 
+ VIII 
+ 
+9 
+ IX 
+ 10 
+ X 
+ 11 
+ XI 
+ 12 
+ XII 
+ 
+
+Upper case or lower case numerals can be used, providing the use is consistent within the document. 
+ 
+7.11 THE GREEK ALPHABET 
+ 
+Character 
+ Uppercase 
+ Lowercase 
+ 
+Symbol 
+ Character in Symbol Font 
+ Symbol 
+ Character in Symbol Font 
+ 
+alpha 
+ . 
+ A 
+ a 
+ a 
+ 
+beta 
+ . 
+ B 
+ ß 
+ b 
+ 
+gamma 
+ G 
+ G 
+ . 
+ g 
+ 
+delta 
+ . 
+ D 
+ d 
+ d 
+ 
+epsilon 
+ . 
+ E 
+ e 
+ e 
+ 
+zeta 
+ . 
+ Z 
+ . 
+ z 
+ 
+eta 
+ . 
+ H 
+ . 
+ h 
+ 
+theta 
+ T 
+ Q 
+ . 
+ q 
+ 
+iota 
+ . 
+ I 
+ . 
+ i 
+ 
+kappa 
+ . 
+ K 
+ . 
+ k 
+ 
+lambda 
+ . 
+ L 
+ . 
+ l 
+ 
+mu 
+ . 
+ M 
+ µ 
+ m 
+ 
+nu 
+ . 
+ N 
+ . 
+ n 
+ 
+xi 
+ . 
+ X 
+ . 
+ x 
+ 
+omicron 
+ . 
+ O 
+ . 
+ o 
+ 
+pi 
+ . 
+ P 
+ p 
+ p 
+ 
+rho 
+ . 
+ R 
+ . 
+ r 
+ 
+sigma 
+ S 
+ S 
+ s 
+ s 
+ 
+tau 
+ . 
+ T 
+ t 
+ t 
+ 
+upsilon 
+ . 
+ U 
+ . 
+ u 
+ 
+phi 
+ F 
+ F 
+ . 
+ f 
+ 
+chi 
+ . 
+ C 
+ . 
+ c 
+ 
+psi 
+ . 
+ Y 
+ . 
+ y 
+ 
+omega 
+ . 
+ W 
+ . 
+ w 
+ 
+
+To obtain a Greek character, type the equivalent roman character shown in the table above, select it and then select the Symbol font in the font selection pull- down menu. 
+ 
+7.12 SHORTCUT KEYS 
+The following shortcut keys produce symbols and other characters. 
+ 
+Symbol 
+ Shortcut 
+ Application 
+ 
+. 
+ W in Symbol font 
+ Greek capital omega—use for Ohms. Needs Symbol font 
+ 
+µ 
+ m in Symbol font 
+ Greek mu — use for micro, i.e. 10-9. Needs Symbol font 
+ 
+° 
+ Ctrl+@, Space 
+ Degrees. Note that there is no space between the number, the degrees symbol and the scale, e.g. 50ºC 
+ 
+± 
+ Alt+0177 
+ Tolerance, or plus-minus sign 
+ 
+. 
+ Alt+0252 in Wingdings font 
+ Check. Needs Wingdings font 
+ 
+8 
+ Alt+0251 in Wingdings font 
+ Cross. Needs Wingdings font 
+ 
+® 
+ Alt+Ctrl+r 
+ Registered Trade Mark 
+ 
+© 
+ Alt+Ctrl+c 
+ Copyright 
+ 
+ 
+ Ctrl+Shift+space 
+ Non-breaking space. Use between numbers and associated symbols, and between words that you do not want to separate over the end of a line 
+ 
+- 
+ Ctrl+Shift+- 
+ Non-breaking hyphen. Use between characters that you do not want to break over the end of a line, e.g. 
+MIL-STD-188-141A 
+ 
+– 
+ Ctrl+Num- 
+ En-rule. Use between parts of a combined company, e.g. GEC–Marconi 
+ 
+— 
+ Alt+Ctrl+Num- 
+ Em-rule. Use to break up sentences 
+ 
+… 
+ Alt+Ctrl+. 
+ Ellipsis 
+ 
+˜ 
+ Alt+0187 in Symbol font 
+ Approximately equal to. Needs Symbol font 
+ 
+= 
+ Alt+0179 in Symbol font 
+ Greater than or equal to. Needs Symbol font 
+ 
+8 
+ Alt+0165 in Symbol font 
+ Infinity. Needs Symbol font 
+ 
+= 
+ Alt+0163 in Symbol font 
+ Less than or equal to. Needs Symbol font 
+ 
+. 
+ Alt+0181 in Symbol font 
+ Proportional to. Needs Symbol font 
+ 
+
+ 
+ 
+
+“And make sure that you use the OKRV Style Guide…” 
+ 
+
+
+

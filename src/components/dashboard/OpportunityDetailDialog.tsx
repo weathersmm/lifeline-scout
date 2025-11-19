@@ -34,6 +34,8 @@ import { ProposalGenerator } from './ProposalGenerator';
 import { CompetitiveAssessmentDashboard } from './CompetitiveAssessmentDashboard';
 import { PTWAnalysis } from './PTWAnalysis';
 import { GoNoGoMatrix } from './GoNoGoMatrix';
+import { WinProbabilityPredictor } from './WinProbabilityPredictor';
+import { CapturePlanGenerator } from './CapturePlanGenerator';
 import { useAuth } from '@/hooks/useAuth';
 import { useState } from 'react';
 
@@ -86,31 +88,13 @@ export const OpportunityDetailDialog = ({
         </DialogHeader>
 
         <Tabs defaultValue="details" className="mt-4">
-          <TabsList className="grid w-full grid-cols-9">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="details">Details</TabsTrigger>
-            <TabsTrigger value="documents">
-              <Upload className="w-4 h-4 mr-2" />
-              Documents
-            </TabsTrigger>
-            <TabsTrigger value="lifecycle">
-              <GitBranch className="w-4 h-4 mr-2" />
-              Lifecycle
-            </TabsTrigger>
-            <TabsTrigger value="tasks">
-              <FileText className="w-4 h-4 mr-2" />
-              Tasks
-            </TabsTrigger>
-            <TabsTrigger value="content">
-              <Target className="w-4 h-4 mr-2" />
-              Content
-            </TabsTrigger>
             <TabsTrigger value="competitive">Competitive</TabsTrigger>
             <TabsTrigger value="ptw">PTW</TabsTrigger>
             <TabsTrigger value="gonogo">Go/No-Go</TabsTrigger>
-            <TabsTrigger value="history">
-              <History className="w-4 h-4 mr-2" />
-              History
-            </TabsTrigger>
+            <TabsTrigger value="ml">ML Predict</TabsTrigger>
+            <TabsTrigger value="capture">Capture Plan</TabsTrigger>
           </TabsList>
 
           <TabsContent value="details" className="space-y-6 mt-4">
@@ -315,6 +299,14 @@ export const OpportunityDetailDialog = ({
 
           <TabsContent value="gonogo" className="mt-4">
             <GoNoGoMatrix opportunityId={opportunity.id} />
+          </TabsContent>
+
+          <TabsContent value="ml" className="mt-4">
+            <WinProbabilityPredictor opportunityId={opportunity.id} />
+          </TabsContent>
+
+          <TabsContent value="capture" className="mt-4">
+            <CapturePlanGenerator opportunityId={opportunity.id} opportunity={opportunity} />
           </TabsContent>
 
           <TabsContent value="history" className="mt-4">

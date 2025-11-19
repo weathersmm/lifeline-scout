@@ -68,10 +68,89 @@ export type Database = {
             foreignKeyName: "competitive_assessments_opportunity_id_fkey"
             columns: ["opportunity_id"]
             isOneToOne: false
+            referencedRelation: "ml_training_data"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "competitive_assessments_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
             referencedRelation: "opportunities"
             referencedColumns: ["id"]
           },
         ]
+      }
+      competitor_intelligence: {
+        Row: {
+          avg_price_position: string | null
+          company_description: string | null
+          competitor_name: string
+          created_at: string
+          differentiators: string[] | null
+          headquarters: string | null
+          id: string
+          key_strengths: string[] | null
+          key_weaknesses: string[] | null
+          metadata: Json | null
+          pricing_strategy_notes: string | null
+          primary_markets: string[] | null
+          service_specialties: string[] | null
+          size_category: string | null
+          total_bids: number | null
+          total_losses: number | null
+          total_wins: number | null
+          typical_discount_percent: number | null
+          updated_at: string
+          website: string | null
+          win_rate_percent: number | null
+        }
+        Insert: {
+          avg_price_position?: string | null
+          company_description?: string | null
+          competitor_name: string
+          created_at?: string
+          differentiators?: string[] | null
+          headquarters?: string | null
+          id?: string
+          key_strengths?: string[] | null
+          key_weaknesses?: string[] | null
+          metadata?: Json | null
+          pricing_strategy_notes?: string | null
+          primary_markets?: string[] | null
+          service_specialties?: string[] | null
+          size_category?: string | null
+          total_bids?: number | null
+          total_losses?: number | null
+          total_wins?: number | null
+          typical_discount_percent?: number | null
+          updated_at?: string
+          website?: string | null
+          win_rate_percent?: number | null
+        }
+        Update: {
+          avg_price_position?: string | null
+          company_description?: string | null
+          competitor_name?: string
+          created_at?: string
+          differentiators?: string[] | null
+          headquarters?: string | null
+          id?: string
+          key_strengths?: string[] | null
+          key_weaknesses?: string[] | null
+          metadata?: Json | null
+          pricing_strategy_notes?: string | null
+          primary_markets?: string[] | null
+          service_specialties?: string[] | null
+          size_category?: string | null
+          total_bids?: number | null
+          total_losses?: number | null
+          total_wins?: number | null
+          typical_discount_percent?: number | null
+          updated_at?: string
+          website?: string | null
+          win_rate_percent?: number | null
+        }
+        Relationships: []
       }
       go_no_go_evaluations: {
         Row: {
@@ -153,6 +232,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "go_no_go_evaluations_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "ml_training_data"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "go_no_go_evaluations_opportunity_id_fkey"
             columns: ["opportunity_id"]
@@ -357,6 +443,13 @@ export type Database = {
             foreignKeyName: "opportunity_changes_opportunity_id_fkey"
             columns: ["opportunity_id"]
             isOneToOne: false
+            referencedRelation: "ml_training_data"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "opportunity_changes_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
             referencedRelation: "opportunities"
             referencedColumns: ["id"]
           },
@@ -406,6 +499,13 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "opportunity_tasks_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "ml_training_data"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "opportunity_tasks_opportunity_id_fkey"
             columns: ["opportunity_id"]
@@ -594,6 +694,13 @@ export type Database = {
             foreignKeyName: "proposal_instances_opportunity_id_fkey"
             columns: ["opportunity_id"]
             isOneToOne: false
+            referencedRelation: "ml_training_data"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_instances_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
             referencedRelation: "opportunities"
             referencedColumns: ["id"]
           },
@@ -772,6 +879,13 @@ export type Database = {
           win_probability_percent?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "ptw_analyses_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "ml_training_data"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "ptw_analyses_opportunity_id_fkey"
             columns: ["opportunity_id"]
@@ -973,9 +1087,122 @@ export type Database = {
         }
         Relationships: []
       }
+      win_loss_history: {
+        Row: {
+          award_date: string | null
+          competitor_intelligence: Json | null
+          contract_value: number | null
+          created_at: string
+          final_gonogo_score: number | null
+          final_ptw_recommended_price: number | null
+          final_win_probability: number | null
+          id: string
+          key_loss_factors: string[] | null
+          key_win_factors: string[] | null
+          lessons_learned: string | null
+          metadata: Json | null
+          opportunity_id: string | null
+          our_price: number | null
+          outcome: string
+          price_differential_percent: number | null
+          winning_competitor: string | null
+          winning_price: number | null
+        }
+        Insert: {
+          award_date?: string | null
+          competitor_intelligence?: Json | null
+          contract_value?: number | null
+          created_at?: string
+          final_gonogo_score?: number | null
+          final_ptw_recommended_price?: number | null
+          final_win_probability?: number | null
+          id?: string
+          key_loss_factors?: string[] | null
+          key_win_factors?: string[] | null
+          lessons_learned?: string | null
+          metadata?: Json | null
+          opportunity_id?: string | null
+          our_price?: number | null
+          outcome: string
+          price_differential_percent?: number | null
+          winning_competitor?: string | null
+          winning_price?: number | null
+        }
+        Update: {
+          award_date?: string | null
+          competitor_intelligence?: Json | null
+          contract_value?: number | null
+          created_at?: string
+          final_gonogo_score?: number | null
+          final_ptw_recommended_price?: number | null
+          final_win_probability?: number | null
+          id?: string
+          key_loss_factors?: string[] | null
+          key_win_factors?: string[] | null
+          lessons_learned?: string | null
+          metadata?: Json | null
+          opportunity_id?: string | null
+          our_price?: number | null
+          outcome?: string
+          price_differential_percent?: number | null
+          winning_competitor?: string | null
+          winning_price?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "win_loss_history_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "ml_training_data"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "win_loss_history_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
-      [_ in never]: never
+      ml_training_data: {
+        Row: {
+          actual_our_price: number | null
+          actual_value: number | null
+          competitor_analysis_score: number | null
+          competitors: Json | null
+          contract_approach_score: number | null
+          contract_type: Database["public"]["Enums"]["contract_type"] | null
+          estimated_value_max: number | null
+          estimated_value_min: number | null
+          geography_state: string | null
+          gonogo_score: number | null
+          id: string | null
+          key_loss_factors: string[] | null
+          key_win_factors: string[] | null
+          market_average_price: number | null
+          our_estimated_price: number | null
+          outcome: string | null
+          past_performance_score: number | null
+          predicted_win_prob: number | null
+          priority: Database["public"]["Enums"]["priority_level"] | null
+          reality_check_score: number | null
+          recommendation: string | null
+          roi_potential_score: number | null
+          service_tags: Database["public"]["Enums"]["service_tag"][] | null
+          strategic_fit_score: number | null
+          strengths: string[] | null
+          swot_opportunities: string[] | null
+          target_margin_percent: number | null
+          threats: string[] | null
+          timeline_feasibility_score: number | null
+          weaknesses: string[] | null
+          winning_price: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       cleanup_old_rate_limits: { Args: never; Returns: undefined }
