@@ -1,0 +1,539 @@
+BASELINES
+
+.
+The Intent of a Baseline is to Provide Information that Details our Solution(s) So That During the Proposal Development We are sellingnot Solving!
+
+.
+The Collection of Baseline Topics (Modules), Are a Collection Of Short Stories We Think We Will Have to Tell in Our Proposal
+
+.
+Our Baselines Become the Foundation for the Proposal Response
+
+.
+Our Proposal Response Must Reflect the Integration of Our:•
+Technical approach
+
+•
+Functional integration
+
+•
+Programmatic Architecture
+
+•
+Organizational structure and responsibility
+
+
+
+
+
+
+
+
+BASELINES
+
+.
+Our Team Must Understand and Own the Baselines 
+
+.
+Our Baselines Must Reflect Team Thinking
+
+.
+Our Baselines Must be Approved by Executive Management to Assure Stability
+
+.
+Baselines Provide a Common, Approved, Approach/Solution to its Respective Topic Area
+
+.
+Use of Baselines Provide a Consistent, Accurate, Compelling Base of Data to Answer an RFP Instruction/Requirement 
+
+
+
+
+Proposal ‘ABCs’
+
+.
+Proposals are Scored not Read.
+Follow the 7 Cs•
+Compliant, Compelling, Credible, Correct, Consistent, Concise, & Clear
+
+
+
+
+
+
+
+.
+Customers Buy Benefits, not Features.
+Use program knowledge to drive benefit
+
+.
+Show benefit of innovation to Users
+
+.
+Demonstrate improvement in service and delivery on existing contract(s) – PP & Proof Points
+
+.
+Become the ‘trusted advisor’, show/discuss benefit to the customer, not features – even at a cost to us
+
+
+
+
+.
+Proposals are Sales Documents, not Contracts.
+Think outside the box, show thought leadership and innovation
+
+.
+Show how we support our Customer’s and their End User’s Mission
+
+
+
+
+
+
+
+Title Page
+
+
+
+Government Issues
+
+
+
+Issues and Concerns
+
+.
+Customer’s issues and concerns
+
+.
+Our (Contractor’s) Issues and concerns
+
+.
+Must address both kinds effectively
+
+.
+These are the most important “secret” to crafting a winning story!
+
+
+
+‘Smart’ Competitive Proposals Recognize the Key Issues And Concerns Around Requirements
+
+When analyzing the requirements, dig deep to understand the drivers for the requirements – these become the real issues and concerns
+
+
+The RFP Doesn’t Always Tell You What’s Bothering The Customer
+
+What the RFP Said
+“The Contractor Shall propose and innovative approach for…”
+What the Customer Might Really Have Been Thinking
+
+When analyzing the requirements, dig deep to understand the drivers for the requirements – these become the real issues and concerns
+
+
+Customer’s Issues And Concerns
+
+.
+Is this a Key Requirement or “Nice-to-have”?
+
+.
+Critical problem or deficiency?
+
+.
+New opportunity or challenge?
+
+.
+Approval? Funding? Schedule?
+
+.
+Implementation issues?
+
+.
+Operational constraints?
+
+.
+Internal politics? Outside influences?
+
+.
+Organizational risk? Personal risk?
+
+.
+Are there agendas, biases, hot buttons?
+
+
+
+What keeps the customer awake at night?
+
+OK… So How Do I get to the real drivers … the real issues and concerns?
+
+What drives this requirement from the Customer’s perspective?
+
+Any unstated needs, worries, “history” to take into account?
+
+
+Typical Unspoken Customer Issues and Concerns
+
+What might your customer be concerned about, but can not acknowledge in the RFP?
+
+Try reading ‘between the lines’ to develop the real issues and concerns
+
+
+Do A Reality Check On “Customer Issues And Concerns”
+
+What should worry you
+
+ Because your Customer’s reaction might be
+
+ 
+We’re just parroting the RFP
+
+ “Do they understand our real problem?”
+
+ 
+It’s not really a key issue to the Customer
+
+ “Do they know what’s most important to us?”
+
+ 
+Doesn’t show insight into our Customer’s true concerns
+
+ “Do they know the right solution for us?”
+
+ 
+
+
+Solution & Approach
+
+
+
+
+Our Issues and Concerns
+
+Why Should We Win?  How Could We Lose?
+
+ 
+What should keep us awake at night?
+
+ What should drive our response?
+
+ 
+Are there shortfalls in our approach?
+
+ Do we have any important issues (positive or negative) around our ability to meet this requirement?
+
+ 
+Are there skeletons in our closet?
+
+ Do we have a special strength, weakness vs. this requirement?
+
+ 
+Are there personality issues?
+
+ What must we do to win? Talk up, exploit strength? Ghost competitor…?
+
+ 
+What must we do to avoid losing? Minimize a weakness? Remedy a deficiency? Overcome ‘bad press’…?
+
+ 
+
+
+
+Typical Unspoken Issues and Concerns We May Have
+
+.
+Our management thinks we have accurate information about the customer and what they’re up to, … but we don’t
+
+.
+We ‘understand’ the issues and can probably do the work, but don’t have enough of a track record
+
+.
+We don’t currently have the right people , or can’t spring them from ongoing jobs
+
+.
+We don’t know if the customer is looking to switch contractors
+
+.
+????
+
+
+
+What might we (our proposal team) be concerned about but are reluctant to tell our management?
+
+Sample Ideas….
+
+
+Do A Reality Check On “Our Issues And Concerns”
+
+What should worry you
+
+ Because ……
+
+ 
+Playing it safe – “Got it covered”
+
+ The competition might tell a more aggressive, persuasive story
+
+ 
+Dancing around a vulnerability – not confronting and defusing it
+
+ We’ll be giving away points we should be able to keep
+
+ 
+Wishful thinking, not real discriminators
+
+ Customer will figure that out too
+
+ 
+
+
+
+Proof We Can Do This
+
+
+
+
+Why Our Solution/Approach Is Good
+
+
+
+
+Example Elements of a Functional/ Technical Solution Baseline
+
+.
+Articulation of the mission and its design ramifications
+
+.
+How mission is executed (concept of operations)
+
+.
+Resulting system functions
+
+.
+Major system elements .
+key partitioning trades
+
+
+
+
+.
+Allocation of functions to elements and key allocation trades
+
+.
+Resulting design requirements for each element
+
+.
+Alternative designs examined
+
+.
+System schematic
+
+.
+Features and benefits of selected design
+
+.
+Evidence that design meets requirements
+
+.
+Evidence that “base” system transitions into required database architecture
+
+
+
+
+
+Example Programmatic Baselines
+
+.
+Project goals & objectives established
+
+.
+WBS and work definitions 
+
+.
+Project plan (top level)
+
+.
+Project schedule (top level)
+
+.
+Project organization chart by WBS with tasks assigned
+
+.
+Key project staff identified
+
+.
+Cost baseline established
+
+.
+Project management methodology
+
+.
+Project security approach
+
+
+
+.
+Associate contractor approach
+
+.
+Warranty approach
+
+.
+Quality assurance approach 
+
+.
+Knowledge transfer approach
+
+.
+Risk assessment and mitigation approach
+
+.
+Change control approach
+
+.
+Issue and Resolution approach
+
+.
+Disaster recovery approach
+
+.
+Life cycle system approach
+
+.
+Warranty approach
+
+.
+Change order process 
+
+
+
+
+Example Programmatic Baselines
+
+.
+Facilities required/ available
+
+.
+Equipment required/avail
+
+.
+Personnel required/avail
+
+.
+Subcontractors/ Teammates selected and roles established
+
+.
+Minority business participation established
+
+.
+Team experience/ references
+
+
+
+.
+Subcontractor/Teammate management approach
+
+.
+Communication approach
+
+.
+“Partnership” (with customer) approach
+
+.
+Our Program “Vision” 
+
+.
+Program Timeline
+
+.
+Delivery Organizational Structure
+
+.
+Staffing Approach
+
+.
+Payment schedule
+
+
+
+
+
+Baselines Are at the Heart of the Proposal
+
+.
+Develop Facts and Assumptions “ the Foundation” Used to Prepare Proposal–Avoid the overpowering urge to start writing
+
+
+
+
+.Driven by Win Strategy 
+
+.Prepared by Core Team
+
+.Identify Disconnects and Problems Early
+
+.Sr. Management Approval Needed Before Authors Start to Write the Proposal
+
+.Briefed to All Authors at Proposal Kick-off–Provide basis for authors to develop proposal
+
+
+
+
+
+
+Why Do We Develop Baselines?
+
+
+What To Expect From Baselines
+
+.
+We Started With a List of Topics Identified in the RFP.
+Developed into baseline Modules
+
+
+
+
+.
+We Expanded The Baseline Modules After Requirements Analysis.
+We added some new topics to the baselines
+
+.
+We refined existing baselines
+
+
+
+
+.
+Baseline Briefing Is Just a Collection of Information / Data.
+Each Baseline has a list of topics addressed
+
+.
+The List of topics are in random order
+
+.
+Not intended to be a smooth story
+
+
+
+
+.
+When A Final RFP is Released.
+Baseline topics will be used as information sources to jump start the proposal writing process
+
+
+
+
+.
+Presenting Answers to Questions presented in the RFP is Good Proposal Process.
+Proposals are not read like a novel
+
+.
+Proposals are evaluated
+
+.
+At best, a volume is a collection of short (very short) stories 
+
+
+
+
+
+
+
+
