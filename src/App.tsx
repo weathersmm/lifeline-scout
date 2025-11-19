@@ -12,6 +12,7 @@ import Landing from "./pages/Landing";
 import Demo from "./pages/Demo";
 import Analytics from "./pages/Analytics";
 import AdminDashboard from "./pages/AdminDashboard";
+import CompetitorIntelligencePage from "./pages/CompetitorIntelligencePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -64,6 +65,14 @@ const App = () => {
             }
           />
           <Route
+            path="/competitor-intelligence"
+            element={
+              <ProtectedRoute>
+                <CompetitorIntelligencePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/admin"
             element={
               <ProtectedRoute>
@@ -94,6 +103,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Analytics />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/competitor-intelligence"
+            element={
+              <ProtectedRoute>
+                <CompetitorIntelligencePage />
               </ProtectedRoute>
             }
           />

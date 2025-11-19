@@ -1,26 +1,71 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// LifeLine EMS Baseline Reference Materials
+const LIFELINE_CONTEXT = `
+LIFELINE EMS COMPANY BACKGROUND:
+LifeLine is a leading provider of emergency medical services specializing in 911 response, non-emergency medical transportation, BLS/ALS/CCT services, air ambulance operations, billing services, and EMS technology solutions.
+
+KEY DIFFERENTIATORS:
+- Advanced fleet management and tracking systems
+- Proven track record in California EMS market
+- Comprehensive quality improvement programs
+- State-of-the-art training and simulation capabilities
+- 24/7 dispatch and call center operations
+- Integrated billing and claims processing
+- CAAS accreditation and regulatory compliance
+- Experienced management team with public sector expertise
+
+CORE PROPOSAL WRITING PRINCIPLES (from Style Guide):
+1. Write like you talk - use plain language and active voice
+2. Use the customer's language - mirror RFP terminology exactly
+3. Be specific - avoid vague claims like "industry-proven" or "best and brightest"
+4. Talk benefits not features - explain value to the customer
+5. Use effective presentation style - make answers clear and easy to find
+
+BASELINE PHILOSOPHY:
+- Baselines provide pre-solved solutions to tell stories, not solve problems during proposals
+- Integrate technical approach, functional integration, programmatic architecture, and organizational structure
+- Team must understand and own baselines - reflect team thinking
+- Baselines become the foundation for proposal responses
+
+FEATURES-BENEFITS-PROOFS FRAMEWORK:
+Always structure content as: Theme/Requirement → Features → Proofs/Evidence → Customer Benefits
+- Features: What we do or provide
+- Proofs: Evidence, metrics, past performance demonstrating capability
+- Benefits: Value delivered to customer (cost savings, risk reduction, improved outcomes)
+
+AVOID:
+- Flowery language: "phenomenal," "awesome," "gigantic"
+- Redundant phrases: "tightly aligned," "proven and repeatable," "best and brightest"
+- Overly dramatic style: "passionate," "embrace," "intimate knowledge of"
+- Generic claims without specific evidence
+
+EMPHASIZE:
+- Specific metrics and quantifiable results
+- Concrete examples from similar contracts
+- Clear connection between our solution and customer needs
+- Risk mitigation strategies with evidence
+- Cost-effective approach with justification
+`;
+
 serve(async (req) => {
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const { opportunity, contentType, basePrompt, customPrompt } = await req.json();
-    
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+
     if (!LOVABLE_API_KEY) {
-      throw new Error('LOVABLE_API_KEY not configured');
+      throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    console.log('Generating proposal content for:', contentType);
-
-    // Build context about the opportunity
     const opportunityContext = `
 Opportunity Title: ${opportunity.title}
 Agency/Organization: ${opportunity.agency}
@@ -31,32 +76,94 @@ Summary: ${opportunity.summary}
 ${opportunity.lifecycle_notes ? `Additional Notes:\n${opportunity.lifecycle_notes}` : ''}
     `.trim();
 
-    // Build the system prompt
-    const systemPrompt = `You are an expert proposal writer for LifeLine EMS, a leading emergency medical services provider. You specialize in creating compelling, professional proposal content that demonstrates capability, highlights relevant experience, and addresses client requirements.
+    let systemPrompt = "";
+    
+    if (contentType === "past_performance") {
+      systemPrompt = `${LIFELINE_CONTEXT}
 
-LifeLine EMS Background:
-- Leading EMS provider with operations across California and nationally
-- Core services: 911 emergency response, non-emergency medical transport (NEMT), interfacility transport (IFT), critical care transport (CCT), air ambulance operations
-- Advanced capabilities: BLS, ALS, CCT-level care, specialized event medical services, billing and claims processing, call center operations, quality improvement programs
-- Experienced with municipal contracts, county-wide systems, hospital partnerships
-- Strong track record in urban and suburban environments
-- Excellence in compliance, patient care, operational efficiency, and customer service
-- Technology-driven with modern dispatch, CAD systems, ePCR, fleet management
-- Certified and credentialed across all required levels
+You are generating a PAST PERFORMANCE narrative for a proposal. Follow these requirements:
 
-When generating content:
-1. Use professional, confident, but not boastful tone
-2. Focus on client benefits and outcomes
-3. Address requirements directly
-4. Highlight relevant experience and capabilities
-5. Use specific examples when appropriate (but mark them as [EXAMPLE - CUSTOMIZE])
-6. Include metrics and measurable outcomes where relevant
-7. Maintain compliance with RFP requirements
-8. Write in clear, concise language avoiding jargon
-9. Structure content with clear sections and bullet points where appropriate
-10. Leave placeholders like [INSERT SPECIFIC EXAMPLE] where customization is needed`;
+STRUCTURE:
+1. Project Overview (2-3 sentences): Client name, contract value, duration, scope
+2. Relevance Statement (1-2 sentences): How this project directly relates to current opportunity
+3. Key Accomplishments (3-5 bullet points): Specific, quantifiable achievements with metrics
+4. Lessons Applied (1-2 sentences): What we learned and how it benefits this customer
 
-    // Build the user prompt
+STYLE RULES:
+- Use active voice and specific details
+- Include concrete metrics (response times, cost savings, satisfaction scores)
+- Avoid vague claims - back everything with evidence
+- Write in customer's language from the RFP
+- Focus on benefits to customer, not just features
+
+EXAMPLE STRUCTURE:
+"LifeLine provided [service type] for [Agency] under a [contract value] contract from [dates]. This [X-year] contract included [specific scope].
+
+This project directly demonstrates our capability to [relevant requirement from RFP] through [specific similarity].
+
+Key Accomplishments:
+• Achieved 95% compliance rate for 8-minute urban response times
+• Reduced operational costs by 12% through fleet optimization
+• Maintained 98.5% customer satisfaction rating over contract term
+• Successfully transitioned 150+ personnel with zero service disruption
+• Implemented CAD integration reducing dispatch times by 22%
+
+These proven capabilities position LifeLine to deliver [specific customer benefit] for [current opportunity agency]."`;
+    } else if (contentType === "technical_approach") {
+      systemPrompt = `${LIFELINE_CONTEXT}
+
+You are generating a TECHNICAL APPROACH section for a proposal. Follow these requirements:
+
+STRUCTURE:
+1. Understanding (1-2 paragraphs): Demonstrate comprehension of requirement and challenge
+2. Approach Overview (1 paragraph): High-level methodology
+3. Implementation Steps (numbered list): Specific, sequenced actions
+4. Quality Controls (bullet points): How we ensure success
+5. Benefits (1 paragraph): Value delivered to customer
+
+STYLE RULES:
+- Be specific about methods, tools, and processes
+- Include timelines and milestones where applicable
+- Explain WHY our approach works, with evidence
+- Connect to past performance examples
+- Address potential risks and mitigation strategies
+
+FRAMEWORK:
+Feature → Proof → Benefit
+- What we'll do
+- Evidence it works (metrics, past performance)
+- Value to customer`;
+    } else if (contentType === "executive_summary") {
+      systemPrompt = `${LIFELINE_CONTEXT}
+
+You are generating an EXECUTIVE SUMMARY for a proposal. This is the most critical section.
+
+STRUCTURE (2-3 pages max):
+1. Opening Hook (1 paragraph): Connect our solution to customer's core need
+2. Understanding (1 paragraph): Demonstrate grasp of challenge and environment
+3. Solution Overview (1-2 paragraphs): High-level approach and key differentiators
+4. Qualifications (1 paragraph): Why we're uniquely qualified (past performance, team)
+5. Value Proposition (1 paragraph): Quantifiable benefits and ROI
+6. Commitment Statement (2-3 sentences): Confidence in delivery
+
+CRITICAL RULES:
+- Lead with benefits, not features
+- Use specific metrics and evidence
+- Mirror customer's language from RFP
+- Make it executive-readable (clear, concise, compelling)`;
+    } else {
+      systemPrompt = `${LIFELINE_CONTEXT}
+
+You are generating proposal content for LifeLine EMS. Follow the company's style guide and baseline philosophy.
+
+GENERAL CONTENT RULES:
+- Use active voice and customer's language
+- Be specific with metrics and evidence
+- Structure as Feature → Proof → Benefit
+- Avoid flowery language and buzzwords
+- Make content clear, concise, and compelling`;
+    }
+
     const userPrompt = `${basePrompt}
 
 Opportunity Details:
@@ -64,84 +171,55 @@ ${opportunityContext}
 
 ${customPrompt ? `Additional Requirements:\n${customPrompt}\n` : ''}
 
-Generate comprehensive, professional proposal content for this ${contentType.replace(/_/g, ' ')} section. Make it specific to this opportunity while remaining adaptable. Include clear structure with headings and subsections. Mark any areas that need customization with [CUSTOMIZE] or [INSERT SPECIFIC].
+Generate comprehensive, professional proposal content for this ${contentType.replace(/_/g, ' ')} section. Generate 400-800 words of high-quality content.`;
 
-Generate 400-800 words of high-quality content.`;
-
-    console.log('Calling Lovable AI...');
-
-    // Call Lovable AI
-    const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
+        model: "google/gemini-2.5-flash",
         messages: [
-          {
-            role: 'system',
-            content: systemPrompt
-          },
-          {
-            role: 'user',
-            content: userPrompt
-          }
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt }
         ],
-        temperature: 0.7,
-        max_tokens: 2000,
       }),
     });
 
-    if (!aiResponse.ok) {
-      const errorText = await aiResponse.text();
-      console.error('AI API error:', aiResponse.status, errorText);
-      
-      if (aiResponse.status === 429) {
-        return new Response(
-          JSON.stringify({ error: 'Rate limit exceeded. Please try again in a moment.' }),
-          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
+    if (!response.ok) {
+      if (response.status === 429) {
+        return new Response(JSON.stringify({ error: "Rate limit exceeded" }), {
+          status: 429,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
       }
-      
-      if (aiResponse.status === 402) {
-        return new Response(
-          JSON.stringify({ error: 'AI service requires payment. Please add credits to your workspace.' }),
-          { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
+      if (response.status === 402) {
+        return new Response(JSON.stringify({ error: "Payment required" }), {
+          status: 402,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
       }
-      
-      throw new Error(`AI API error: ${errorText}`);
+      throw new Error(`AI gateway error: ${response.status}`);
     }
 
-    const aiData = await aiResponse.json();
-    const generatedContent = aiData.choices?.[0]?.message?.content;
-
-    if (!generatedContent) {
-      throw new Error('No content returned from AI');
-    }
-
-    console.log('Successfully generated proposal content');
+    const data = await response.json();
+    const content = data.choices[0].message.content;
 
     return new Response(
-      JSON.stringify({ 
-        success: true,
-        content: generatedContent
-      }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      JSON.stringify({ content }),
+      {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      }
     );
-
-  } catch (error) {
-    console.error('Generate proposal content error:', error);
+  } catch (error: any) {
+    console.error("Error:", error);
     return new Response(
-      JSON.stringify({ 
-        error: error instanceof Error ? error.message : 'Unknown error',
-        success: false 
-      }),
-      { 
-        status: 500, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      JSON.stringify({ error: error.message }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       }
     );
   }

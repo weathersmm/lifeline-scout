@@ -36,6 +36,7 @@ import { PTWAnalysis } from './PTWAnalysis';
 import { GoNoGoMatrix } from './GoNoGoMatrix';
 import { WinProbabilityPredictor } from './WinProbabilityPredictor';
 import { CapturePlanGenerator } from './CapturePlanGenerator';
+import { OpportunityOverviewEnhancer } from './OpportunityOverviewEnhancer';
 import { useAuth } from '@/hooks/useAuth';
 import { useState } from 'react';
 
@@ -98,6 +99,17 @@ export const OpportunityDetailDialog = ({
           </TabsList>
 
           <TabsContent value="details" className="space-y-6 mt-4">
+            {/* AI-Enhanced Overview */}
+            {canEdit && (
+              <OpportunityOverviewEnhancer 
+                opportunityId={opportunity.id}
+                opportunity={opportunity}
+                onUpdate={onUpdate}
+              />
+            )}
+
+            <Separator />
+
             {/* Status Badges */}
             <div className="flex flex-wrap gap-2">
               <Badge className={
