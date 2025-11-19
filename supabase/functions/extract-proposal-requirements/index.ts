@@ -49,7 +49,23 @@ serve(async (req) => {
       throw new Error('LOVABLE_API_KEY not configured');
     }
 
-    const systemPrompt = `You are an expert proposal requirements analyst. Extract ALL requirements, submission instructions, deliverable specifications, and formatting requirements from RFP/solicitation documents.
+    const EMS_CATEGORIES = {
+      "EMS Service Scope": ["ambulance", "BLS", "ALS", "emergency medical", "paramedic", "EMT", "911", "CCT", "critical care"],
+      "Staffing and Supervision Plan": ["staffing", "personnel", "supervisory", "shift", "coverage", "crew", "employee"],
+      "Continuous Quality Improvement": ["quality improvement", "CQI", "performance metrics", "clinical care", "quality assurance"],
+      "Corporate Experience": ["experience", "past performance", "references", "contracts", "municipal", "county"],
+      "Training and Certification Plan": ["training", "certification", "education", "onboarding", "specialized training"],
+      "Disaster Preparedness and Mutual Aid": ["disaster", "emergency response", "mutual aid", "incidents", "major events"],
+      "Data and Interoperability Strategy": ["data", "interoperability", "ePCR", "records", "information systems"],
+      "Vehicle Deployment Strategy": ["vehicle", "fleet", "deployment", "ambulance", "units", "equipment"],
+      "Financial Capacity and Stability": ["financial", "audited", "fiscal", "stability", "insurance", "bonding"],
+      "Performance Reporting and Metrics": ["reporting", "metrics", "APOT", "response time", "compliance", "KPI"]
+    };
+
+    const systemPrompt = `You are an expert proposal requirements analyst specializing in EMS procurement. Extract ALL requirements, submission instructions, deliverable specifications, and formatting requirements from RFP/solicitation documents.
+
+IMPORTANT: Classify each requirement using these EMS-specific categories:
+${Object.keys(EMS_CATEGORIES).join(', ')}
 
 Parse the document and identify:
 
@@ -90,6 +106,8 @@ Return a JSON object with this structure:
       "subsection": "Technical Approach",
       "text": "Describe your approach to providing BLS and ALS services",
       "type": "technical_requirement",
+      "category": "EMS Service Scope",
+      "tags": ["BLS", "ALS"],
       "pageLimit": 10
     }
   ],

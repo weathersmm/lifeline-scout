@@ -32,6 +32,7 @@ import { ProposalContentRepository } from './ProposalContentRepository';
 import { ProposalTemplateLibrary } from './ProposalTemplateLibrary';
 import { ProposalGenerator } from './ProposalGenerator';
 import { ProposalOutlineBuilder } from './ProposalOutlineBuilder';
+import { ModuleSpecificationGenerator } from './ModuleSpecificationGenerator';
 import { CompetitiveAssessmentDashboard } from './CompetitiveAssessmentDashboard';
 import { PTWAnalysis } from './PTWAnalysis';
 import { GoNoGoMatrix } from './GoNoGoMatrix';
@@ -61,6 +62,7 @@ export const OpportunityDetailDialog = ({
   const [templateLibraryOpen, setTemplateLibraryOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
   const [proposalGeneratorOpen, setProposalGeneratorOpen] = useState(false);
+  const [extractedRequirements, setExtractedRequirements] = useState<any[]>([]);
 
   if (!opportunity) return null;
 
@@ -289,7 +291,7 @@ export const OpportunityDetailDialog = ({
                 <div>
                   <h3 className="font-semibold">Proposal Content</h3>
                   <p className="text-sm text-muted-foreground">
-                    Generate proposals from templates or browse reusable content blocks
+                    Extract requirements, generate module specs, and browse reusable content
                   </p>
                 </div>
                 {canEdit && (
@@ -299,6 +301,25 @@ export const OpportunityDetailDialog = ({
                   </Button>
                 )}
               </div>
+
+              <AIFeatureCircuitBreaker featureName="Proposal Outline Builder">
+                <ProposalOutlineBuilder 
+                  opportunityId={opportunity.id}
+                  documents={opportunity.documents || []}
+                  onRequirementsExtracted={setExtractedRequirements}
+                />
+              </AIFeatureCircuitBreaker>
+
+              {extractedRequirements.length > 0 && (
+                <AIFeatureCircuitBreaker featureName="Module Specification Generator">
+                  <ModuleSpecificationGenerator
+                    opportunityId={opportunity.id}
+                    opportunity={opportunity}
+                    requirements={extractedRequirements}
+                  />
+                </AIFeatureCircuitBreaker>
+              )}
+
               <AIFeatureCircuitBreaker featureName="Proposal Content Repository">
                 <ProposalContentRepository
                   currentStage={opportunity.lifecycleStage || 'identified'}

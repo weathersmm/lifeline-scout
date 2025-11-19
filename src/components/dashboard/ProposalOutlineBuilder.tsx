@@ -12,6 +12,7 @@ import * as XLSX from 'xlsx';
 interface ProposalOutlineBuilderProps {
   opportunityId: string;
   documents: any[];
+  onRequirementsExtracted?: (requirements: any[]) => void;
 }
 
 interface Requirement {
@@ -20,6 +21,8 @@ interface Requirement {
   subsection: string;
   text: string;
   type: string;
+  category?: string;
+  tags?: string[];
   pageLimit?: number;
 }
 
@@ -42,7 +45,7 @@ interface ExtractedData {
   error?: string;
 }
 
-export function ProposalOutlineBuilder({ opportunityId, documents }: ProposalOutlineBuilderProps) {
+export function ProposalOutlineBuilder({ opportunityId, documents, onRequirementsExtracted }: ProposalOutlineBuilderProps) {
   const { toast } = useToast();
   const [extracting, setExtracting] = useState(false);
   const [extractedData, setExtractedData] = useState<ExtractedData | null>(null);
@@ -82,6 +85,11 @@ export function ProposalOutlineBuilder({ opportunityId, documents }: ProposalOut
 
       setExtractedData(data.data);
       
+      // Notify parent component of extracted requirements
+      if (onRequirementsExtracted && data.data.requirements) {
+        onRequirementsExtracted(data.data.requirements);
+      }
+      
       toast({
         title: "Requirements extracted",
         description: `Found ${data.data.requirements?.length || 0} requirements`,
@@ -108,6 +116,8 @@ export function ProposalOutlineBuilder({ opportunityId, documents }: ProposalOut
       'Subsection': req.subsection,
       'Requirement Text': req.text,
       'Type': req.type,
+      'Category': req.category || '',
+      'Tags': req.tags?.join(', ') || '',
       'Page Limit': req.pageLimit || '',
       'Proposal Section': '',
       'Comments': ''
@@ -238,6 +248,20 @@ export function ProposalOutlineBuilder({ opportunityId, documents }: ProposalOut
                         <Badge variant="outline">{req.id}</Badge>
                         <Badge>{req.type}</Badge>
                       </div>
+                      {req.category && (
+                        <Badge variant="secondary" className="mr-2">
+                          {req.category}
+                        </Badge>
+                      )}
+                      {req.tags && req.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {req.tags.map((tag, tagIdx) => (
+                            <Badge key={tagIdx} variant="outline" className="text-xs">
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
                       {req.subsection && (
                         <p className="text-sm font-medium text-muted-foreground">
                           {req.subsection}
