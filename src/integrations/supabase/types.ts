@@ -14,6 +14,154 @@ export type Database = {
   }
   public: {
     Tables: {
+      competitive_assessments: {
+        Row: {
+          competitive_advantage: string | null
+          competitors: Json | null
+          created_at: string
+          created_by: string | null
+          id: string
+          metadata: Json | null
+          opportunities: string[] | null
+          opportunity_id: string
+          risk_mitigation: string | null
+          strategic_recommendation: string | null
+          strengths: string[] | null
+          threats: string[] | null
+          updated_at: string
+          weaknesses: string[] | null
+        }
+        Insert: {
+          competitive_advantage?: string | null
+          competitors?: Json | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          metadata?: Json | null
+          opportunities?: string[] | null
+          opportunity_id: string
+          risk_mitigation?: string | null
+          strategic_recommendation?: string | null
+          strengths?: string[] | null
+          threats?: string[] | null
+          updated_at?: string
+          weaknesses?: string[] | null
+        }
+        Update: {
+          competitive_advantage?: string | null
+          competitors?: Json | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          metadata?: Json | null
+          opportunities?: string[] | null
+          opportunity_id?: string
+          risk_mitigation?: string | null
+          strategic_recommendation?: string | null
+          strengths?: string[] | null
+          threats?: string[] | null
+          updated_at?: string
+          weaknesses?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "competitive_assessments_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      go_no_go_evaluations: {
+        Row: {
+          competitor_analysis_notes: string | null
+          competitor_analysis_score: number | null
+          contract_approach_notes: string | null
+          contract_approach_score: number | null
+          created_at: string
+          created_by: string | null
+          decision_rationale: string | null
+          executive_summary: string | null
+          id: string
+          metadata: Json | null
+          opportunity_id: string
+          past_performance_notes: string | null
+          past_performance_score: number | null
+          reality_check_notes: string | null
+          reality_check_score: number | null
+          recommendation: string | null
+          roi_potential_notes: string | null
+          roi_potential_score: number | null
+          strategic_fit_notes: string | null
+          strategic_fit_score: number | null
+          timeline_feasibility_notes: string | null
+          timeline_feasibility_score: number | null
+          total_score: number | null
+          updated_at: string
+        }
+        Insert: {
+          competitor_analysis_notes?: string | null
+          competitor_analysis_score?: number | null
+          contract_approach_notes?: string | null
+          contract_approach_score?: number | null
+          created_at?: string
+          created_by?: string | null
+          decision_rationale?: string | null
+          executive_summary?: string | null
+          id?: string
+          metadata?: Json | null
+          opportunity_id: string
+          past_performance_notes?: string | null
+          past_performance_score?: number | null
+          reality_check_notes?: string | null
+          reality_check_score?: number | null
+          recommendation?: string | null
+          roi_potential_notes?: string | null
+          roi_potential_score?: number | null
+          strategic_fit_notes?: string | null
+          strategic_fit_score?: number | null
+          timeline_feasibility_notes?: string | null
+          timeline_feasibility_score?: number | null
+          total_score?: number | null
+          updated_at?: string
+        }
+        Update: {
+          competitor_analysis_notes?: string | null
+          competitor_analysis_score?: number | null
+          contract_approach_notes?: string | null
+          contract_approach_score?: number | null
+          created_at?: string
+          created_by?: string | null
+          decision_rationale?: string | null
+          executive_summary?: string | null
+          id?: string
+          metadata?: Json | null
+          opportunity_id?: string
+          past_performance_notes?: string | null
+          past_performance_score?: number | null
+          reality_check_notes?: string | null
+          reality_check_score?: number | null
+          recommendation?: string | null
+          roi_potential_notes?: string | null
+          roi_potential_score?: number | null
+          strategic_fit_notes?: string | null
+          strategic_fit_score?: number | null
+          timeline_feasibility_notes?: string | null
+          timeline_feasibility_score?: number | null
+          total_score?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "go_no_go_evaluations_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notification_preferences: {
         Row: {
           created_at: string
@@ -558,6 +706,80 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      ptw_analyses: {
+        Row: {
+          competitor_prices: Json | null
+          confidence_level: string | null
+          created_at: string
+          created_by: string | null
+          direct_costs: number | null
+          id: string
+          indirect_costs: number | null
+          market_average_price: number | null
+          metadata: Json | null
+          opportunity_id: string
+          our_estimated_price: number | null
+          overhead_rate: number | null
+          price_justification: string | null
+          pricing_strategy: string | null
+          recommended_price: number | null
+          risk_assessment: string | null
+          target_margin_percent: number | null
+          updated_at: string
+          win_probability_percent: number | null
+        }
+        Insert: {
+          competitor_prices?: Json | null
+          confidence_level?: string | null
+          created_at?: string
+          created_by?: string | null
+          direct_costs?: number | null
+          id?: string
+          indirect_costs?: number | null
+          market_average_price?: number | null
+          metadata?: Json | null
+          opportunity_id: string
+          our_estimated_price?: number | null
+          overhead_rate?: number | null
+          price_justification?: string | null
+          pricing_strategy?: string | null
+          recommended_price?: number | null
+          risk_assessment?: string | null
+          target_margin_percent?: number | null
+          updated_at?: string
+          win_probability_percent?: number | null
+        }
+        Update: {
+          competitor_prices?: Json | null
+          confidence_level?: string | null
+          created_at?: string
+          created_by?: string | null
+          direct_costs?: number | null
+          id?: string
+          indirect_costs?: number | null
+          market_average_price?: number | null
+          metadata?: Json | null
+          opportunity_id?: string
+          our_estimated_price?: number | null
+          overhead_rate?: number | null
+          price_justification?: string | null
+          pricing_strategy?: string | null
+          recommended_price?: number | null
+          risk_assessment?: string | null
+          target_margin_percent?: number | null
+          updated_at?: string
+          win_probability_percent?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ptw_analyses_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       rate_limits: {
         Row: {

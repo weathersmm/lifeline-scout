@@ -31,6 +31,9 @@ import { OpportunityTasks } from './OpportunityTasks';
 import { ProposalContentRepository } from './ProposalContentRepository';
 import { ProposalTemplateLibrary } from './ProposalTemplateLibrary';
 import { ProposalGenerator } from './ProposalGenerator';
+import { CompetitiveAssessmentDashboard } from './CompetitiveAssessmentDashboard';
+import { PTWAnalysis } from './PTWAnalysis';
+import { GoNoGoMatrix } from './GoNoGoMatrix';
 import { useAuth } from '@/hooks/useAuth';
 import { useState } from 'react';
 
@@ -83,7 +86,7 @@ export const OpportunityDetailDialog = ({
         </DialogHeader>
 
         <Tabs defaultValue="details" className="mt-4">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-9">
             <TabsTrigger value="details">Details</TabsTrigger>
             <TabsTrigger value="documents">
               <Upload className="w-4 h-4 mr-2" />
@@ -101,6 +104,9 @@ export const OpportunityDetailDialog = ({
               <Target className="w-4 h-4 mr-2" />
               Content
             </TabsTrigger>
+            <TabsTrigger value="competitive">Competitive</TabsTrigger>
+            <TabsTrigger value="ptw">PTW</TabsTrigger>
+            <TabsTrigger value="gonogo">Go/No-Go</TabsTrigger>
             <TabsTrigger value="history">
               <History className="w-4 h-4 mr-2" />
               History
@@ -297,6 +303,18 @@ export const OpportunityDetailDialog = ({
                 opportunity={opportunity}
               />
             </div>
+          </TabsContent>
+
+          <TabsContent value="competitive" className="mt-4">
+            <CompetitiveAssessmentDashboard opportunityId={opportunity.id} />
+          </TabsContent>
+
+          <TabsContent value="ptw" className="mt-4">
+            <PTWAnalysis opportunityId={opportunity.id} />
+          </TabsContent>
+
+          <TabsContent value="gonogo" className="mt-4">
+            <GoNoGoMatrix opportunityId={opportunity.id} />
           </TabsContent>
 
           <TabsContent value="history" className="mt-4">
