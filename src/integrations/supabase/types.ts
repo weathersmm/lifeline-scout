@@ -1246,6 +1246,69 @@ export type Database = {
         }
         Relationships: []
       }
+      requirement_gap_analyses: {
+        Row: {
+          analyzed_at: string
+          analyzed_by: string | null
+          created_at: string
+          extraction_id: string | null
+          gap_details: Json
+          gap_summary: string | null
+          id: string
+          opportunity_id: string
+          recommendations: Json | null
+          requirements_missing_content: number
+          requirements_with_content: number
+          total_requirements: number
+          updated_at: string
+        }
+        Insert: {
+          analyzed_at?: string
+          analyzed_by?: string | null
+          created_at?: string
+          extraction_id?: string | null
+          gap_details?: Json
+          gap_summary?: string | null
+          id?: string
+          opportunity_id: string
+          recommendations?: Json | null
+          requirements_missing_content?: number
+          requirements_with_content?: number
+          total_requirements?: number
+          updated_at?: string
+        }
+        Update: {
+          analyzed_at?: string
+          analyzed_by?: string | null
+          created_at?: string
+          extraction_id?: string | null
+          gap_details?: Json
+          gap_summary?: string | null
+          id?: string
+          opportunity_id?: string
+          recommendations?: Json | null
+          requirements_missing_content?: number
+          requirements_with_content?: number
+          total_requirements?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "requirement_gap_analyses_extraction_id_fkey"
+            columns: ["extraction_id"]
+            isOneToOne: false
+            referencedRelation: "extracted_proposal_requirements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "requirement_gap_analyses_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       scraped_sources: {
         Row: {
           created_at: string
