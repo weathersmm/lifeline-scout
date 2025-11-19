@@ -401,6 +401,164 @@ export type Database = {
         }
         Relationships: []
       }
+      proposal_instances: {
+        Row: {
+          content: Json
+          created_at: string
+          created_by: string | null
+          id: string
+          metadata: Json | null
+          opportunity_id: string
+          status: string
+          submitted_at: string | null
+          template_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content?: Json
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          metadata?: Json | null
+          opportunity_id: string
+          status?: string
+          submitted_at?: string | null
+          template_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          metadata?: Json | null
+          opportunity_id?: string
+          status?: string
+          submitted_at?: string | null
+          template_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_instances_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_instances_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "proposal_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      proposal_template_sections: {
+        Row: {
+          created_at: string
+          id: string
+          metadata: Json | null
+          placeholder_text: string | null
+          required_content_type:
+            | Database["public"]["Enums"]["content_block_type"]
+            | null
+          section_description: string | null
+          section_order: number
+          section_title: string
+          suggested_content_blocks: string[] | null
+          template_id: string
+          word_count_target: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          placeholder_text?: string | null
+          required_content_type?:
+            | Database["public"]["Enums"]["content_block_type"]
+            | null
+          section_description?: string | null
+          section_order: number
+          section_title: string
+          suggested_content_blocks?: string[] | null
+          template_id: string
+          word_count_target?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          placeholder_text?: string | null
+          required_content_type?:
+            | Database["public"]["Enums"]["content_block_type"]
+            | null
+          section_description?: string | null
+          section_order?: number
+          section_title?: string
+          suggested_content_blocks?: string[] | null
+          template_id?: string
+          word_count_target?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_template_sections_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "proposal_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      proposal_templates: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          is_default: boolean | null
+          lifecycle_stages:
+            | Database["public"]["Enums"]["opportunity_lifecycle_stage"][]
+            | null
+          metadata: Json | null
+          name: string
+          template_type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_default?: boolean | null
+          lifecycle_stages?:
+            | Database["public"]["Enums"]["opportunity_lifecycle_stage"][]
+            | null
+          metadata?: Json | null
+          name: string
+          template_type: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_default?: boolean | null
+          lifecycle_stages?:
+            | Database["public"]["Enums"]["opportunity_lifecycle_stage"][]
+            | null
+          metadata?: Json | null
+          name?: string
+          template_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       rate_limits: {
         Row: {
           action: string
