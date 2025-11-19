@@ -28,6 +28,7 @@ import { OpportunityChangeHistory } from './OpportunityChangeHistory';
 import { OpportunityDocuments } from './OpportunityDocuments';
 import { OpportunityLifecycle } from './OpportunityLifecycle';
 import { OpportunityTasks } from './OpportunityTasks';
+import { ProposalContentRepository } from './ProposalContentRepository';
 import { useAuth } from '@/hooks/useAuth';
 
 interface OpportunityDetailDialogProps {
@@ -71,7 +72,7 @@ export const OpportunityDetailDialog = ({
         </DialogHeader>
 
         <Tabs defaultValue="details" className="mt-4">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="details">Details</TabsTrigger>
             <TabsTrigger value="documents">
               <Upload className="w-4 h-4 mr-2" />
@@ -84,6 +85,10 @@ export const OpportunityDetailDialog = ({
             <TabsTrigger value="tasks">
               <FileText className="w-4 h-4 mr-2" />
               Tasks
+            </TabsTrigger>
+            <TabsTrigger value="content">
+              <Target className="w-4 h-4 mr-2" />
+              Content
             </TabsTrigger>
             <TabsTrigger value="history">
               <History className="w-4 h-4 mr-2" />
@@ -256,6 +261,13 @@ export const OpportunityDetailDialog = ({
               opportunityId={opportunity.id}
               currentStage={opportunity.lifecycleStage || 'identified'}
               canEdit={canEdit}
+            />
+          </TabsContent>
+
+          <TabsContent value="content" className="mt-4">
+            <ProposalContentRepository
+              currentStage={opportunity.lifecycleStage || 'identified'}
+              opportunityId={opportunity.id}
             />
           </TabsContent>
 

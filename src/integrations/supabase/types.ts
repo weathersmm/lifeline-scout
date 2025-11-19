@@ -291,6 +291,54 @@ export type Database = {
         }
         Relationships: []
       }
+      proposal_content_blocks: {
+        Row: {
+          content: string
+          content_type: Database["public"]["Enums"]["content_block_type"]
+          created_at: string
+          created_by: string | null
+          id: string
+          is_template: boolean | null
+          lifecycle_stages:
+            | Database["public"]["Enums"]["opportunity_lifecycle_stage"][]
+            | null
+          metadata: Json | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          content_type: Database["public"]["Enums"]["content_block_type"]
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_template?: boolean | null
+          lifecycle_stages?:
+            | Database["public"]["Enums"]["opportunity_lifecycle_stage"][]
+            | null
+          metadata?: Json | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          content_type?: Database["public"]["Enums"]["content_block_type"]
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_template?: boolean | null
+          lifecycle_stages?:
+            | Database["public"]["Enums"]["opportunity_lifecycle_stage"][]
+            | null
+          metadata?: Json | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       rate_limits: {
         Row: {
           action: string
@@ -499,6 +547,15 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "member" | "viewer"
+      content_block_type:
+        | "past_performance"
+        | "technical_approach"
+        | "team_bio"
+        | "executive_summary"
+        | "management_approach"
+        | "quality_control"
+        | "staffing_plan"
+        | "other"
       contract_type:
         | "RFP"
         | "RFQ"
@@ -665,6 +722,16 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "member", "viewer"],
+      content_block_type: [
+        "past_performance",
+        "technical_approach",
+        "team_bio",
+        "executive_summary",
+        "management_approach",
+        "quality_control",
+        "staffing_plan",
+        "other",
+      ],
       contract_type: [
         "RFP",
         "RFQ",
