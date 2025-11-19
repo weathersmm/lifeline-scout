@@ -68,13 +68,6 @@ export type Database = {
             foreignKeyName: "competitive_assessments_opportunity_id_fkey"
             columns: ["opportunity_id"]
             isOneToOne: false
-            referencedRelation: "ml_training_data"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "competitive_assessments_opportunity_id_fkey"
-            columns: ["opportunity_id"]
-            isOneToOne: false
             referencedRelation: "opportunities"
             referencedColumns: ["id"]
           },
@@ -232,13 +225,6 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "go_no_go_evaluations_opportunity_id_fkey"
-            columns: ["opportunity_id"]
-            isOneToOne: false
-            referencedRelation: "ml_training_data"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "go_no_go_evaluations_opportunity_id_fkey"
             columns: ["opportunity_id"]
@@ -443,13 +429,6 @@ export type Database = {
             foreignKeyName: "opportunity_changes_opportunity_id_fkey"
             columns: ["opportunity_id"]
             isOneToOne: false
-            referencedRelation: "ml_training_data"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "opportunity_changes_opportunity_id_fkey"
-            columns: ["opportunity_id"]
-            isOneToOne: false
             referencedRelation: "opportunities"
             referencedColumns: ["id"]
           },
@@ -499,13 +478,6 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: [
-          {
-            foreignKeyName: "opportunity_tasks_opportunity_id_fkey"
-            columns: ["opportunity_id"]
-            isOneToOne: false
-            referencedRelation: "ml_training_data"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "opportunity_tasks_opportunity_id_fkey"
             columns: ["opportunity_id"]
@@ -694,13 +666,6 @@ export type Database = {
             foreignKeyName: "proposal_instances_opportunity_id_fkey"
             columns: ["opportunity_id"]
             isOneToOne: false
-            referencedRelation: "ml_training_data"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "proposal_instances_opportunity_id_fkey"
-            columns: ["opportunity_id"]
-            isOneToOne: false
             referencedRelation: "opportunities"
             referencedColumns: ["id"]
           },
@@ -879,13 +844,6 @@ export type Database = {
           win_probability_percent?: number | null
         }
         Relationships: [
-          {
-            foreignKeyName: "ptw_analyses_opportunity_id_fkey"
-            columns: ["opportunity_id"]
-            isOneToOne: false
-            referencedRelation: "ml_training_data"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "ptw_analyses_opportunity_id_fkey"
             columns: ["opportunity_id"]
@@ -1153,13 +1111,6 @@ export type Database = {
             foreignKeyName: "win_loss_history_opportunity_id_fkey"
             columns: ["opportunity_id"]
             isOneToOne: false
-            referencedRelation: "ml_training_data"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "win_loss_history_opportunity_id_fkey"
-            columns: ["opportunity_id"]
-            isOneToOne: false
             referencedRelation: "opportunities"
             referencedColumns: ["id"]
           },
@@ -1206,6 +1157,42 @@ export type Database = {
     }
     Functions: {
       cleanup_old_rate_limits: { Args: never; Returns: undefined }
+      get_ml_training_data: {
+        Args: never
+        Returns: {
+          actual_our_price: number
+          actual_value: number
+          competitor_analysis_score: number
+          competitors: Json
+          contract_approach_score: number
+          contract_type: Database["public"]["Enums"]["contract_type"]
+          estimated_value_max: number
+          estimated_value_min: number
+          geography_state: string
+          gonogo_score: number
+          id: string
+          key_loss_factors: string[]
+          key_win_factors: string[]
+          market_average_price: number
+          our_estimated_price: number
+          outcome: string
+          past_performance_score: number
+          predicted_win_prob: number
+          priority: Database["public"]["Enums"]["priority_level"]
+          reality_check_score: number
+          recommendation: string
+          roi_potential_score: number
+          service_tags: Database["public"]["Enums"]["service_tag"][]
+          strategic_fit_score: number
+          strengths: string[]
+          swot_opportunities: string[]
+          target_margin_percent: number
+          threats: string[]
+          timeline_feasibility_score: number
+          weaknesses: string[]
+          winning_price: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
