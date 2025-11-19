@@ -11,3 +11,18 @@ verify_jwt = true
 
 [functions.send-opportunity-notifications]
 verify_jwt = true
+
+[functions.generate-proposal-content]
+verify_jwt = true
+
+[functions.predict-win-probability]
+verify_jwt = true
+
+[functions.generate-capture-plan]
+verify_jwt = true
+
+[functions.enhance-opportunity-overview]
+verify_jwt = true
+
+[functions.parse-opportunity-document]
+verify_jwt = true

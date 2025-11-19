@@ -1,4 +1,4 @@
-import { LayoutDashboard, BarChart3, Shield, Bell, Upload, Settings, LogOut, User, Eye, Flame } from 'lucide-react';
+import { LayoutDashboard, BarChart3, Shield, Bell, Upload, Settings, LogOut, User, Eye, Flame, Target } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -37,6 +37,7 @@ export function AppSidebar() {
   const mainItems = [
     { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
     { title: 'Analytics', url: '/analytics', icon: BarChart3 },
+    { title: 'Competitor Intel', url: '/competitor-intelligence', icon: Target },
   ];
 
   if (isAdmin) {
