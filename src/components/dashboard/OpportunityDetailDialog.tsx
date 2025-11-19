@@ -40,6 +40,7 @@ import { OpportunityOverviewEnhancer } from './OpportunityOverviewEnhancer';
 import { DocumentQAChat } from './DocumentQAChat';
 import { useAuth } from '@/hooks/useAuth';
 import { useState } from 'react';
+import { AIFeatureErrorBoundary } from '@/components/AIFeatureErrorBoundary';
 
 interface OpportunityDetailDialogProps {
   opportunity: Opportunity | null;
@@ -103,11 +104,13 @@ export const OpportunityDetailDialog = ({
           <TabsContent value="details" className="space-y-6 mt-4">
             {/* AI-Enhanced Overview */}
             {canEdit && (
-              <OpportunityOverviewEnhancer 
-                opportunityId={opportunity.id}
-                opportunity={opportunity}
-                onUpdate={onUpdate}
-              />
+              <AIFeatureErrorBoundary featureName="AI-Enhanced Overview">
+                <OpportunityOverviewEnhancer 
+                  opportunityId={opportunity.id}
+                  opportunity={opportunity}
+                  onUpdate={onUpdate}
+                />
+              </AIFeatureErrorBoundary>
             )}
 
             <Separator />
@@ -295,43 +298,57 @@ export const OpportunityDetailDialog = ({
                   </Button>
                 )}
               </div>
-              <ProposalContentRepository
-                currentStage={opportunity.lifecycleStage || 'identified'}
-                opportunityId={opportunity.id}
-                opportunity={opportunity}
-              />
+              <AIFeatureErrorBoundary featureName="Proposal Content Repository">
+                <ProposalContentRepository
+                  currentStage={opportunity.lifecycleStage || 'identified'}
+                  opportunityId={opportunity.id}
+                  opportunity={opportunity}
+                />
+              </AIFeatureErrorBoundary>
             </div>
           </TabsContent>
 
           <TabsContent value="competitive" className="mt-4">
-            <CompetitiveAssessmentDashboard opportunityId={opportunity.id} />
+            <AIFeatureErrorBoundary featureName="Competitive Assessment">
+              <CompetitiveAssessmentDashboard opportunityId={opportunity.id} />
+            </AIFeatureErrorBoundary>
           </TabsContent>
 
           <TabsContent value="ptw" className="mt-4">
-            <PTWAnalysis opportunityId={opportunity.id} />
+            <AIFeatureErrorBoundary featureName="Price-to-Win Analysis">
+              <PTWAnalysis opportunityId={opportunity.id} />
+            </AIFeatureErrorBoundary>
           </TabsContent>
 
           <TabsContent value="gonogo" className="mt-4">
-            <GoNoGoMatrix opportunityId={opportunity.id} />
+            <AIFeatureErrorBoundary featureName="Go/No-Go Evaluation">
+              <GoNoGoMatrix opportunityId={opportunity.id} />
+            </AIFeatureErrorBoundary>
           </TabsContent>
 
           <TabsContent value="ml" className="mt-4">
-            <WinProbabilityPredictor opportunityId={opportunity.id} />
+            <AIFeatureErrorBoundary featureName="Win Probability Predictor">
+              <WinProbabilityPredictor opportunityId={opportunity.id} />
+            </AIFeatureErrorBoundary>
           </TabsContent>
 
           <TabsContent value="capture" className="mt-4">
-            <CapturePlanGenerator opportunityId={opportunity.id} opportunity={opportunity} />
+            <AIFeatureErrorBoundary featureName="Capture Plan Generator">
+              <CapturePlanGenerator opportunityId={opportunity.id} opportunity={opportunity} />
+            </AIFeatureErrorBoundary>
           </TabsContent>
 
           <TabsContent value="docqa" className="mt-4">
-            <DocumentQAChat
-              opportunityId={opportunity.id}
-              opportunityTitle={opportunity.title}
-              documentName={opportunity.documents && opportunity.documents.length > 0 
-                ? opportunity.documents[0].name 
-                : "RFP Document"
-              }
-            />
+            <AIFeatureErrorBoundary featureName="Document Q&A">
+              <DocumentQAChat
+                opportunityId={opportunity.id}
+                opportunityTitle={opportunity.title}
+                documentName={opportunity.documents && opportunity.documents.length > 0 
+                  ? opportunity.documents[0].name 
+                  : "RFP Document"
+                }
+              />
+            </AIFeatureErrorBoundary>
           </TabsContent>
 
           <TabsContent value="history" className="mt-4">
@@ -350,12 +367,14 @@ export const OpportunityDetailDialog = ({
 
         {/* Proposal Generator */}
         {selectedTemplate && (
-          <ProposalGenerator
-            open={proposalGeneratorOpen}
-            onOpenChange={setProposalGeneratorOpen}
-            opportunity={opportunity}
-            template={selectedTemplate}
-          />
+          <AIFeatureErrorBoundary featureName="Proposal Generator">
+            <ProposalGenerator
+              open={proposalGeneratorOpen}
+              onOpenChange={setProposalGeneratorOpen}
+              opportunity={opportunity}
+              template={selectedTemplate}
+            />
+          </AIFeatureErrorBoundary>
         )}
       </DialogContent>
     </Dialog>
