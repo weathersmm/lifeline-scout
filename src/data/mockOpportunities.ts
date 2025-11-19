@@ -30,7 +30,10 @@ export const mockOpportunities: Opportunity[] = [
     source: 'Alameda County Procurement',
     recommendedAction: 'Add to pipeline and assign capture owner immediately. Pre-bid attendance mandatory.',
     isHot: false,
-    hotFlaggedType: undefined
+    hotFlaggedType: undefined,
+    lifecycleStage: 'identified',
+    documents: [],
+    lifecycleNotes: undefined
   },
   {
     id: 'OPP-002',
@@ -59,7 +62,10 @@ export const mockOpportunities: Opportunity[] = [
     source: 'SF DPH Procurement Portal',
     recommendedAction: 'Review minority-owned partnership options. Add to pipeline for Q2 pursuit.',
     isHot: false,
-    hotFlaggedType: undefined
+    hotFlaggedType: undefined,
+    lifecycleStage: 'identified',
+    documents: [],
+    lifecycleNotes: undefined
   },
   {
     id: 'OPP-003',
@@ -89,7 +95,10 @@ export const mockOpportunities: Opportunity[] = [
     source: 'SAM.gov',
     recommendedAction: 'High strategic value. Verify FAA certifications and initiate military partnership discussions immediately.',
     isHot: false,
-    hotFlaggedType: undefined
+    hotFlaggedType: undefined,
+    lifecycleStage: 'identified',
+    documents: [],
+    lifecycleNotes: undefined
   },
   {
     id: 'OPP-004',
@@ -117,7 +126,10 @@ export const mockOpportunities: Opportunity[] = [
     source: 'Contra Costa Procurement',
     recommendedAction: 'Align with existing CQI capabilities. Schedule meeting with Contra Costa EMS leadership.',
     isHot: false,
-    hotFlaggedType: undefined
+    hotFlaggedType: undefined,
+    lifecycleStage: 'identified',
+    documents: [],
+    lifecycleNotes: undefined
   },
   {
     id: 'OPP-005',
@@ -145,7 +157,10 @@ export const mockOpportunities: Opportunity[] = [
     source: 'Fresno County Purchasing',
     recommendedAction: 'Low priority - out-of-region unless expansion planned. Monitor for partnership opportunities.',
     isHot: false,
-    hotFlaggedType: undefined
+    hotFlaggedType: undefined,
+    lifecycleStage: 'identified',
+    documents: [],
+    lifecycleNotes: undefined
   },
   {
     id: 'OPP-006',
@@ -175,7 +190,10 @@ export const mockOpportunities: Opportunity[] = [
     source: 'Sacramento Community College District',
     recommendedAction: 'Identify VR/simulation technology partners. Good strategic fit for training innovation showcase.',
     isHot: false,
-    hotFlaggedType: undefined
+    hotFlaggedType: undefined,
+    lifecycleStage: 'identified',
+    documents: [],
+    lifecycleNotes: undefined
   },
   {
     id: 'OPP-007',
@@ -198,7 +216,10 @@ export const mockOpportunities: Opportunity[] = [
     source: 'Santa Clara County Procurement',
     recommendedAction: 'Respond to sources sought to position for future RFP. Excellent strategic opportunity for MIH expansion.',
     isHot: false,
-    hotFlaggedType: undefined
+    hotFlaggedType: undefined,
+    lifecycleStage: 'identified',
+    documents: [],
+    lifecycleNotes: undefined
   },
   {
     id: 'OPP-008',
@@ -226,6 +247,9 @@ export const mockOpportunities: Opportunity[] = [
     source: 'Marin County',
     recommendedAction: 'Technology-focused - partner with ePCR vendors if pursuing. Lower priority for direct pursuit.',
     isHot: false,
-    hotFlaggedType: undefined
+    hotFlaggedType: undefined,
+    lifecycleStage: 'identified',
+    documents: [],
+    lifecycleNotes: undefined
   }
 ];

@@ -57,6 +57,9 @@ export default function Analytics() {
         recommendedAction: item.recommended_action || undefined,
         isHot: (item as any).is_hot || false,
         hotFlaggedType: (item as any).hot_flagged_type || undefined,
+        lifecycleStage: (item as any).lifecycle_stage || 'identified',
+        documents: (item as any).documents || [],
+        lifecycleNotes: (item as any).lifecycle_notes || undefined,
       }));
 
       setOpportunities(transformedData);

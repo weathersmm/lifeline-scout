@@ -1,3 +1,28 @@
+export interface OpportunityDocument {
+  id: string;
+  name: string;
+  size: number;
+  uploaded_at: string;
+  file_path: string;
+}
+
+export type LifecycleStage = 
+  | 'identified'
+  | 'bd_intel_deck'
+  | 'capture_plan'
+  | 'pre_drfp'
+  | 'drfp_kickoff'
+  | 'proposal_development'
+  | 'pink_team'
+  | 'red_team'
+  | 'gold_team'
+  | 'final_review'
+  | 'submitted'
+  | 'awaiting_award'
+  | 'won'
+  | 'lost'
+  | 'no_bid';
+
 export interface Opportunity {
   id: string;
   title: string;
@@ -28,6 +53,9 @@ export interface Opportunity {
   recommendedAction?: string;
   isHot: boolean;
   hotFlaggedType?: 'manual' | 'automatic';
+  lifecycleStage?: LifecycleStage;
+  documents?: OpportunityDocument[];
+  lifecycleNotes?: string;
 }
 
 export type HotFlagType = 'manual' | 'automatic';
