@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -51,6 +51,39 @@ export function ProposalOutlineBuilder({ opportunityId, documents, onRequirement
   const [extracting, setExtracting] = useState(false);
   const [extractedData, setExtractedData] = useState<ExtractedData | null>(null);
   const [extractionProgress, setExtractionProgress] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  // Load previously extracted requirements on mount
+  useEffect(() => {
+    const loadExistingRequirements = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('extracted_proposal_requirements')
+          .select('*')
+          .eq('opportunity_id', opportunityId)
+          .order('extracted_at', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        if (error) throw error;
+
+        if (data) {
+          setExtractedData({
+            requirements: (data.requirements || []) as unknown as Requirement[],
+            deliverableSpecs: data.deliverable_specs as DeliverableSpecs | undefined,
+            submissionDetails: data.submission_details || undefined,
+            evaluationCriteria: (data.evaluation_criteria || []) as unknown as any[] | undefined,
+          });
+        }
+      } catch (error) {
+        console.error('Error loading existing requirements:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadExistingRequirements();
+  }, [opportunityId]);
 
   const getFileSizeInMB = async (filePath: string): Promise<number> => {
     try {
@@ -195,31 +228,40 @@ export function ProposalOutlineBuilder({ opportunityId, documents, onRequirement
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="flex gap-2">
-          <Button
-            onClick={handleExtractRequirements}
-            disabled={extracting || !documents?.length}
-          >
-            {extracting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Extracting...
-              </>
-            ) : (
-              "Extract Requirements"
-            )}
-          </Button>
-          
-          {extractedData && (
-            <Button
-              variant="outline"
-              onClick={handleExportToExcel}
-            >
-              <Download className="mr-2 h-4 w-4" />
-              Export to Excel
-            </Button>
-          )}
-        </div>
+        {loading ? (
+          <div className="flex items-center justify-center py-8">
+            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            <span className="ml-2 text-muted-foreground">Loading existing requirements...</span>
+          </div>
+        ) : (
+          <>
+            <div className="flex gap-2">
+              <Button
+                onClick={handleExtractRequirements}
+                disabled={extracting || !documents?.length || loading}
+              >
+                {extracting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Extracting...
+                  </>
+                ) : extractedData ? (
+                  "Re-extract Requirements"
+                ) : (
+                  "Extract Requirements"
+                )}
+              </Button>
+              
+              {extractedData && extractedData.requirements && extractedData.requirements.length > 0 && (
+                <Button
+                  variant="outline"
+                  onClick={handleExportToExcel}
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  Export to Excel
+                </Button>
+              )}
+            </div>
 
         {extracting && (
           <div className="space-y-2">
@@ -341,7 +383,9 @@ export function ProposalOutlineBuilder({ opportunityId, documents, onRequirement
             <AlertDescription>
               Requirements extracted but structured parsing failed. Export to see raw content.
             </AlertDescription>
-          </Alert>
+            </Alert>
+          )}
+        </>
         )}
       </CardContent>
     </Card>

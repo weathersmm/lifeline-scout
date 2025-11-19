@@ -206,6 +206,33 @@ Return a JSON object with this structure:
       hasDeliverableSpecs: !!extractedData.deliverableSpecs
     });
 
+    // Save to database
+    try {
+      const { error: dbError } = await supabaseClient
+        .from('extracted_proposal_requirements')
+        .upsert({
+          opportunity_id: opportunityId,
+          document_name: documentName,
+          document_url: documentUrl,
+          requirements: extractedData.requirements || [],
+          deliverable_specs: extractedData.deliverableSpecs || null,
+          submission_details: extractedData.submissionDetails || null,
+          evaluation_criteria: extractedData.evaluationCriteria || null,
+          extracted_at: new Date().toISOString()
+        }, {
+          onConflict: 'opportunity_id'
+        });
+
+      if (dbError) {
+        console.error('Error saving to database:', dbError);
+        // Don't fail the request if DB save fails, just log it
+      } else {
+        console.log('Successfully saved requirements to database');
+      }
+    } catch (dbSaveError) {
+      console.error('Exception saving to database:', dbSaveError);
+    }
+
     return new Response(
       JSON.stringify({
         success: true,
