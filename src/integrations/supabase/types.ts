@@ -266,6 +266,59 @@ export type Database = {
           },
         ]
       }
+      extracted_proposal_requirements: {
+        Row: {
+          created_at: string
+          deliverable_specs: Json | null
+          document_name: string
+          document_url: string
+          evaluation_criteria: Json | null
+          extracted_at: string
+          extracted_by: string | null
+          id: string
+          opportunity_id: string
+          requirements: Json
+          submission_details: Json | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deliverable_specs?: Json | null
+          document_name: string
+          document_url: string
+          evaluation_criteria?: Json | null
+          extracted_at?: string
+          extracted_by?: string | null
+          id?: string
+          opportunity_id: string
+          requirements?: Json
+          submission_details?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deliverable_specs?: Json | null
+          document_name?: string
+          document_url?: string
+          evaluation_criteria?: Json | null
+          extracted_at?: string
+          extracted_by?: string | null
+          id?: string
+          opportunity_id?: string
+          requirements?: Json
+          submission_details?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "extracted_proposal_requirements_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       go_no_go_evaluations: {
         Row: {
           competitor_analysis_notes: string | null
