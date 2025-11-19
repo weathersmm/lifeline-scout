@@ -26,8 +26,10 @@ import {
 } from '@dnd-kit/sortable';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { FileText, GripVertical, Plus, Trash2, CheckCircle2, AlertCircle } from "lucide-react";
+import { FileText, GripVertical, Plus, Trash2, CheckCircle2, AlertCircle, Download, FileDown } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { exportProposalToPDF, exportProposalToDOCX } from "@/utils/proposalExportUtils";
+import { RequirementGapAnalysis } from "./RequirementGapAnalysis";
 
 interface RequirementSlot {
   id: string;
@@ -405,12 +407,48 @@ export function ProposalAssemblyInterface({ opportunityId, requirements }: Propo
       console.error('Error saving assembly:', error);
       toast({
         title: "Save failed",
-        description: error.message,
+        description: error instanceof Error ? error.message : "Unknown error",
         variant: "destructive",
       });
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleExportPDF = () => {
+    const mappingsWithBlocks = requirementSlots.map(slot => ({
+      ...slot,
+      contentBlocks: getSlotContentBlocks(slot)
+    }));
+    
+    exportProposalToPDF(
+      `Proposal - Opportunity ${opportunityId}`,
+      mappingsWithBlocks,
+      `proposal-${opportunityId}.pdf`
+    );
+    
+    toast({
+      title: "PDF exported",
+      description: "Proposal document downloaded successfully",
+    });
+  };
+
+  const handleExportDOCX = async () => {
+    const mappingsWithBlocks = requirementSlots.map(slot => ({
+      ...slot,
+      contentBlocks: getSlotContentBlocks(slot)
+    }));
+    
+    await exportProposalToDOCX(
+      `Proposal - Opportunity ${opportunityId}`,
+      mappingsWithBlocks,
+      `proposal-${opportunityId}.docx`
+    );
+    
+    toast({
+      title: "DOCX exported",
+      description: "Proposal document downloaded successfully",
+    });
   };
 
   const getSlotContentBlocks = (slot: RequirementSlot): ContentBlock[] => {
@@ -437,46 +475,64 @@ export function ProposalAssemblyInterface({ opportunityId, requirements }: Propo
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle>Proposal Assembly</CardTitle>
-            <CardDescription>
-              Drag content blocks into requirements to build your proposal
-            </CardDescription>
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Proposal Assembly</CardTitle>
+              <CardDescription>
+                Drag content blocks into requirements to build your proposal
+              </CardDescription>
+            </div>
+            <div className="flex gap-2">
+              <Button onClick={handleExportPDF} variant="outline" size="sm">
+                <FileDown className="h-4 w-4 mr-2" />
+                Export PDF
+              </Button>
+              <Button onClick={handleExportDOCX} variant="outline" size="sm">
+                <Download className="h-4 w-4 mr-2" />
+                Export DOCX
+              </Button>
+              <Button onClick={handleSave} disabled={saving}>
+                {saving ? "Saving..." : "Save Progress"}
+              </Button>
+            </div>
           </div>
-          <Button onClick={handleSave} disabled={saving}>
-            {saving ? "Saving..." : "Save Progress"}
-          </Button>
-        </div>
-        
-        <div className="mt-4 space-y-2">
-          <div className="flex justify-between text-sm">
-            <span>Completion: {completedCount}/{requirementSlots.length} requirements</span>
-            <span>Total: {totalWords.toLocaleString()} words</span>
+          
+          <div className="mt-4 space-y-2">
+            <div className="flex justify-between text-sm">
+              <span>Completion: {completedCount}/{requirementSlots.length} requirements</span>
+              <span>Total: {totalWords.toLocaleString()} words</span>
+            </div>
+            <Progress value={completionRate} />
           </div>
-          <Progress value={completionRate} />
-        </div>
-      </CardHeader>
-      <CardContent>
-        <ScrollArea className="h-[600px] pr-4">
-          <div className="space-y-4">
-            {requirementSlots.map((slot) => (
-              <RequirementSlotCard
-                key={slot.id}
-                slot={slot}
-                contentBlocks={getSlotContentBlocks(slot)}
-                availableBlocks={getAvailableBlocks(slot)}
-                onAddBlock={handleAddBlock}
-                onRemoveBlock={handleRemoveBlock}
-                onCustomContentChange={handleCustomContentChange}
-                onToggleComplete={handleToggleComplete}
-              />
-            ))}
-          </div>
-        </ScrollArea>
-      </CardContent>
-    </Card>
+        </CardHeader>
+        <CardContent>
+          <ScrollArea className="h-[600px] pr-4">
+            <div className="space-y-4">
+              {requirementSlots.map((slot) => (
+                <RequirementSlotCard
+                  key={slot.id}
+                  slot={slot}
+                  contentBlocks={getSlotContentBlocks(slot)}
+                  availableBlocks={getAvailableBlocks(slot)}
+                  onAddBlock={handleAddBlock}
+                  onRemoveBlock={handleRemoveBlock}
+                  onCustomContentChange={handleCustomContentChange}
+                  onToggleComplete={handleToggleComplete}
+                />
+              ))}
+            </div>
+          </ScrollArea>
+        </CardContent>
+      </Card>
+
+      <RequirementGapAnalysis
+        opportunityId={opportunityId}
+        requirements={requirementSlots}
+        onAddBlock={handleAddBlock}
+      />
+    </div>
   );
 }
