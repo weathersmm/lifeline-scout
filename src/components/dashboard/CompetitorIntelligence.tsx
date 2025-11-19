@@ -12,6 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { CompetitorIntelligenceGatherer } from "./CompetitorIntelligenceGatherer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
 
 interface Competitor {
   id: string;
@@ -273,15 +274,17 @@ export function CompetitorIntelligence() {
               </TabsContent>
               
               <TabsContent value="ai" className="mt-4">
-                <CompetitorIntelligenceGatherer
-                  competitorId={editingCompetitor?.id}
-                  competitorName={editingCompetitor?.competitor_name}
-                  onComplete={() => {
-                    setDialogOpen(false);
-                    resetForm();
-                    loadCompetitors();
-                  }}
-                />
+                <AIFeatureErrorBoundary featureName="AI Competitor Intelligence Gatherer">
+                  <CompetitorIntelligenceGatherer
+                    competitorId={editingCompetitor?.id}
+                    competitorName={editingCompetitor?.competitor_name}
+                    onComplete={() => {
+                      setDialogOpen(false);
+                      resetForm();
+                      loadCompetitors();
+                    }}
+                  />
+                </AIFeatureErrorBoundary>
               </TabsContent>
             </Tabs>
           </DialogContent>
