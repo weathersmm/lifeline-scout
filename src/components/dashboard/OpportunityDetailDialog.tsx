@@ -37,6 +37,7 @@ import { GoNoGoMatrix } from './GoNoGoMatrix';
 import { WinProbabilityPredictor } from './WinProbabilityPredictor';
 import { CapturePlanGenerator } from './CapturePlanGenerator';
 import { OpportunityOverviewEnhancer } from './OpportunityOverviewEnhancer';
+import { DocumentQAChat } from './DocumentQAChat';
 import { useAuth } from '@/hooks/useAuth';
 import { useState } from 'react';
 
@@ -89,13 +90,14 @@ export const OpportunityDetailDialog = ({
         </DialogHeader>
 
         <Tabs defaultValue="details" className="mt-4">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="details">Details</TabsTrigger>
             <TabsTrigger value="competitive">Competitive</TabsTrigger>
             <TabsTrigger value="ptw">PTW</TabsTrigger>
             <TabsTrigger value="gonogo">Go/No-Go</TabsTrigger>
             <TabsTrigger value="ml">ML Predict</TabsTrigger>
             <TabsTrigger value="capture">Capture Plan</TabsTrigger>
+            <TabsTrigger value="docqa">Doc Q&A</TabsTrigger>
           </TabsList>
 
           <TabsContent value="details" className="space-y-6 mt-4">
@@ -319,6 +321,17 @@ export const OpportunityDetailDialog = ({
 
           <TabsContent value="capture" className="mt-4">
             <CapturePlanGenerator opportunityId={opportunity.id} opportunity={opportunity} />
+          </TabsContent>
+
+          <TabsContent value="docqa" className="mt-4">
+            <DocumentQAChat
+              opportunityId={opportunity.id}
+              opportunityTitle={opportunity.title}
+              documentName={opportunity.documents && opportunity.documents.length > 0 
+                ? opportunity.documents[0].name 
+                : "RFP Document"
+              }
+            />
           </TabsContent>
 
           <TabsContent value="history" className="mt-4">

@@ -27,5 +27,5 @@ verify_jwt = true
 [functions.parse-opportunity-document]
 verify_jwt = true
 
-[functions.gather-competitor-intelligence]
+[functions.document-qa]
 verify_jwt = true
