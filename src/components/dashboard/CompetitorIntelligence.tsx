@@ -7,9 +7,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Plus, TrendingUp, Building, Target, DollarSign } from "lucide-react";
+import { Loader2, Plus, TrendingUp, Building, Target, DollarSign, Search } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { CompetitorIntelligenceGatherer } from "./CompetitorIntelligenceGatherer";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Competitor {
   id: string;
@@ -168,98 +170,120 @@ export function CompetitorIntelligence() {
               Add Competitor
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>{editingCompetitor ? 'Edit' : 'Add'} Competitor</DialogTitle>
+              <DialogTitle>{editingCompetitor ? "Edit" : "Add"} Competitor</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <Label>Competitor Name *</Label>
-                <Input
-                  value={formData.competitor_name}
-                  onChange={(e) => setFormData({ ...formData, competitor_name: e.target.value })}
-                  placeholder="Company name"
-                />
-              </div>
-              <div>
-                <Label>Description</Label>
-                <Textarea
-                  value={formData.company_description}
-                  onChange={(e) => setFormData({ ...formData, company_description: e.target.value })}
-                  placeholder="Brief company description"
-                  rows={3}
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
+            <Tabs defaultValue="manual" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="manual">Manual Entry</TabsTrigger>
+                <TabsTrigger value="ai">
+                  <Search className="mr-2 h-4 w-4" />
+                  AI Research
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="manual" className="space-y-4 mt-4">
                 <div>
-                  <Label>Headquarters</Label>
+                  <Label>Competitor Name *</Label>
                   <Input
-                    value={formData.headquarters}
-                    onChange={(e) => setFormData({ ...formData, headquarters: e.target.value })}
-                    placeholder="City, State"
+                    value={formData.competitor_name}
+                    onChange={(e) => setFormData({ ...formData, competitor_name: e.target.value })}
+                    placeholder="Company name"
                   />
                 </div>
                 <div>
-                  <Label>Website</Label>
-                  <Input
-                    value={formData.website}
-                    onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                    placeholder="https://..."
+                  <Label>Description</Label>
+                  <Textarea
+                    value={formData.company_description}
+                    onChange={(e) => setFormData({ ...formData, company_description: e.target.value })}
+                    placeholder="Brief company description"
+                    rows={3}
                   />
                 </div>
-              </div>
-              <div>
-                <Label>Average Price Position</Label>
-                <select
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                  value={formData.avg_price_position}
-                  onChange={(e) => setFormData({ ...formData, avg_price_position: e.target.value })}
-                >
-                  <option>Low</option>
-                  <option>Medium-Low</option>
-                  <option>Medium</option>
-                  <option>Medium-High</option>
-                  <option>High</option>
-                </select>
-              </div>
-              <div>
-                <Label>Key Strengths (one per line)</Label>
-                <Textarea
-                  value={formData.key_strengths}
-                  onChange={(e) => setFormData({ ...formData, key_strengths: e.target.value })}
-                  placeholder="Enter each strength on a new line"
-                  rows={3}
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label>Headquarters</Label>
+                    <Input
+                      value={formData.headquarters}
+                      onChange={(e) => setFormData({ ...formData, headquarters: e.target.value })}
+                      placeholder="City, State"
+                    />
+                  </div>
+                  <div>
+                    <Label>Website</Label>
+                    <Input
+                      value={formData.website}
+                      onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                      placeholder="https://..."
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label>Average Price Position</Label>
+                  <select
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    value={formData.avg_price_position}
+                    onChange={(e) => setFormData({ ...formData, avg_price_position: e.target.value })}
+                  >
+                    <option>Low</option>
+                    <option>Medium-Low</option>
+                    <option>Medium</option>
+                    <option>Medium-High</option>
+                    <option>High</option>
+                  </select>
+                </div>
+                <div>
+                  <Label>Key Strengths (one per line)</Label>
+                  <Textarea
+                    value={formData.key_strengths}
+                    onChange={(e) => setFormData({ ...formData, key_strengths: e.target.value })}
+                    placeholder="Enter each strength on a new line"
+                    rows={3}
+                  />
+                </div>
+                <div>
+                  <Label>Key Weaknesses (one per line)</Label>
+                  <Textarea
+                    value={formData.key_weaknesses}
+                    onChange={(e) => setFormData({ ...formData, key_weaknesses: e.target.value })}
+                    placeholder="Enter each weakness on a new line"
+                    rows={3}
+                  />
+                </div>
+                <div>
+                  <Label>Primary Markets (comma-separated)</Label>
+                  <Input
+                    value={formData.primary_markets}
+                    onChange={(e) => setFormData({ ...formData, primary_markets: e.target.value })}
+                    placeholder="California, Texas, Florida"
+                  />
+                </div>
+                <div>
+                  <Label>Service Specialties (comma-separated)</Label>
+                  <Input
+                    value={formData.service_specialties}
+                    onChange={(e) => setFormData({ ...formData, service_specialties: e.target.value })}
+                    placeholder="EMS 911, BLS, ALS"
+                  />
+                </div>
+                <Button onClick={handleSave} className="w-full">
+                  {editingCompetitor ? 'Update' : 'Add'} Competitor
+                </Button>
+              </TabsContent>
+              
+              <TabsContent value="ai" className="mt-4">
+                <CompetitorIntelligenceGatherer
+                  competitorId={editingCompetitor?.id}
+                  competitorName={editingCompetitor?.competitor_name}
+                  onComplete={() => {
+                    setDialogOpen(false);
+                    resetForm();
+                    loadCompetitors();
+                  }}
                 />
-              </div>
-              <div>
-                <Label>Key Weaknesses (one per line)</Label>
-                <Textarea
-                  value={formData.key_weaknesses}
-                  onChange={(e) => setFormData({ ...formData, key_weaknesses: e.target.value })}
-                  placeholder="Enter each weakness on a new line"
-                  rows={3}
-                />
-              </div>
-              <div>
-                <Label>Primary Markets (comma-separated)</Label>
-                <Input
-                  value={formData.primary_markets}
-                  onChange={(e) => setFormData({ ...formData, primary_markets: e.target.value })}
-                  placeholder="California, Texas, Florida"
-                />
-              </div>
-              <div>
-                <Label>Service Specialties (comma-separated)</Label>
-                <Input
-                  value={formData.service_specialties}
-                  onChange={(e) => setFormData({ ...formData, service_specialties: e.target.value })}
-                  placeholder="EMS 911, BLS, ALS"
-                />
-              </div>
-              <Button onClick={handleSave} className="w-full">
-                {editingCompetitor ? 'Update' : 'Add'} Competitor
-              </Button>
-            </div>
+              </TabsContent>
+            </Tabs>
           </DialogContent>
         </Dialog>
       </div>

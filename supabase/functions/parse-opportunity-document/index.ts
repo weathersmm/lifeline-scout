@@ -61,25 +61,63 @@ serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: `You are an expert RFP analyzer. Extract key information from procurement documents and return structured JSON with the following fields:
-- submission_requirements: Array of submission requirements and deliverables
-- deadlines: Array of important dates (format: {date: "YYYY-MM-DD", description: "what"})
-- qualifications: Array of required qualifications and certifications
-- evaluation_criteria: Array of how proposals will be evaluated
-- technical_requirements: Array of technical specifications or requirements
-- scope_of_work: Brief summary of the scope
-- estimated_value: Estimated contract value if mentioned
-- key_contacts: Array of agency contacts
-- proposal_format: Required format/structure for submission
+            content: `You are an expert RFP analyzer for emergency medical services procurement. Extract comprehensive information from procurement documents and return structured JSON with the following fields:
 
-Return ONLY valid JSON, no markdown formatting.`
+**Submission Requirements** (submission_requirements):
+- Array of required deliverables, documents, certifications, forms
+- Include page limits, format requirements, number of copies
+- Note any mandatory vs optional submissions
+
+**Deadlines** (deadlines):
+- Array of critical dates: {date: "YYYY-MM-DD", description: "event", time: "HH:MM timezone"}
+- Include: RFP issue date, questions due, pre-bid meetings, proposal due, interviews, award date
+
+**Qualifications** (qualifications):
+- Required licenses, certifications, experience levels
+- Minimum years in business, similar contract experience
+- Insurance requirements, bonding requirements
+- Personnel qualifications and credentials
+
+**Evaluation Criteria** (evaluation_criteria):
+- Scoring methodology and point allocations
+- Technical evaluation factors and weights
+- Price evaluation methodology
+- Past performance evaluation criteria
+
+**Technical Requirements** (technical_requirements):
+- Service scope: 911/BLS/ALS/CCT/NEMT specifications
+- Response time requirements
+- Coverage areas and hours of operation
+- Fleet/equipment/technology requirements
+- Staffing levels and qualifications
+
+**Scope of Work** (scope_of_work):
+- Comprehensive summary of services required
+- Service delivery model and operational requirements
+
+**Contract Terms** (contract_terms):
+- estimated_value: Dollar amount or range if mentioned
+- contract_duration: Length and renewal options
+- payment_terms: Payment structure and schedule
+
+**Key Contacts** (key_contacts):
+- Agency contacts with roles, emails, phones
+- Question submission process
+
+**Submission Instructions** (submission_instructions):
+- How to submit (email, portal, physical)
+- Where to submit (address, portal URL)
+- Format requirements (PDF, copies, bindings)
+- Labeling and packaging instructions
+
+Return ONLY valid JSON with these exact field names, no markdown formatting.`
           },
           {
             role: 'user',
             content: [
               {
                 type: 'text',
-                text: `Parse this RFP/procurement document (${documentName}) and extract all submission requirements, deadlines, qualifications, evaluation criteria, technical requirements, and other key information.`
+                text: `Analyze this RFP/procurement document (${documentName}) for an EMS opportunity. Extract all submission requirements, deadlines, qualifications, evaluation criteria, technical specifications, scope of work, contract terms, key contacts, and submission instructions. Be thorough and specific.`
               },
               {
                 type: 'image_url',
@@ -130,8 +168,8 @@ Return ONLY valid JSON, no markdown formatting.`
     };
 
     // Update estimated value if extracted
-    if (extractedData.estimated_value) {
-      const valueMatch = extractedData.estimated_value.match(/[\d,]+/g);
+    if (extractedData.contract_terms?.estimated_value) {
+      const valueMatch = extractedData.contract_terms.estimated_value.match(/[\d,]+/g);
       if (valueMatch) {
         const value = parseInt(valueMatch[0].replace(/,/g, ''));
         updateData.estimated_value_max = value;
@@ -142,10 +180,26 @@ Return ONLY valid JSON, no markdown formatting.`
     if (extractedData.deadlines && Array.isArray(extractedData.deadlines)) {
       const proposalDueDate = extractedData.deadlines.find((d: any) => 
         d.description?.toLowerCase().includes('proposal') || 
-        d.description?.toLowerCase().includes('submission')
+        d.description?.toLowerCase().includes('submission') ||
+        d.description?.toLowerCase().includes('due')
       );
       if (proposalDueDate?.date) {
         updateData.proposal_due = proposalDueDate.date;
+      }
+
+      const questionsDueDate = extractedData.deadlines.find((d: any) => 
+        d.description?.toLowerCase().includes('question')
+      );
+      if (questionsDueDate?.date) {
+        updateData.questions_due = questionsDueDate.date;
+      }
+
+      const preBidDate = extractedData.deadlines.find((d: any) => 
+        d.description?.toLowerCase().includes('pre-bid') ||
+        d.description?.toLowerCase().includes('prebid')
+      );
+      if (preBidDate?.date) {
+        updateData.pre_bid_meeting = preBidDate.date;
       }
     }
 
