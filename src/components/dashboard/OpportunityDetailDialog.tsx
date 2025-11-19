@@ -19,22 +19,32 @@ import {
   FileText,
   Clock,
   Target,
-  History
+  History,
+  Upload,
+  GitBranch
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { OpportunityChangeHistory } from './OpportunityChangeHistory';
+import { OpportunityDocuments } from './OpportunityDocuments';
+import { OpportunityLifecycle } from './OpportunityLifecycle';
+import { useAuth } from '@/hooks/useAuth';
 
 interface OpportunityDetailDialogProps {
   opportunity: Opportunity | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onUpdate?: () => void;
 }
 
 export const OpportunityDetailDialog = ({
   opportunity,
   open,
-  onOpenChange
+  onOpenChange,
+  onUpdate
 }: OpportunityDetailDialogProps) => {
+  const { effectiveRole } = useAuth();
+  const canEdit = effectiveRole === 'admin' || effectiveRole === 'member';
+
   if (!opportunity) return null;
 
   return (
@@ -60,11 +70,19 @@ export const OpportunityDetailDialog = ({
         </DialogHeader>
 
         <Tabs defaultValue="details" className="mt-4">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="details">Details</TabsTrigger>
+            <TabsTrigger value="documents">
+              <Upload className="w-4 h-4 mr-2" />
+              Documents
+            </TabsTrigger>
+            <TabsTrigger value="lifecycle">
+              <GitBranch className="w-4 h-4 mr-2" />
+              Lifecycle
+            </TabsTrigger>
             <TabsTrigger value="history">
               <History className="w-4 h-4 mr-2" />
-              Change History
+              History
             </TabsTrigger>
           </TabsList>
 
@@ -207,6 +225,25 @@ export const OpportunityDetailDialog = ({
               <span>Source: {opportunity.source}</span>
               <span>ID: {opportunity.id}</span>
             </div>
+          </TabsContent>
+
+          <TabsContent value="documents" className="mt-4">
+            <OpportunityDocuments
+              opportunityId={opportunity.id}
+              documents={opportunity.documents || []}
+              onDocumentsUpdate={() => onUpdate?.()}
+              canEdit={canEdit}
+            />
+          </TabsContent>
+
+          <TabsContent value="lifecycle" className="mt-4">
+            <OpportunityLifecycle
+              opportunityId={opportunity.id}
+              currentStage={opportunity.lifecycleStage || 'identified'}
+              lifecycleNotes={opportunity.lifecycleNotes}
+              onUpdate={() => onUpdate?.()}
+              canEdit={canEdit}
+            />
           </TabsContent>
 
           <TabsContent value="history" className="mt-4">

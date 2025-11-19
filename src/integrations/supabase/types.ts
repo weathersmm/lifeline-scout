@@ -58,6 +58,7 @@ export type Database = {
           current_911_provider: string | null
           current_nemt_provider: string | null
           current_procurement_type: string | null
+          documents: Json | null
           ems_plan_url: string | null
           estimated_value_max: number | null
           estimated_value_min: number | null
@@ -69,6 +70,10 @@ export type Database = {
           is_hot: boolean
           issue_date: string | null
           lemsa_site: string | null
+          lifecycle_notes: string | null
+          lifecycle_stage:
+            | Database["public"]["Enums"]["opportunity_lifecycle_stage"]
+            | null
           link: string
           pre_bid_meeting: string | null
           priority: Database["public"]["Enums"]["priority_level"]
@@ -93,6 +98,7 @@ export type Database = {
           current_911_provider?: string | null
           current_nemt_provider?: string | null
           current_procurement_type?: string | null
+          documents?: Json | null
           ems_plan_url?: string | null
           estimated_value_max?: number | null
           estimated_value_min?: number | null
@@ -104,6 +110,10 @@ export type Database = {
           is_hot?: boolean
           issue_date?: string | null
           lemsa_site?: string | null
+          lifecycle_notes?: string | null
+          lifecycle_stage?:
+            | Database["public"]["Enums"]["opportunity_lifecycle_stage"]
+            | null
           link: string
           pre_bid_meeting?: string | null
           priority?: Database["public"]["Enums"]["priority_level"]
@@ -128,6 +138,7 @@ export type Database = {
           current_911_provider?: string | null
           current_nemt_provider?: string | null
           current_procurement_type?: string | null
+          documents?: Json | null
           ems_plan_url?: string | null
           estimated_value_max?: number | null
           estimated_value_min?: number | null
@@ -139,6 +150,10 @@ export type Database = {
           is_hot?: boolean
           issue_date?: string | null
           lemsa_site?: string | null
+          lifecycle_notes?: string | null
+          lifecycle_stage?:
+            | Database["public"]["Enums"]["opportunity_lifecycle_stage"]
+            | null
           link?: string
           pre_bid_meeting?: string | null
           priority?: Database["public"]["Enums"]["priority_level"]
@@ -192,6 +207,59 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "opportunity_changes_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      opportunity_tasks: {
+        Row: {
+          assigned_to: string | null
+          completed_at: string | null
+          completed_by: string | null
+          created_at: string | null
+          due_date: string | null
+          id: string
+          is_completed: boolean | null
+          lifecycle_stage: Database["public"]["Enums"]["opportunity_lifecycle_stage"]
+          opportunity_id: string
+          task_description: string | null
+          task_name: string
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string | null
+          due_date?: string | null
+          id?: string
+          is_completed?: boolean | null
+          lifecycle_stage: Database["public"]["Enums"]["opportunity_lifecycle_stage"]
+          opportunity_id: string
+          task_description?: string | null
+          task_name: string
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string | null
+          due_date?: string | null
+          id?: string
+          is_completed?: boolean | null
+          lifecycle_stage?: Database["public"]["Enums"]["opportunity_lifecycle_stage"]
+          opportunity_id?: string
+          task_description?: string | null
+          task_name?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "opportunity_tasks_opportunity_id_fkey"
             columns: ["opportunity_id"]
             isOneToOne: false
             referencedRelation: "opportunities"
@@ -439,6 +507,22 @@ export type Database = {
         | "Pre-solicitation"
         | "Sole-Source Notice"
       hot_flag_type: "manual" | "automatic"
+      opportunity_lifecycle_stage:
+        | "identified"
+        | "bd_intel_deck"
+        | "capture_plan"
+        | "pre_drfp"
+        | "drfp_kickoff"
+        | "proposal_development"
+        | "pink_team"
+        | "red_team"
+        | "gold_team"
+        | "final_review"
+        | "submitted"
+        | "awaiting_award"
+        | "won"
+        | "lost"
+        | "no_bid"
       opportunity_status: "new" | "monitoring" | "in-pipeline" | "archived"
       priority_level: "high" | "medium" | "low"
       service_tag:
@@ -590,6 +674,23 @@ export const Constants = {
         "Sole-Source Notice",
       ],
       hot_flag_type: ["manual", "automatic"],
+      opportunity_lifecycle_stage: [
+        "identified",
+        "bd_intel_deck",
+        "capture_plan",
+        "pre_drfp",
+        "drfp_kickoff",
+        "proposal_development",
+        "pink_team",
+        "red_team",
+        "gold_team",
+        "final_review",
+        "submitted",
+        "awaiting_award",
+        "won",
+        "lost",
+        "no_bid",
+      ],
       opportunity_status: ["new", "monitoring", "in-pipeline", "archived"],
       priority_level: ["high", "medium", "low"],
       service_tag: [
