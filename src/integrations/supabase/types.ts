@@ -145,6 +145,73 @@ export type Database = {
         }
         Relationships: []
       }
+      document_qa_conversations: {
+        Row: {
+          created_at: string
+          document_name: string
+          id: string
+          opportunity_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          document_name: string
+          id?: string
+          opportunity_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          document_name?: string
+          id?: string
+          opportunity_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_qa_conversations_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_qa_messages: {
+        Row: {
+          citations: Json | null
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          role: string
+        }
+        Insert: {
+          citations?: Json | null
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          role: string
+        }
+        Update: {
+          citations?: Json | null
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_qa_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "document_qa_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       go_no_go_evaluations: {
         Row: {
           competitor_analysis_notes: string | null
