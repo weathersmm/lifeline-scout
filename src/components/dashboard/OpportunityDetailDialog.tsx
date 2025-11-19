@@ -33,6 +33,8 @@ import { ProposalTemplateLibrary } from './ProposalTemplateLibrary';
 import { ProposalGenerator } from './ProposalGenerator';
 import { ProposalOutlineBuilder } from './ProposalOutlineBuilder';
 import { ModuleSpecificationGenerator } from './ModuleSpecificationGenerator';
+import { ProposalAssemblyInterface } from './ProposalAssemblyInterface';
+import { ComplianceChecker } from './ComplianceChecker';
 import { CompetitiveAssessmentDashboard } from './CompetitiveAssessmentDashboard';
 import { PTWAnalysis } from './PTWAnalysis';
 import { GoNoGoMatrix } from './GoNoGoMatrix';
@@ -291,7 +293,7 @@ export const OpportunityDetailDialog = ({
                 <div>
                   <h3 className="font-semibold">Proposal Content</h3>
                   <p className="text-sm text-muted-foreground">
-                    Extract requirements, generate module specs, and browse reusable content
+                    Extract requirements, assemble proposals, and check compliance
                   </p>
                 </div>
                 {canEdit && (
@@ -311,13 +313,29 @@ export const OpportunityDetailDialog = ({
               </AIFeatureCircuitBreaker>
 
               {extractedRequirements.length > 0 && (
-                <AIFeatureCircuitBreaker featureName="Module Specification Generator">
-                  <ModuleSpecificationGenerator
-                    opportunityId={opportunity.id}
-                    opportunity={opportunity}
-                    requirements={extractedRequirements}
-                  />
-                </AIFeatureCircuitBreaker>
+                <>
+                  <AIFeatureCircuitBreaker featureName="Proposal Assembly Interface">
+                    <ProposalAssemblyInterface
+                      opportunityId={opportunity.id}
+                      requirements={extractedRequirements}
+                    />
+                  </AIFeatureCircuitBreaker>
+
+                  <AIFeatureCircuitBreaker featureName="Compliance Checker">
+                    <ComplianceChecker
+                      opportunityId={opportunity.id}
+                      requirements={extractedRequirements}
+                    />
+                  </AIFeatureCircuitBreaker>
+
+                  <AIFeatureCircuitBreaker featureName="Module Specification Generator">
+                    <ModuleSpecificationGenerator
+                      opportunityId={opportunity.id}
+                      opportunity={opportunity}
+                      requirements={extractedRequirements}
+                    />
+                  </AIFeatureCircuitBreaker>
+                </>
               )}
 
               <AIFeatureCircuitBreaker featureName="Proposal Content Repository">

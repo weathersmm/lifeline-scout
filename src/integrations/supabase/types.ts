@@ -650,6 +650,62 @@ export type Database = {
         }
         Relationships: []
       }
+      proposal_compliance_checks: {
+        Row: {
+          check_data: Json | null
+          checked_at: string
+          checked_by: string | null
+          compliance_score: number | null
+          created_at: string
+          id: string
+          missing_categories: string[] | null
+          opportunity_id: string
+          requirements_completed: number
+          requirements_missing: number
+          requirements_partial: number
+          total_requirements: number
+          total_word_count: number
+        }
+        Insert: {
+          check_data?: Json | null
+          checked_at?: string
+          checked_by?: string | null
+          compliance_score?: number | null
+          created_at?: string
+          id?: string
+          missing_categories?: string[] | null
+          opportunity_id: string
+          requirements_completed?: number
+          requirements_missing?: number
+          requirements_partial?: number
+          total_requirements?: number
+          total_word_count?: number
+        }
+        Update: {
+          check_data?: Json | null
+          checked_at?: string
+          checked_by?: string | null
+          compliance_score?: number | null
+          created_at?: string
+          id?: string
+          missing_categories?: string[] | null
+          opportunity_id?: string
+          requirements_completed?: number
+          requirements_missing?: number
+          requirements_partial?: number
+          total_requirements?: number
+          total_word_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_compliance_checks_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       proposal_content_block_versions: {
         Row: {
           change_description: string | null
@@ -813,6 +869,62 @@ export type Database = {
             columns: ["template_id"]
             isOneToOne: false
             referencedRelation: "proposal_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      proposal_requirement_mappings: {
+        Row: {
+          content_block_ids: string[] | null
+          created_at: string
+          custom_content: string | null
+          id: string
+          is_complete: boolean | null
+          last_updated_by: string | null
+          opportunity_id: string
+          page_limit: number | null
+          requirement_category: string | null
+          requirement_id: string
+          requirement_text: string
+          updated_at: string
+          word_count: number | null
+        }
+        Insert: {
+          content_block_ids?: string[] | null
+          created_at?: string
+          custom_content?: string | null
+          id?: string
+          is_complete?: boolean | null
+          last_updated_by?: string | null
+          opportunity_id: string
+          page_limit?: number | null
+          requirement_category?: string | null
+          requirement_id: string
+          requirement_text: string
+          updated_at?: string
+          word_count?: number | null
+        }
+        Update: {
+          content_block_ids?: string[] | null
+          created_at?: string
+          custom_content?: string | null
+          id?: string
+          is_complete?: boolean | null
+          last_updated_by?: string | null
+          opportunity_id?: string
+          page_limit?: number | null
+          requirement_category?: string | null
+          requirement_id?: string
+          requirement_text?: string
+          updated_at?: string
+          word_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_requirement_mappings_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
             referencedColumns: ["id"]
           },
         ]
