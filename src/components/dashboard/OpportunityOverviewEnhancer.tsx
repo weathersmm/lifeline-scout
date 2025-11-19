@@ -21,30 +21,10 @@ export function OpportunityOverviewEnhancer({ opportunityId, opportunity, onUpda
   const enhanceOverview = async () => {
     setEnhancing(true);
     try {
-      // Parse any uploaded documents if available
-      let documentInsights = "";
-      if (opportunity.documents && opportunity.documents.length > 0) {
-        toast({
-          title: "Analyzing documents...",
-          description: "Extracting requirements from uploaded RFP documents",
-        });
-
-        const { data: parseData, error: parseError } = await supabase.functions.invoke('parse-opportunity-document', {
-          body: { 
-            opportunityId,
-            documentUrls: opportunity.documents.map((d: any) => d.url)
-          }
-        });
-
-        if (!parseError && parseData?.insights) {
-          documentInsights = parseData.insights;
-        }
-      }
-
       // Generate enhanced overview using AI with web search context
       toast({
         title: "Enhancing overview...",
-        description: "Combining document analysis with web research of official sources",
+        description: "Researching official sources and generating comprehensive intelligence",
       });
 
       const { data: functionData, error: functionError } = await supabase.functions.invoke('enhance-opportunity-overview', {
@@ -57,7 +37,7 @@ export function OpportunityOverviewEnhancer({ opportunityId, opportunity, onUpda
             geography: `${opportunity.geography.city || ''}, ${opportunity.geography.county || ''}, ${opportunity.geography.state}`.replace(/^,\s*/, ''),
             serviceTags: opportunity.serviceTags.join(', ')
           },
-          documentInsights
+          documentInsights: ""
         }
       });
 
