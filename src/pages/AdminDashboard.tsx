@@ -52,7 +52,7 @@ interface UserAccount {
 const COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))', 'hsl(var(--chart-5))'];
 
 const AdminDashboard = () => {
-  const { isAdmin, loading: authLoading } = useAuth();
+  const { actualIsAdmin, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [rateLimits, setRateLimits] = useState<RateLimitRecord[]>([]);
@@ -64,7 +64,7 @@ const AdminDashboard = () => {
   const [loadingUsers, setLoadingUsers] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && !isAdmin) {
+    if (!authLoading && !actualIsAdmin) {
       navigate('/');
       toast({
         variant: 'destructive',
@@ -72,14 +72,14 @@ const AdminDashboard = () => {
         description: 'You do not have permission to access this page.',
       });
     }
-  }, [isAdmin, authLoading, navigate, toast]);
+  }, [actualIsAdmin, authLoading, navigate, toast]);
 
   useEffect(() => {
-    if (isAdmin) {
+    if (actualIsAdmin) {
       fetchRateLimitData();
       fetchUserAccounts();
     }
-  }, [isAdmin, timeRange]);
+  }, [actualIsAdmin, timeRange]);
 
   const getTimeRangeDate = () => {
     const now = new Date();
@@ -249,7 +249,7 @@ const AdminDashboard = () => {
     );
   }
 
-  if (!isAdmin) {
+  if (!actualIsAdmin) {
     return null;
   }
 

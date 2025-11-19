@@ -30,7 +30,7 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, effectiveRole, previewRole, signOut, isAdmin } = useAuth();
+  const { user, effectiveRole, previewRole, signOut, actualIsAdmin } = useAuth();
   const currentPath = location.pathname;
   const collapsed = state === 'collapsed';
 
@@ -40,7 +40,7 @@ export function AppSidebar() {
     { title: 'Competitor Intel', url: '/competitor-intelligence', icon: Target },
   ];
 
-  if (isAdmin) {
+  if (actualIsAdmin) {
     mainItems.push({ title: 'Admin', url: '/admin', icon: Shield });
   }
 
