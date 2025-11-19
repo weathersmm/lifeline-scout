@@ -2,6 +2,7 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { Document, Paragraph, TextRun, HeadingLevel, AlignmentType, Packer } from "docx";
 import { saveAs } from "file-saver";
+import { TEMPLATE_PRESETS } from "./proposalFormatValidation";
 
 interface ContentBlock {
   id: string;
@@ -128,11 +129,17 @@ export const exportProposalToPDF = (
 export const exportProposalToDOCX = async (
   opportunityTitle: string,
   requirements: RequirementMapping[],
-  filename: string = "proposal.docx"
+  filename: string = "proposal.docx",
+  templateName: string = "Arial 10pt"
 ) => {
+  const formatSpec = TEMPLATE_PRESETS[templateName];
   const children: Paragraph[] = [];
+  
+  // Determine font based on template
+  const fontFamily = formatSpec.fontFamily;
+  const fontSize = formatSpec.fontSize * 2; // Convert to half-points for docx
 
-  // Title
+  // Title with template formatting
   children.push(
     new Paragraph({
       text: "Proposal Response",
@@ -160,7 +167,8 @@ export const exportProposalToDOCX = async (
           new TextRun({
             text: `${req.requirementId}: ${req.requirementText}`,
             bold: true,
-            size: 28,
+            size: fontSize + 4,
+            font: fontFamily,
           }),
         ],
         spacing: { before: 300, after: 100 },
@@ -174,7 +182,8 @@ export const exportProposalToDOCX = async (
             new TextRun({
               text: `Category: ${req.category}`,
               italics: true,
-              size: 20,
+              size: fontSize - 4,
+              font: fontFamily,
             }),
           ],
           spacing: { after: 100 },
@@ -191,7 +200,8 @@ export const exportProposalToDOCX = async (
           children: [
             new TextRun({
               text: `Page Limit: ${req.pageLimit} pages | Current: ~${estimatedPages} pages | Word Count: ${req.wordCount}`,
-              size: 20,
+              size: fontSize - 4,
+              font: fontFamily,
               color: isOverLimit ? "FF0000" : "000000",
             }),
           ],
@@ -208,7 +218,8 @@ export const exportProposalToDOCX = async (
             new TextRun({
               text: block.title,
               bold: true,
-              size: 24,
+              size: fontSize,
+              font: fontFamily,
             }),
           ],
           spacing: { before: 200, after: 100 },
@@ -232,7 +243,8 @@ export const exportProposalToDOCX = async (
             new TextRun({
               text: "Custom Content",
               bold: true,
-              size: 24,
+              size: fontSize,
+              font: fontFamily,
             }),
           ],
           spacing: { before: 200, after: 100 },
@@ -251,7 +263,20 @@ export const exportProposalToDOCX = async (
   const doc = new Document({
     sections: [
       {
-        properties: {},
+        properties: {
+          page: {
+            size: {
+              width: formatSpec.pageSize === "Letter" ? 12240 : 11906,
+              height: formatSpec.pageSize === "Letter" ? 15840 : 16838,
+            },
+            margin: {
+              top: formatSpec.margins.top * 1440,
+              bottom: formatSpec.margins.bottom * 1440,
+              left: formatSpec.margins.left * 1440,
+              right: formatSpec.margins.right * 1440,
+            },
+          },
+        },
         children,
       },
     ],

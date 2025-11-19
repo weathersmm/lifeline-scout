@@ -30,6 +30,7 @@ import { FileText, GripVertical, Plus, Trash2, CheckCircle2, AlertCircle, Downlo
 import { Separator } from "@/components/ui/separator";
 import { exportProposalToPDF, exportProposalToDOCX } from "@/utils/proposalExportUtils";
 import { RequirementGapAnalysis } from "./RequirementGapAnalysis";
+import { FormatValidationDialog } from "./FormatValidationDialog";
 
 interface RequirementSlot {
   id: string;
@@ -239,6 +240,7 @@ export function ProposalAssemblyInterface({ opportunityId, requirements }: Propo
   const [allContentBlocks, setAllContentBlocks] = useState<ContentBlock[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [showValidationDialog, setShowValidationDialog] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -415,6 +417,42 @@ export function ProposalAssemblyInterface({ opportunityId, requirements }: Propo
     }
   };
 
+  const handleExportWithValidation = (format: "PDF" | "DOCX", templateName: string) => {
+    try {
+      const mappingsWithBlocks = requirementSlots.map(slot => ({
+        ...slot,
+        contentBlocks: getSlotContentBlocks(slot)
+      }));
+
+      if (format === "PDF") {
+        exportProposalToPDF(
+          `Proposal - Opportunity ${opportunityId}`,
+          mappingsWithBlocks,
+          `proposal-${opportunityId}.pdf`
+        );
+      } else {
+        exportProposalToDOCX(
+          `Proposal - Opportunity ${opportunityId}`,
+          mappingsWithBlocks,
+          `proposal-${opportunityId}.docx`,
+          templateName
+        );
+      }
+      
+      toast({
+        title: `${format} exported`,
+        description: `Proposal exported with ${templateName} formatting`,
+      });
+    } catch (error) {
+      console.error(`Error exporting ${format}:`, error);
+      toast({
+        title: "Export failed",
+        description: `Failed to export ${format}`,
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleExportPDF = () => {
     const mappingsWithBlocks = requirementSlots.map(slot => ({
       ...slot,
@@ -486,13 +524,9 @@ export function ProposalAssemblyInterface({ opportunityId, requirements }: Propo
               </CardDescription>
             </div>
             <div className="flex gap-2">
-              <Button onClick={handleExportPDF} variant="outline" size="sm">
+              <Button onClick={() => setShowValidationDialog(true)} variant="outline" size="sm">
                 <FileDown className="h-4 w-4 mr-2" />
-                Export PDF
-              </Button>
-              <Button onClick={handleExportDOCX} variant="outline" size="sm">
-                <Download className="h-4 w-4 mr-2" />
-                Export DOCX
+                Validate & Export
               </Button>
               <Button onClick={handleSave} disabled={saving}>
                 {saving ? "Saving..." : "Save Progress"}
@@ -532,6 +566,14 @@ export function ProposalAssemblyInterface({ opportunityId, requirements }: Propo
         opportunityId={opportunityId}
         requirements={requirementSlots}
         onAddBlock={handleAddBlock}
+      />
+
+      <FormatValidationDialog
+        open={showValidationDialog}
+        onOpenChange={setShowValidationDialog}
+        wordCount={totalWords}
+        requirements={requirementSlots}
+        onExport={handleExportWithValidation}
       />
     </div>
   );
