@@ -1,13 +1,16 @@
 import React, { Component, ReactNode } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, RefreshCw } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { AlertCircle, RefreshCw, ShieldAlert, Clock } from 'lucide-react';
 
 interface Props {
   children: ReactNode;
   featureName: string;
   fallback?: ReactNode;
   onReset?: () => void;
+  onError?: (error: Error) => void;
+  onSuccess?: () => void;
 }
 
 interface State {
@@ -40,6 +43,14 @@ export class AIFeatureErrorBoundary extends Component<Props, State> {
       error,
       errorInfo,
     });
+    this.props.onError?.(error);
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    // If error was cleared (hasError changed from true to false), notify success
+    if (prevState.hasError && !this.state.hasError) {
+      this.props.onSuccess?.();
+    }
   }
 
   handleReset = () => {

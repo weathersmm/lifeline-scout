@@ -40,7 +40,7 @@ import { OpportunityOverviewEnhancer } from './OpportunityOverviewEnhancer';
 import { DocumentQAChat } from './DocumentQAChat';
 import { useAuth } from '@/hooks/useAuth';
 import { useState } from 'react';
-import { AIFeatureErrorBoundary } from '@/components/AIFeatureErrorBoundary';
+import { AIFeatureCircuitBreaker } from '@/components/AIFeatureCircuitBreaker';
 
 interface OpportunityDetailDialogProps {
   opportunity: Opportunity | null;
@@ -104,13 +104,13 @@ export const OpportunityDetailDialog = ({
           <TabsContent value="details" className="space-y-6 mt-4">
             {/* AI-Enhanced Overview */}
             {canEdit && (
-              <AIFeatureErrorBoundary featureName="AI-Enhanced Overview">
+              <AIFeatureCircuitBreaker featureName="AI-Enhanced Overview">
                 <OpportunityOverviewEnhancer 
                   opportunityId={opportunity.id}
                   opportunity={opportunity}
                   onUpdate={onUpdate}
                 />
-              </AIFeatureErrorBoundary>
+              </AIFeatureCircuitBreaker>
             )}
 
             <Separator />
@@ -298,48 +298,48 @@ export const OpportunityDetailDialog = ({
                   </Button>
                 )}
               </div>
-              <AIFeatureErrorBoundary featureName="Proposal Content Repository">
+              <AIFeatureCircuitBreaker featureName="Proposal Content Repository">
                 <ProposalContentRepository
                   currentStage={opportunity.lifecycleStage || 'identified'}
                   opportunityId={opportunity.id}
                   opportunity={opportunity}
                 />
-              </AIFeatureErrorBoundary>
+              </AIFeatureCircuitBreaker>
             </div>
           </TabsContent>
 
           <TabsContent value="competitive" className="mt-4">
-            <AIFeatureErrorBoundary featureName="Competitive Assessment">
+            <AIFeatureCircuitBreaker featureName="Competitive Assessment">
               <CompetitiveAssessmentDashboard opportunityId={opportunity.id} />
-            </AIFeatureErrorBoundary>
+            </AIFeatureCircuitBreaker>
           </TabsContent>
 
           <TabsContent value="ptw" className="mt-4">
-            <AIFeatureErrorBoundary featureName="Price-to-Win Analysis">
+            <AIFeatureCircuitBreaker featureName="Price-to-Win Analysis">
               <PTWAnalysis opportunityId={opportunity.id} />
-            </AIFeatureErrorBoundary>
+            </AIFeatureCircuitBreaker>
           </TabsContent>
 
           <TabsContent value="gonogo" className="mt-4">
-            <AIFeatureErrorBoundary featureName="Go/No-Go Evaluation">
+            <AIFeatureCircuitBreaker featureName="Go/No-Go Evaluation">
               <GoNoGoMatrix opportunityId={opportunity.id} />
-            </AIFeatureErrorBoundary>
+            </AIFeatureCircuitBreaker>
           </TabsContent>
 
           <TabsContent value="ml" className="mt-4">
-            <AIFeatureErrorBoundary featureName="Win Probability Predictor">
+            <AIFeatureCircuitBreaker featureName="Win Probability Predictor">
               <WinProbabilityPredictor opportunityId={opportunity.id} />
-            </AIFeatureErrorBoundary>
+            </AIFeatureCircuitBreaker>
           </TabsContent>
 
           <TabsContent value="capture" className="mt-4">
-            <AIFeatureErrorBoundary featureName="Capture Plan Generator">
+            <AIFeatureCircuitBreaker featureName="Capture Plan Generator">
               <CapturePlanGenerator opportunityId={opportunity.id} opportunity={opportunity} />
-            </AIFeatureErrorBoundary>
+            </AIFeatureCircuitBreaker>
           </TabsContent>
 
           <TabsContent value="docqa" className="mt-4">
-            <AIFeatureErrorBoundary featureName="Document Q&A">
+            <AIFeatureCircuitBreaker featureName="Document Q&A">
               <DocumentQAChat
                 opportunityId={opportunity.id}
                 opportunityTitle={opportunity.title}
@@ -348,7 +348,7 @@ export const OpportunityDetailDialog = ({
                   : "RFP Document"
                 }
               />
-            </AIFeatureErrorBoundary>
+            </AIFeatureCircuitBreaker>
           </TabsContent>
 
           <TabsContent value="history" className="mt-4">
@@ -367,14 +367,14 @@ export const OpportunityDetailDialog = ({
 
         {/* Proposal Generator */}
         {selectedTemplate && (
-          <AIFeatureErrorBoundary featureName="Proposal Generator">
+          <AIFeatureCircuitBreaker featureName="Proposal Generator">
             <ProposalGenerator
               open={proposalGeneratorOpen}
               onOpenChange={setProposalGeneratorOpen}
               opportunity={opportunity}
               template={selectedTemplate}
             />
-          </AIFeatureErrorBoundary>
+          </AIFeatureCircuitBreaker>
         )}
       </DialogContent>
     </Dialog>
