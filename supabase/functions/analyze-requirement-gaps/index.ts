@@ -31,13 +31,43 @@ serve(async (req) => {
       );
     }
 
-    // Fetch all content blocks
+    // Fetch all content blocks with usage stats
     const { data: contentBlocks, error: blocksError } = await supabase
       .from('proposal_content_blocks')
       .select('*')
       .order('created_at', { ascending: false });
 
     if (blocksError) throw blocksError;
+
+    // Fetch past performance data - which blocks have been used successfully
+    const { data: winHistory } = await supabase
+      .from('win_loss_history')
+      .select('*')
+      .eq('outcome', 'won')
+      .order('award_date', { ascending: false })
+      .limit(50);
+
+    // Fetch requirement mappings to see which blocks are commonly used
+    const { data: mappings } = await supabase
+      .from('proposal_requirement_mappings')
+      .select('requirement_category, content_block_ids')
+      .not('content_block_ids', 'is', null);
+
+    // Build block usage statistics
+    const blockUsageStats: Record<string, { count: number; categories: string[] }> = {};
+    mappings?.forEach((m: any) => {
+      if (m.content_block_ids) {
+        m.content_block_ids.forEach((blockId: string) => {
+          if (!blockUsageStats[blockId]) {
+            blockUsageStats[blockId] = { count: 0, categories: [] };
+          }
+          blockUsageStats[blockId].count++;
+          if (m.requirement_category && !blockUsageStats[blockId].categories.includes(m.requirement_category)) {
+            blockUsageStats[blockId].categories.push(m.requirement_category);
+          }
+        });
+      }
+    });
 
     // Analyze each unfilled requirement
     const gapAnalysis = [];
@@ -48,25 +78,41 @@ serve(async (req) => {
         continue;
       }
 
-      // Find best matching content blocks using AI
-      const prompt = `Analyze the following RFP requirement and identify the 3 most relevant content blocks that could address this requirement.
+      // Build enhanced block info with past performance data
+      const enrichedBlocks = contentBlocks?.slice(0, 30).map((block: any, idx: number) => {
+        const stats = blockUsageStats[block.id] || { count: 0, categories: [] };
+        return `${idx + 1}. ID: ${block.id}
+   Title: ${block.title}
+   Type: ${block.content_type}
+   Tags: ${block.tags?.join(', ') || 'none'}
+   Past Usage: Used ${stats.count} times in proposals${stats.categories.length > 0 ? ` (categories: ${stats.categories.join(', ')})` : ''}
+   Preview: ${block.content.substring(0, 150)}...`;
+      }).join('\n\n');
+
+      // Find best matching content blocks using AI with semantic similarity
+      const prompt = `You are an expert proposal analyst. Analyze the RFP requirement below and identify the TOP 3 most relevant content blocks based on:
+1. Semantic similarity to the requirement text
+2. Category alignment 
+3. Past usage success (blocks used more often in winning proposals are preferred)
 
 Requirement ID: ${req.requirementId}
 Requirement Category: ${req.category || 'Not specified'}
 Requirement Text: ${req.requirementText}
 
-Available Content Blocks:
-${contentBlocks?.slice(0, 20).map((block: any, idx: number) => 
-  `${idx + 1}. Title: ${block.title}\n   Type: ${block.content_type}\n   Preview: ${block.content.substring(0, 200)}...`
-).join('\n\n')}
+Available Content Blocks (with past performance data):
+${enrichedBlocks}
 
-Respond with a JSON array of the top 3 matching content block IDs with match scores (0-100) and brief explanations. Format:
+Historical Context: We have ${winHistory?.length || 0} winning proposals in our database.
+
+IMPORTANT: Return ONLY a JSON array with exactly 3 blocks. Each block must include the actual UUID from the list above.
+Format:
 [
   {
-    "blockId": "uuid",
-    "blockTitle": "title",
+    "blockId": "actual-uuid-from-list",
+    "blockTitle": "exact title from list",
     "matchScore": 85,
-    "reason": "explanation"
+    "reason": "Brief explanation of semantic match and why this block fits",
+    "confidence": "high|medium|low"
   }
 ]`;
 
@@ -95,7 +141,19 @@ Respond with a JSON array of the top 3 matching content block IDs with match sco
       
       let matches = [];
       try {
-        matches = JSON.parse(aiContent);
+        // Try to extract JSON from the response
+        const jsonMatch = aiContent.match(/\[[\s\S]*\]/);
+        if (jsonMatch) {
+          matches = JSON.parse(jsonMatch[0]);
+        } else {
+          matches = JSON.parse(aiContent);
+        }
+        // Validate and enrich matches with usage stats
+        matches = matches.map((m: any) => ({
+          ...m,
+          usageCount: blockUsageStats[m.blockId]?.count || 0,
+          previousCategories: blockUsageStats[m.blockId]?.categories || []
+        }));
       } catch (e) {
         console.error('Failed to parse AI response:', aiContent);
         continue;

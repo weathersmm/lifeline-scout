@@ -5,14 +5,26 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, TrendingDown, CheckCircle2, AlertCircle, Lightbulb } from "lucide-react";
+import { Loader2, TrendingDown, CheckCircle2, AlertCircle, Lightbulb, Sparkles, ThumbsUp, History } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface RequirementGapAnalysisProps {
   opportunityId: string;
   requirements: any[];
   extractionId?: string;
+  onSuggestionAccepted?: (requirementId: string, blockId: string) => void;
+}
+
+interface SuggestedBlock {
+  blockId: string;
+  blockTitle: string;
+  matchScore: number;
+  reason: string;
+  confidence?: 'high' | 'medium' | 'low';
+  usageCount?: number;
+  previousCategories?: string[];
 }
 
 interface GapAnalysisResult {
@@ -21,12 +33,7 @@ interface GapAnalysisResult {
     requirementText: string;
     category: string;
     hasSuggestedContent: boolean;
-    suggestedBlocks: Array<{
-      blockId: string;
-      blockTitle: string;
-      matchScore: number;
-      reason: string;
-    }>;
+    suggestedBlocks: SuggestedBlock[];
   }>;
   summary: string;
   recommendations: string[];
@@ -41,9 +48,11 @@ interface GapAnalysisResult {
 export function RequirementGapAnalysis({ 
   opportunityId, 
   requirements, 
-  extractionId 
+  extractionId,
+  onSuggestionAccepted
 }: RequirementGapAnalysisProps) {
   const { toast } = useToast();
+  const [acceptedSuggestions, setAcceptedSuggestions] = useState<Record<string, string>>({});
   const [analyzing, setAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<GapAnalysisResult | null>(null);
 
@@ -103,6 +112,57 @@ export function RequirementGapAnalysis({
     if (percent >= 80) return "text-green-600";
     if (percent >= 50) return "text-yellow-600";
     return "text-red-600";
+  };
+
+  const getConfidenceBadge = (confidence?: string) => {
+    switch (confidence) {
+      case 'high':
+        return <Badge className="bg-green-500/20 text-green-700 border-green-300">High Confidence</Badge>;
+      case 'medium':
+        return <Badge className="bg-yellow-500/20 text-yellow-700 border-yellow-300">Medium</Badge>;
+      case 'low':
+        return <Badge className="bg-red-500/20 text-red-700 border-red-300">Low</Badge>;
+      default:
+        return null;
+    }
+  };
+
+  const handleAcceptSuggestion = async (requirementId: string, block: SuggestedBlock) => {
+    try {
+      // Update the requirement mapping with the accepted block
+      const { error } = await supabase
+        .from('proposal_requirement_mappings')
+        .upsert({
+          opportunity_id: opportunityId,
+          requirement_id: requirementId,
+          requirement_text: analysisResult?.gapAnalysis.find(g => g.requirementId === requirementId)?.requirementText || '',
+          requirement_category: analysisResult?.gapAnalysis.find(g => g.requirementId === requirementId)?.category,
+          content_block_ids: [block.blockId],
+          is_complete: false
+        }, {
+          onConflict: 'opportunity_id,requirement_id'
+        });
+
+      if (error) throw error;
+
+      setAcceptedSuggestions(prev => ({ ...prev, [requirementId]: block.blockId }));
+      
+      if (onSuggestionAccepted) {
+        onSuggestionAccepted(requirementId, block.blockId);
+      }
+
+      toast({
+        title: "Suggestion accepted",
+        description: `"${block.blockTitle}" mapped to requirement ${requirementId}`,
+      });
+    } catch (error: any) {
+      console.error('Error accepting suggestion:', error);
+      toast({
+        title: "Failed to accept suggestion",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -219,23 +279,58 @@ export function RequirementGapAnalysis({
 
                           {gap.suggestedBlocks.length > 0 ? (
                             <div className="space-y-2">
-                              <p className="text-xs font-medium text-muted-foreground">
-                                Suggested Content Blocks:
+                              <p className="text-xs font-medium text-muted-foreground flex items-center gap-1">
+                                <Sparkles className="h-3 w-3" />
+                                AI-Suggested Content Blocks (click to accept):
                               </p>
-                              {gap.suggestedBlocks.map((block, blockIdx) => (
-                                <div key={blockIdx} className="flex items-start gap-2 p-2 bg-background rounded">
-                                  <Badge 
-                                    variant={block.matchScore >= 70 ? "default" : "secondary"}
-                                    className="flex-shrink-0"
-                                  >
-                                    {block.matchScore}%
-                                  </Badge>
-                                  <div className="flex-1">
-                                    <p className="text-sm font-medium">{block.blockTitle}</p>
-                                    <p className="text-xs text-muted-foreground">{block.reason}</p>
-                                  </div>
-                                </div>
-                              ))}
+                              {gap.suggestedBlocks.map((block, blockIdx) => {
+                                const isAccepted = acceptedSuggestions[gap.requirementId] === block.blockId;
+                                return (
+                                  <TooltipProvider key={blockIdx}>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <div 
+                                          className={`flex items-start gap-2 p-2 bg-background rounded border cursor-pointer transition-all hover:border-primary ${isAccepted ? 'border-green-500 bg-green-50' : 'border-transparent'}`}
+                                          onClick={() => !isAccepted && handleAcceptSuggestion(gap.requirementId, block)}
+                                        >
+                                          <Badge 
+                                            variant={block.matchScore >= 70 ? "default" : "secondary"}
+                                            className="flex-shrink-0"
+                                          >
+                                            {block.matchScore}%
+                                          </Badge>
+                                          <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                              <p className="text-sm font-medium truncate">{block.blockTitle}</p>
+                                              {getConfidenceBadge(block.confidence)}
+                                              {block.usageCount && block.usageCount > 0 && (
+                                                <Badge variant="outline" className="text-xs flex items-center gap-1">
+                                                  <History className="h-3 w-3" />
+                                                  Used {block.usageCount}x
+                                                </Badge>
+                                              )}
+                                            </div>
+                                            <p className="text-xs text-muted-foreground mt-1">{block.reason}</p>
+                                            {block.previousCategories && block.previousCategories.length > 0 && (
+                                              <p className="text-xs text-muted-foreground mt-1">
+                                                Previously used for: {block.previousCategories.join(', ')}
+                                              </p>
+                                            )}
+                                          </div>
+                                          {isAccepted ? (
+                                            <CheckCircle2 className="h-5 w-5 text-green-600 flex-shrink-0" />
+                                          ) : (
+                                            <ThumbsUp className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                                          )}
+                                        </div>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        <p>{isAccepted ? 'Already mapped to this requirement' : 'Click to map this block to the requirement'}</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
+                                );
+                              })}
                             </div>
                           ) : (
                             <Alert variant="destructive">
